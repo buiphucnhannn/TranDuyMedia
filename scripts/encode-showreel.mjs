@@ -14,7 +14,7 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const input = path.resolve(root, process.argv[2] || "public/videos/SHOWREEL_TRANDUYMEDIA2026.mp4");
-const posterAt = process.argv[3] || "42";
+const posterAt = process.argv[3] || "0.5"; // khung "Hello!" ở đầu video
 const out = path.join(root, "public", "media");
 mkdirSync(out, { recursive: true });
 
