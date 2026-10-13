@@ -1,42 +1,97 @@
 import Link from "next/link";
+import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const variants = {
-  primary:
-    "bg-brand-500 text-white shadow-lg shadow-brand-500/25 hover:bg-brand-600 active:bg-brand-700",
-  secondary: "bg-ink-950 text-white hover:bg-ink-800",
-  outline: "border border-current/20 text-current hover:border-brand-500 hover:text-brand-500",
+const styles = {
+  primary: "bg-navy-900 text-white shadow-card hover:bg-navy-700 hover:shadow-soft",
+  accent: "bg-orange-500 text-white shadow-card hover:bg-orange-600",
+  outline:
+    "border border-ink/20 bg-transparent text-ink hover:border-navy-900 hover:bg-navy-900 hover:text-white",
+  light:
+    "border border-white/60 bg-white/10 text-white backdrop-blur-sm hover:bg-white hover:text-ink",
+  white: "bg-white text-ink hover:bg-paper-100",
   ghost: "text-current hover:bg-current/5",
 };
 
 const sizes = {
-  sm: "h-9 px-4 text-sm",
-  md: "h-11 px-6 text-sm",
-  lg: "h-13 px-8 text-base",
+  sm: "px-5 py-2.5 text-[13px]",
+  md: "px-7 py-3.5 text-sm",
+  lg: "px-8 py-4 text-sm",
 };
 
 /**
- * Button đa năng: render <Link> khi có `href`, ngược lại render <button>.
+ * Nút dùng chung.
+ * - href → <Link>; external → <a target=_blank>; không có href → <button>
+ * - arrow: mũi tên trượt khi hover
+ * - pill: chữ + vòng tròn mũi tên (kiểu Squarespace / ButStudio)
  */
-export function Button({ href, variant = "primary", size = "md", className, children, ...props }) {
-  const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50",
-    variants[variant],
-    sizes[size],
+export function Button({
+  href,
+  variant = "primary",
+  size = "md",
+  arrow = false,
+  pill = false,
+  external = false,
+  className,
+  children,
+  ...rest
+}) {
+  const base =
+    "group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-wide whitespace-nowrap transition-all duration-300 disabled:pointer-events-none disabled:opacity-50";
+  const cls = cn(
+    base,
+    pill ? "py-1.5 pr-1.5 pl-6 text-sm" : sizes[size],
+    styles[variant],
     className,
   );
+  // Nút trắng (trên nền tối): vòng tròn cam như nút "Đặt lịch" trên header
+  const circle =
+    variant === "white"
+      ? "bg-orange-500 text-white"
+      : variant === "primary" || variant === "accent"
+        ? "bg-white text-navy-900"
+        : "bg-navy-900 text-white";
 
-  if (href) {
+  const content = (
+    <>
+      <span className="inline-flex items-center gap-2">{children}</span>
+      {pill ? (
+        <span
+          className={cn(
+            "flex size-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5",
+            circle,
+          )}
+        >
+          <Icon name="arrowRight" className="size-4" />
+        </span>
+      ) : (
+        arrow && (
+          <Icon
+            name="arrowRight"
+            className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+          />
+        )
+      )}
+    </>
+  );
+
+  if (!href) {
     return (
-      <Link href={href} className={classes} {...props}>
-        {children}
-      </Link>
+      <button type="button" className={cls} {...rest}>
+        {content}
+      </button>
     );
   }
-
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cls} {...rest}>
+        {content}
+      </a>
+    );
+  }
   return (
-    <button type="button" className={classes} {...props}>
-      {children}
-    </button>
+    <Link href={href} className={cls} {...rest}>
+      {content}
+    </Link>
   );
 }

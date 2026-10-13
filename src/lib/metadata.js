@@ -6,20 +6,21 @@ import { siteConfig } from "@/config/site";
  */
 export function createMetadata({ title, description, path = "/", image } = {}) {
   const desc = description || siteConfig.description;
-  const ogImage = image || siteConfig.ogImage;
+  const ogImage = image || "/images/og-image.png";
+  const fullTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
 
   return {
     title,
     description: desc,
     alternates: { canonical: path },
     openGraph: {
-      title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
+      title: fullTitle,
       description: desc,
       url: path,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: siteConfig.name }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: fullTitle }],
     },
     twitter: {
-      title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
+      title: fullTitle,
       description: desc,
       images: [ogImage],
     },

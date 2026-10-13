@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Showreel 4K gốc (~1.1GB) — không commit; bản web đã nén nằm ở public/media (npm run video)
+/public/videos/

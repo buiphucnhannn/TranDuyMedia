@@ -1,13 +1,14 @@
 import { Be_Vietnam_Pro } from "next/font/google";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { BookingModal, VideoModal } from "@/components/booking";
+import { IntroSplash, PageTransition, Reveal, ScrollTop, SmoothScroll } from "@/components/fx";
+import { FloatingContact, Footer, Header } from "@/components/layout";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const beVietnam = Be_Vietnam_Pro({
-  variable: "--font-be-vietnam",
+const sans = Be_Vietnam_Pro({
+  variable: "--font-sans",
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -32,13 +33,13 @@ export const metadata = {
     siteName: siteConfig.name,
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: siteConfig.name }],
+    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: siteConfig.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [siteConfig.ogImage],
+    images: ["/images/og-image.png"],
   },
   robots: {
     index: true,
@@ -48,37 +49,58 @@ export const metadata = {
 };
 
 export const viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: siteConfig.themeColor,
   colorScheme: "light",
 };
 
+// Dữ liệu có cấu trúc cho Google (LocalBusiness)
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "LocalBusiness",
   name: siteConfig.name,
+  description: siteConfig.description,
   url: siteConfig.url,
-  logo: `${siteConfig.url}/icons/icon-512.png`,
+  telephone: "+84" + siteConfig.contact.phoneRaw.slice(1),
   email: siteConfig.contact.email,
-  telephone: siteConfig.contact.phoneHref.replace("tel:", ""),
-  address: { "@type": "PostalAddress", addressLocality: siteConfig.contact.address },
-  sameAs: Object.values(siteConfig.socials),
+  image: `${siteConfig.url}/images/og-image.png`,
+  logo: `${siteConfig.url}/images/brand/logo.png`,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.contact.address,
+    addressLocality: "Nhà Bè",
+    addressRegion: siteConfig.contact.city,
+    addressCountry: "VN",
+  },
+  hasMap: siteConfig.contact.mapsLink,
+  sameAs: [siteConfig.socials.facebook],
+  priceRange: "$$",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang={siteConfig.lang} className={beVietnam.variable}>
-      <body className="flex min-h-dvh flex-col">
+    <html lang={siteConfig.lang} className={sans.variable}>
+      <body>
         <a
           href="#main"
-          className="sr-only z-100 rounded-lg bg-brand-500 px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+          className="sr-only z-100 rounded-lg bg-orange-500 px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
         >
           Bỏ qua đến nội dung chính
         </a>
+        <SmoothScroll />
+        {/* Màn chào thương hiệu: chỉ khi tải trang đầy đủ (lần đầu / F5), không hiện khi chuyển trang.
+            Đặt SAU SmoothScroll để Lenis đã được tạo khi màn chào khoá cuộn. */}
+        <IntroSplash />
+        <PageTransition />
+        <Reveal />
         <Header />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
+        <main id="main">{children}</main>
         <Footer />
+        <FloatingContact />
+        <ScrollTop />
+        <BookingModal />
+        <VideoModal />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

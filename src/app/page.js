@@ -1,23 +1,25 @@
 import {
-  CTASection,
   Hero,
-  PortfolioSection,
-  ProcessSection,
-  ServicesSection,
-  StatsSection,
-  TestimonialsSection,
+  Intro,
+  Process,
+  ServiceMarquee,
+  ServicesGrid,
+  Showreel,
+  StudioShowcase,
+  Values,
 } from "@/components/sections";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <StatsSection />
-      <ServicesSection />
-      <PortfolioSection />
-      <ProcessSection />
-      <TestimonialsSection />
-      <CTASection />
+      <ServiceMarquee />
+      <Showreel />
+      <Intro />
+      <ServicesGrid />
+      <StudioShowcase />
+      <Process />
+      <Values />
     </>
   );
 }

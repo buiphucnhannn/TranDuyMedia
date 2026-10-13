@@ -10,8 +10,11 @@ const nextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // Ẩn nút "N" của Next ở góc màn hình khi dev (vẫn báo lỗi biên dịch / runtime)
+  devIndicators: false,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Chỉ WebP: AVIF nén nhỏ hơn chút nhưng giải mã nặng hơn nhiều → giật khi ảnh vừa cuộn tới
+    formats: ["image/webp"],
   },
   turbopack: {
     rules: {

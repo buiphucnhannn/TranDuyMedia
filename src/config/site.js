@@ -1,45 +1,67 @@
 /**
- * Cấu hình chung của website.
- * Thay đổi thông tin thương hiệu, liên hệ, mạng xã hội tại đây.
+ * Cấu hình chung của website — thông tin lấy từ hồ sơ yêu cầu (docs/demo.docx) và poster của studio.
+ * Thay đổi thương hiệu, liên hệ, mạng xã hội, video showreel tại đây.
  */
 export const siteConfig = {
-  name: "Trần Duy Media",
+  name: "Tran Duy Media Studio",
   shortName: "TD Media",
-  tagline: "Sản xuất video & truyền thông sáng tạo",
+  tagline: "Sản xuất video thương mại & studio quay chụp",
   description:
-    "Trần Duy Media – đơn vị sản xuất video, chụp ảnh, TVC quảng cáo và quản lý nội dung mạng xã hội chuyên nghiệp cho doanh nghiệp và thương hiệu.",
+    "Tran Duy Media Studio – 10+ năm sản xuất video thương mại quảng cáo (TVC, iTVC, documentary, phim doanh nghiệp, video sự kiện), chụp ảnh thương mại và cho thuê bối cảnh studio tại TP. Hồ Chí Minh.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   locale: "vi_VN",
   lang: "vi",
-  themeColor: "#0b0f19",
-  ogImage: "/images/og-image.png",
+  themeColor: "#0b1220",
   keywords: [
-    "sản xuất video",
-    "quay phim quảng cáo",
+    "sản xuất video quảng cáo",
     "TVC",
-    "chụp ảnh sản phẩm",
-    "media agency",
-    "Trần Duy Media",
+    "iTVC",
+    "phim doanh nghiệp",
+    "video documentary",
+    "video sự kiện",
+    "cho thuê studio chụp ảnh",
+    "studio quay video",
+    "chụp ảnh thương mại",
+    "Tran Duy Media",
+    "Nhà Bè",
   ],
   contact: {
-    email: "contact@tranduymedia.vn",
-    phone: "0900 000 000",
-    phoneHref: "tel:+84900000000",
-    address: "TP. Hồ Chí Minh, Việt Nam",
-    workingHours: "Thứ 2 – Thứ 7, 8:00 – 18:00",
+    phone: "097 154 2026",
+    phoneRaw: "0971542026",
+    phoneHref: "tel:+84971542026",
+    email: "contact@tranduymedia.vn", // TODO: thay email thật
+    address: "456/26 Huỳnh Tấn Phát, KP7, Nhà Bè",
+    city: "TP. Hồ Chí Minh",
+    workingHours: "Thứ 2 – Chủ nhật · 8:00 – 21:00",
+    mapsQuery: "456/26 Huỳnh Tấn Phát, Nhà Bè, Hồ Chí Minh",
+    mapsLink:
+      "https://www.google.com/maps/search/?api=1&query=456%2F26+Hu%E1%BB%B3nh+T%E1%BA%A5n+Ph%C3%A1t%2C+Nh%C3%A0+B%C3%A8",
   },
   socials: {
-    facebook: "https://facebook.com/",
-    youtube: "https://youtube.com/",
-    tiktok: "https://tiktok.com/",
-    instagram: "https://instagram.com/",
+    facebook: "https://www.facebook.com/TranDuyMedia",
+    messenger: "https://m.me/TranDuyMedia",
+    zalo: "https://zalo.me/0971542026",
+    youtube: "https://youtube.com/", // TODO: thay link kênh thật
+    tiktok: "https://tiktok.com/", // TODO: thay link kênh thật
+  },
+  // Showreel 2026 — bản web nén từ file gốc 4K (public/videos, không commit) bằng `npm run video`.
+  // Tự host (không dùng Google Drive) để điều khiển được: tự phát khi cuộn tới, chọn chất lượng 1080p.
+  showreel: {
+    title: "Showreel 2026",
+    duration: "Tổng hợp dự án 2025 – 2026",
+    poster: "/media/showreel-poster.jpg",
+    hd: "/media/showreel-1080.mp4", // máy tính / tablet
+    sd: "/media/showreel-720.mp4", // điện thoại hoặc khi bật tiết kiệm dữ liệu
   },
 };
 
+// Menu chung cho header (desktop + mobile) và footer.
+// Không có "Trang chủ" (logo đã là đường về trang chủ). Mục có "#" là section trên trang chủ:
+// đang ở trang chủ thì cuộn mượt tới, ở trang khác thì chuyển về trang chủ rồi cuộn (SmoothScroll).
 export const mainNav = [
-  { label: "Trang chủ", href: "/" },
-  { label: "Giới thiệu", href: "/gioi-thieu" },
+  { label: "Về chúng tôi", href: "/gioi-thieu" },
   { label: "Dịch vụ", href: "/dich-vu" },
-  { label: "Dự án", href: "/du-an" },
-  { label: "Liên hệ", href: "/lien-he" },
+  { label: "Studio", href: "/studio" },
+  { label: "Quy trình", href: "/#quy-trinh" },
+  { label: "Liên hệ", href: "/#lien-he" },
 ];

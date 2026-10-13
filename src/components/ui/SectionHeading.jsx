@@ -1,16 +1,37 @@
 import { cn } from "@/lib/utils";
 
-export function SectionHeading({ eyebrow, title, description, align = "center", className }) {
+/**
+ * Tiêu đề khối: eyebrow cam + tiêu đề lớn + mô tả. Mặc định căn trái (kiểu Squarespace).
+ */
+export function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  light = false,
+  as: Tag = "h2",
+  className,
+}) {
   return (
-    <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
-      {eyebrow && (
-        <p className="mb-3 text-sm font-semibold tracking-widest text-brand-500 uppercase">
-          {eyebrow}
-        </p>
-      )}
-      <h2 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl">{title}</h2>
+    <div className={cn("max-w-3xl", align === "center" && "mx-auto text-center", className)}>
+      {eyebrow && <p className="reveal mb-4 eyebrow">{eyebrow}</p>}
+      <Tag
+        className={cn("reveal h-section", light ? "text-white" : "text-ink")}
+        style={{ "--reveal-delay": "80ms" }}
+      >
+        {title}
+      </Tag>
       {description && (
-        <p className="mt-4 text-lg leading-relaxed text-pretty opacity-70">{description}</p>
+        <p
+          className={cn(
+            "reveal mt-5 max-w-2xl text-base leading-relaxed sm:text-lg",
+            light ? "text-white/70" : "text-ink-soft",
+            align === "center" && "mx-auto",
+          )}
+          style={{ "--reveal-delay": "160ms" }}
+        >
+          {description}
+        </p>
       )}
     </div>
   );
