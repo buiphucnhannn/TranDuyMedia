@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Trần Duy Media – Website
 
-## Getting Started
+Website giới thiệu doanh nghiệp, xây dựng với **Next.js 16 (App Router)**, **Tailwind CSS v4** và **JavaScript thuần** (không TypeScript).
 
-First, run the development server:
+## Bắt đầu
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # điền NEXT_PUBLIC_SITE_URL
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Lệnh                   | Mô tả                                              |
+| ---------------------- | -------------------------------------------------- |
+| `npm run dev`          | Chạy môi trường phát triển                         |
+| `npm run build`        | Build production                                   |
+| `npm start`            | Chạy bản build                                     |
+| `npm run lint`         | Kiểm tra code bằng ESLint                          |
+| `npm run format`       | Format code bằng Prettier (tự sắp xếp class Tailwind) |
+| `npm run assets`       | Tạo lại favicon, icons, OG image từ logo           |
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Cấu trúc thư mục
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── public/
+│   ├── .well-known/security.txt
+│   ├── icons/                  # PWA icons (192, 512, maskable, apple-touch)
+│   ├── images/
+│   │   ├── logo.svg            # Logo nền sáng
+│   │   ├── logo-light.svg      # Logo nền tối
+│   │   ├── logo-mark.svg       # Biểu tượng – nguồn để tạo mọi icon
+│   │   ├── og-image.png        # Ảnh chia sẻ mạng xã hội 1200×630
+│   │   ├── hero.jpg, about.jpg # Ảnh placeholder
+│   │   └── portfolio/          # Ảnh dự án (placeholder)
+│   └── humans.txt
+├── scripts/
+│   └── generate-assets.mjs     # Sinh icon/ảnh bằng sharp
+└── src/
+    ├── app/                    # Routes (App Router)
+    │   ├── layout.js           # Layout gốc, font, metadata SEO, JSON-LD
+    │   ├── page.js             # Trang chủ
+    │   ├── gioi-thieu/  dich-vu/  du-an/  lien-he/
+    │   ├── not-found.js  error.js  loading.js
+    │   ├── robots.js  sitemap.js  manifest.js
+    │   └── favicon.ico  icon.svg  apple-icon.png
+    ├── components/
+    │   ├── icons/              # Bộ icon SVG inline
+    │   ├── layout/             # Header, Footer
+    │   ├── sections/           # Các khối nội dung của trang (Hero, CTA, ...)
+    │   └── ui/                 # Thành phần cơ bản (Button, Container, ...)
+    ├── config/site.js          # Thông tin thương hiệu, liên hệ, menu
+    ├── data/                   # Nội dung tĩnh (dịch vụ, dự án, đánh giá)
+    └── lib/                    # Tiện ích (cn, createMetadata)
+```
 
-## Learn More
+## Tuỳ chỉnh
 
-To learn more about Next.js, take a look at the following resources:
+- **Thông tin công ty, liên hệ, mạng xã hội, menu:** `src/config/site.js`
+- **Nội dung trang:** `src/data/*.js`
+- **Màu thương hiệu, font:** khối `@theme` trong `src/app/globals.css` (`brand-*`, `ink-*`)
+- **Logo:** thay `public/images/logo-mark.svg` rồi chạy `npm run assets`
+- **Ảnh:** thay các file trong `public/images/` (giữ nguyên tên hoặc cập nhật trong `src/data`)
+- **Form liên hệ:** đang giả lập gửi – kết nối API thật tại `src/components/sections/ContactForm.jsx` (TODO)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Quy ước
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Import qua alias `@/` (ví dụ `@/components/ui`).
+- Component dùng PascalCase, đuôi `.jsx`; file route theo quy ước Next.js (`page.js`, `layout.js`).
+- Chỉ thêm `"use client"` khi component cần state/sự kiện (Header, ProjectGallery, ContactForm).
+- Mỗi trang con export `metadata` qua `createMetadata()` để có title, canonical và Open Graph.

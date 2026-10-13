@@ -1,0 +1,9 @@
+/* TEAM */
+Company: Trần Duy Media
+Contact: contact@tranduymedia.vn
+Location: TP. Hồ Chí Minh, Việt Nam
+
+/* SITE */
+Language: Vietnamese
+Standards: HTML5, CSS3
+Components: Next.js, React, Tailwind CSS
