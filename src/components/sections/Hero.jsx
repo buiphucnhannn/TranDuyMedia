@@ -71,7 +71,7 @@ export function Hero() {
     <section
       id="top"
       data-nav-theme="dark"
-      className="relative h-(--screen) min-h-[600px] w-full overflow-hidden bg-navy-950 text-white"
+      className="relative h-(--screen) min-h-[600px] w-full overflow-hidden bg-navy-950 text-white short-m:h-auto short-m:min-h-svh"
     >
       {/* Lớp ngoài: parallax (transform inline). Lớp trong: hiệu ứng mở màn (animation transform).
           Tách 2 lớp vì animation CSS sẽ đè transform inline nếu đặt chung một phần tử. */}
@@ -108,7 +108,7 @@ export function Hero() {
 
       {/* Nội dung chính — căn giữa */}
       <div className="relative z-10 flex h-full flex-col">
-        <div className="flex min-h-0 flex-1 items-center justify-center px-5 pt-[max(5.5rem,11svh)] pb-[clamp(1rem,5svh,6rem)]">
+        <div className="flex min-h-0 flex-1 items-center-safe justify-center px-5 pt-[max(5.5rem,11svh)] pb-[clamp(1rem,5svh,6rem)] lg:pb-[clamp(2rem,7svh,7rem)] short-m:pt-[6.5rem] short-d:pt-[6.75rem] short-d:pb-6">
           <div
             ref={textRef}
             className="flex max-w-6xl flex-col items-center text-center will-change-transform"
@@ -116,7 +116,12 @@ export function Hero() {
             {/* Logo đầy đủ (biểu tượng TD + chữ TRAN DUY MEDIA — luôn đi liền, không tách).
                 Hiện đầu tiên; quầng sáng cam mờ sau tam giác play gợi lại glow của logo gốc.
                 Cao theo chiều cao màn hình để không lấn chỗ tiêu đề trên màn thấp. */}
-            <div className={cn("relative mb-5 sm:mb-6", anim("[animation:fadeUp_1.1s_.25s_both]"))}>
+            <div
+              className={cn(
+                "relative mb-5 sm:mb-6 short-m:mb-3 short-d:mb-4",
+                anim("[animation:fadeUp_1.1s_.25s_both]"),
+              )}
+            >
               <span
                 aria-hidden="true"
                 className="absolute top-[28%] left-[62%] -z-10 size-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 blur-2xl"
@@ -128,13 +133,13 @@ export function Hero() {
                 height={768}
                 preload
                 sizes="200px"
-                className="h-[clamp(3.5rem,10svh,6.5rem)] w-auto drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]"
+                className="h-[clamp(3.5rem,10svh,6.5rem)] w-auto drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)] short-m:h-[clamp(2.75rem,7.5svh,3.5rem)] short-d:h-[clamp(3rem,8.5svh,4.5rem)]"
               />
             </div>
 
             <p
               className={cn(
-                "flex items-center gap-2 text-[10px] font-semibold tracking-[0.16em] whitespace-nowrap text-white/80 uppercase sm:gap-3 sm:text-[11px] sm:tracking-eyebrow [@media(max-height:700px)]:hidden",
+                "flex items-center gap-2 text-[10px] font-semibold tracking-[0.16em] whitespace-nowrap text-white/80 uppercase max-[359px]:hidden sm:gap-3 sm:text-[11px] sm:tracking-eyebrow",
                 anim("[animation:fadeUp_1s_.5s_both]"),
               )}
             >
@@ -153,16 +158,18 @@ export function Hero() {
               accent="ngôn ngữ điện ảnh"
               accentClass="text-orange-500"
               breakBefore="bằng"
+              breakMobile
+              keep={["câu chuyện", "thương hiệu", "ngôn ngữ", "điện ảnh"]}
               visible={ready}
               manual
               step={55}
               baseDelay={650}
-              className="mt-6 text-[clamp(2.3rem,min(6.6vw,8.6svh),6.2rem)] h-display text-white text-legible-lg sm:mt-7"
+              className="mt-6 text-[clamp(2.3rem,min(6.6vw,8.6svh),6.2rem)] h-display leading-[1.14] text-white text-legible-lg sm:mt-7 short-m:mt-4 short-m:text-[2.05rem] short-d:mt-5"
             />
 
             <p
               className={cn(
-                "mt-6 max-w-xl text-[15px] leading-relaxed text-balance text-white/80 text-legible sm:text-lg",
+                "mt-6 max-w-xl text-[15px] leading-relaxed text-balance text-white/80 text-legible sm:text-lg short-m:mt-4 short-m:text-[14px] short-d:mt-4",
                 anim("[animation:fadeUp_1s_1.4s_both]"),
               )}
             >
@@ -172,14 +179,14 @@ export function Hero() {
 
             <div
               className={cn(
-                "mt-9 flex w-full max-w-[300px] flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center",
+                "mt-9 flex w-full max-w-[300px] flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center short-m:mt-6 short-m:gap-2.5 short-d:mt-7",
                 anim("[animation:fadeUp_1s_1.65s_both]"),
               )}
             >
               <button
                 type="button"
                 data-showreel
-                className="group relative inline-flex h-12 items-center justify-center gap-3 rounded-full bg-white pl-6 text-sm font-medium text-navy-900 transition hover:bg-paper-100 sm:h-auto sm:py-1.5 sm:pr-1.5"
+                className="group relative inline-flex h-12 items-center justify-center gap-3 rounded-full bg-white pl-6 text-sm font-medium text-navy-900 transition hover:bg-paper-100 sm:h-auto sm:py-1.5 sm:pr-1.5 short-m:h-11"
               >
                 Xem showreel 2026
                 <span className="absolute right-1.5 flex size-9 items-center justify-center rounded-full bg-orange-500 text-white transition-transform group-hover:scale-110 sm:static">
@@ -189,7 +196,7 @@ export function Hero() {
               <button
                 type="button"
                 data-booking
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-medium text-white transition hover:border-white hover:bg-white hover:text-navy-900 sm:h-auto sm:py-3.5"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/40 px-7 text-sm font-medium text-white transition hover:border-white hover:bg-white hover:text-navy-900 sm:h-auto sm:py-3.5 short-m:h-11"
               >
                 Đặt lịch tư vấn
               </button>

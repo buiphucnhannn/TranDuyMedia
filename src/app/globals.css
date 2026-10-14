@@ -4,6 +4,11 @@
  * Design tokens — Tran Duy Media: minimalism · cinematic.
  * 3 màu từ logo: navy (#182838), cam (#f86808), đen. Nền sáng kiểu Squarespace, điểm nhấn cam tiết chế.
  * ------------------------------------------------------------------------- */
+/* Điện thoại màn thấp (iPhone SE/8, Android nhỏ): thu gọn Hero cho vừa, không bị header che */
+@custom-variant short-m (@media (width < 40rem) and (height < 760px));
+/* Laptop màn thấp / trình duyệt chưa F11 / Windows zoom 125%: thu gọn Hero cho cân */
+@custom-variant short-d (@media (width >= 40rem) and (height < 760px));
+
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 
