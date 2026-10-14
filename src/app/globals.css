@@ -79,10 +79,11 @@
   }
 }
 
-/* "Một màn hình" = chiều cao viewport nhưng tối đa 1080px */
+/* "Một màn hình" = chiều cao viewport nhưng tối đa 940px (≈ chiều cao thật của màn 1920x1080 ở zoom 100%)
+   → khi người dùng thu nhỏ trình duyệt, các section theo màn hình không cao vọt lên mà giữ tỉ lệ như 100% */
 html {
   -webkit-text-size-adjust: 100%;
-  --screen: min(100svh, 1080px);
+  --screen: min(100svh, 940px);
 }
 
 /* Chặn tràn ngang; dùng clip (không phải hidden) để position: sticky vẫn chạy */
@@ -128,8 +129,9 @@ html.lenis body {
 @utility h-display {
   @apply leading-[1.02] font-bold tracking-[-0.03em];
 }
+/* Mobile: chữ 16px — iOS tự phóng to trang khi chạm vào ô nhập có chữ < 16px */
 @utility field {
-  @apply w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink transition outline-none placeholder:text-ink-muted focus:border-navy-700 focus:ring-2 focus:ring-navy-700/10;
+  @apply w-full rounded-xl border border-ink/10 bg-white px-4 py-2.5 text-base text-ink transition outline-none placeholder:text-ink-muted focus:border-navy-700 focus:ring-2 focus:ring-navy-700/10 sm:py-3 sm:text-sm;
 }
 /* Nhịp dọc chung của mọi section: 64px / 80px (sm) / 96px (lg) — chỉnh tại đây để đổi toàn site */
 @utility section-y {
@@ -447,9 +449,16 @@ body:has(#intro[data-phase="in"]) main * {
 
   /* Căn đều 2 bên cho mọi đoạn văn (từ tablet trở lên — màn hẹp căn đều tạo khoảng trắng lớn giữa chữ).
      Bỏ qua chỗ đang căn giữa (.text-center hoặc nằm trong khối căn giữa) → không phá bố cục căn giữa.
-     Dòng cuối vẫn căn trái như bình thường; đoạn 1 dòng không bị ảnh hưởng. */
+     Dòng cuối vẫn căn trái như bình thường; đoạn 1 dòng không bị ảnh hưởng.
+     Bỏ qua tiêu đề lớn (.h-display / .h-section viết bằng thẻ p) — căng đều chữ to tạo khoảng hở xấu. */
   @media (width >= 40rem) {
-    :is(p, blockquote, .text-justify):not(.text-center, .text-center *, .text-left) {
+    :is(p, blockquote, .text-justify):not(
+      .text-center,
+      .text-center *,
+      .text-left,
+      .h-display,
+      .h-section
+    ) {
       text-align: justify;
     }
   }

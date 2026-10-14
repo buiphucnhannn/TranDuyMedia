@@ -96,13 +96,19 @@ export function Footer() {
         <FooterColumn title="Dịch vụ">
           {services.map((s) => (
             <li key={s.slug}>
-              <Link href={`/dich-vu/${s.slug}`} className="transition-colors hover:text-white">
+              <Link
+                href={`/dich-vu/${s.slug}`}
+                className="inline-block py-1 transition-colors hover:text-white lg:py-0"
+              >
                 {s.title}
               </Link>
             </li>
           ))}
           <li>
-            <Link href="/studio" className="transition-colors hover:text-white">
+            <Link
+              href="/studio"
+              className="inline-block py-1 transition-colors hover:text-white lg:py-0"
+            >
               Bối cảnh studio
             </Link>
           </li>
@@ -132,13 +138,16 @@ export function Footer() {
           </li>
           <li className="flex gap-3">
             <Icon name="phone" className="size-5 shrink-0 text-orange-500" />
-            <a href={contact.phoneHref} className="hover:text-white">
+            <a href={contact.phoneHref} className="inline-block py-0.5 hover:text-white lg:py-0">
               {contact.phone}
             </a>
           </li>
           <li className="flex gap-3">
             <Icon name="mail" className="size-5 shrink-0 text-orange-500" />
-            <a href={`mailto:${contact.email}`} className="hover:text-white">
+            <a
+              href={`mailto:${contact.email}`}
+              className="inline-block py-0.5 hover:text-white lg:py-0"
+            >
               {contact.email}
             </a>
           </li>
@@ -154,10 +163,13 @@ export function Footer() {
           <p>
             © <CopyrightYear /> {siteConfig.name}. All rights reserved.
           </p>
-          <ul className="flex flex-wrap gap-x-5 gap-y-1">
+          <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">
             {mainNav.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="transition-colors hover:text-white">
+                <Link
+                  href={item.href}
+                  className="inline-block py-1 transition-colors hover:text-white lg:py-0"
+                >
                   {item.label}
                 </Link>
               </li>

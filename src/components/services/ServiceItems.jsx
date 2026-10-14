@@ -63,7 +63,7 @@ export function ServiceItems({ items }) {
                     )}
                   >
                     <span className="overflow-hidden">
-                      <span className="block pt-2 text-justify leading-relaxed text-ink-soft">
+                      <span className="block pt-2 leading-relaxed text-ink-soft sm:text-justify">
                         {it.desc}
                       </span>
                       {/* ảnh riêng trên mobile */}

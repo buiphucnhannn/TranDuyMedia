@@ -27,7 +27,7 @@ export function CollectionCard({ collection: c, index = 0, size, className, size
         style={{ objectPosition: c.cover.pos }}
       />
       <div className="absolute inset-0 bg-linear-to-t from-navy-950/85 via-navy-950/10 to-transparent" />
-      <span className="absolute top-4 left-4 flex items-center gap-1.5 rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-semibold tracking-eyebrow text-white uppercase shadow-[0_6px_18px_-6px_rgba(248,104,8,0.7)]">
+      <span className="absolute top-4 left-4 flex items-center gap-1.5 rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-semibold tracking-[0.18em] whitespace-nowrap text-white uppercase shadow-[0_6px_18px_-6px_rgba(248,104,8,0.7)] sm:tracking-eyebrow">
         {c.eyebrow}
       </span>
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-6">

@@ -15,6 +15,8 @@ const nextConfig = {
   images: {
     // Chỉ WebP: AVIF nén nhỏ hơn chút nhưng giải mã nặng hơn nhiều → giật khi ảnh vừa cuộn tới
     formats: ["image/webp"],
+    // Next 16 chỉ cho phép các mức chất lượng liệt kê ở đây (ngoài danh sách bị ép về mức gần nhất)
+    qualities: [70, 75, 90],
   },
   turbopack: {
     rules: {

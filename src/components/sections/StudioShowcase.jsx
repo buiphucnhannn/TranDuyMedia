@@ -82,7 +82,7 @@ function CardSet({ clone = false }) {
               />
               <div className="absolute inset-0 bg-linear-to-t from-navy-950/90 via-navy-950/10 to-transparent" />
             </div>
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5 text-[11px] tracking-eyebrow uppercase">
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 p-4 text-[10px] tracking-[0.18em] whitespace-nowrap uppercase sm:p-5 sm:text-[11px] sm:tracking-eyebrow">
               {/* Nền tối đặc → đọc được cả trên ảnh sáng (tường trắng, tuyết, nắng) */}
               <span className="rounded-full bg-orange-500 px-3 py-1.5 font-semibold text-white shadow-[0_6px_18px_-6px_rgba(248,104,8,0.7)]">
                 {c.eyebrow}

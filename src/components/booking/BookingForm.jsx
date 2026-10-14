@@ -62,9 +62,9 @@ export function BookingForm({ preset = "", compact = false }) {
         e.preventDefault();
         handleSend("messenger");
       }}
-      className="space-y-3"
+      className="space-y-2.5 sm:space-y-3"
     >
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-3">
         <input
           required
           className="field"
@@ -94,14 +94,24 @@ export function BookingForm({ preset = "", compact = false }) {
           ))}
         </select>
       </label>
-      <div className="grid gap-3 sm:grid-cols-2">
+      {/* Thời gian + ngân sách: luôn 2 cột (kể cả mobile) để form vừa 1 màn hình */}
+      <div className="grid grid-cols-[1.1fr_1fr] gap-2.5 sm:grid-cols-2 sm:gap-3">
         <label className="relative block">
-          {label("Thời gian mong muốn")}
-          <input className="field pt-5" type="date" value={form.date} onChange={set("date")} />
+          {label("Ngày mong muốn")}
+          <input
+            className="field pt-5 pr-2 pl-3 sm:px-4"
+            type="date"
+            value={form.date}
+            onChange={set("date")}
+          />
         </label>
         <label className="relative block">
-          {label("Ngân sách dự kiến")}
-          <select className="field pt-5" value={form.budget} onChange={set("budget")}>
+          {label(
+            <>
+              Ngân sách<span className="max-[379px]:hidden"> dự kiến</span>
+            </>,
+          )}
+          <select className="field pt-5 pr-1 pl-3 sm:px-4" value={form.budget} onChange={set("budget")}>
             <option value="">Chưa rõ</option>
             {["Dưới 20 triệu", "20 – 50 triệu", "50 – 100 triệu", "Trên 100 triệu"].map((b) => (
               <option key={b} value={b}>
@@ -112,7 +122,10 @@ export function BookingForm({ preset = "", compact = false }) {
         </label>
       </div>
       <textarea
-        className={cn("field resize-none", compact ? "min-h-[72px]" : "min-h-[110px]")}
+        className={cn(
+          "field resize-none",
+          compact ? "min-h-[60px] sm:min-h-[72px]" : "min-h-[110px]",
+        )}
         placeholder="Mô tả ngắn: sản phẩm, kênh phát, thời lượng, deadline..."
         value={form.note}
         onChange={set("note")}
@@ -121,18 +134,23 @@ export function BookingForm({ preset = "", compact = false }) {
       <div className="flex gap-2 pt-1">
         <button
           type="submit"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-navy-900 px-3 py-3.5 text-[13px] font-medium whitespace-nowrap text-white transition hover:bg-navy-700 sm:px-6 sm:text-sm"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-ink/15 bg-white px-3 py-3.5 text-[13px] font-medium whitespace-nowrap text-ink transition hover:border-navy-900 hover:bg-navy-900 hover:text-white sm:px-6 sm:text-sm"
         >
           <Icon name="messenger" className="size-4" />
-          Gửi qua Messenger
+          {/* Màn rất hẹp (< 380px): bỏ chữ "Gửi qua" để 2 nút không tràn */}
+          <span>
+            <span className="max-[379px]:hidden">Gửi qua </span>Messenger
+          </span>
         </button>
         <button
           type="button"
           onClick={() => handleSend("zalo")}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-ink/20 px-3 py-3.5 text-[13px] font-medium whitespace-nowrap text-ink transition hover:border-navy-900 hover:bg-navy-900 hover:text-white sm:px-6 sm:text-sm"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-ink/15 bg-white px-3 py-3.5 text-[13px] font-medium whitespace-nowrap text-ink transition hover:border-navy-900 hover:bg-navy-900 hover:text-white sm:px-6 sm:text-sm"
         >
           <Icon name="zalo" className="size-5" />
-          Gửi qua Zalo
+          <span>
+            <span className="max-[379px]:hidden">Gửi qua </span>Zalo
+          </span>
         </button>
       </div>
 

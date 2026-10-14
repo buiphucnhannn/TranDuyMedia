@@ -290,7 +290,7 @@ async function ServiceView({ params }) {
             <h2 className="reveal text-3xl h-display sm:text-4xl">Dịch vụ khác</h2>
             <Link
               href="/dich-vu"
-              className="reveal group inline-flex items-center gap-2 text-sm font-medium hover:text-orange-500"
+              className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"
             >
               Tổng quan dịch vụ
               <Icon
@@ -304,7 +304,7 @@ async function ServiceView({ params }) {
               <Link
                 key={o.slug}
                 href={`/dich-vu/${o.slug}`}
-                className="reveal group relative block aspect-16/9 overflow-hidden rounded-3xl bg-navy-900 text-white"
+                className="reveal group relative block aspect-4/3 overflow-hidden rounded-3xl bg-navy-900 text-white sm:aspect-16/9"
                 style={{ "--reveal-delay": `${i * 100}ms` }}
               >
                 <Image

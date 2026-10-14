@@ -1,19 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { Icon } from "@/components/icons";
+import { useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
+const DRAG_PX = 6; // di chuyển quá ngưỡng này = kéo, không phải bấm
+
 /**
  * Bản đồ Google Maps nhúng ở footer (dạng embed, không cần API key).
- * iframe khác domain nuốt con lăn chuột → Lenis bị bỏ qua → cuộn nhảy cục. Vì vậy iframe bị khoá
- * (pointer-events: none) cho tới khi người dùng bấm vào bản đồ; rời chuột khỏi bản đồ thì khoá lại.
+ * iframe khác domain nuốt con lăn chuột → Lenis bị bỏ qua → cuộn nhảy cục, nên mặc định iframe bị khoá
+ * bằng một lớp phủ (là link tới Google Maps):
+ * - BẤM gọn một cái ở bất kỳ đâu → mở Google Maps (tab mới).
+ * - KÉO chuột (giữ & di chuyển > 6px) → mở khoá bản đồ để kéo / phóng to, không mở link.
+ *   Rời chuột khỏi bản đồ thì khoá lại.
+ * - Cảm ứng: vuốt = cuộn trang như bình thường (trình duyệt không phát click sau khi vuốt), chạm = mở Maps.
  */
 export function FooterMap() {
   const [active, setActive] = useState(false);
+  const start = useRef(null);
+  const dragged = useRef(false);
   const { contact } = siteConfig;
   const src = `https://www.google.com/maps?q=${encodeURIComponent(contact.mapsQuery)}&z=16&hl=vi&output=embed`;
+
+  const onPointerDown = (e) => {
+    dragged.current = false;
+    start.current = e.pointerType === "mouse" ? { x: e.clientX, y: e.clientY } : null;
+  };
+  const onPointerMove = (e) => {
+    if (!start.current || !(e.buttons & 1)) return;
+    if (Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > DRAG_PX) {
+      dragged.current = true;
+      start.current = null;
+      setActive(true); // gỡ lớp phủ → các lần kéo tiếp theo tác động thẳng lên bản đồ
+    }
+  };
 
   return (
     <div
@@ -29,17 +49,18 @@ export function FooterMap() {
         className={cn("size-full", !active && "pointer-events-none")}
       />
       {!active && (
-        <button
-          type="button"
-          onClick={() => setActive(true)}
-          aria-label="Bấm để tương tác với bản đồ"
-          className="group absolute inset-0 flex items-end justify-center p-3"
-        >
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-950/85 px-3 py-1.5 text-[11px] font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <Icon name="mapPin" className="size-3.5" />
-            Bấm để kéo / phóng to
-          </span>
-        </button>
+        <a
+          href={contact.mapsLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Mở vị trí studio trên Google Maps"
+          draggable={false}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onClick={(e) => dragged.current && e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          className="absolute inset-0 cursor-pointer select-none"
+        ></a>
       )}
     </div>
   );

@@ -134,11 +134,16 @@ export function IntroSplash() {
               Uy tín <span className="text-orange-500">·</span> Trách nhiệm{" "}
               <span className="text-orange-500">·</span> Tâm huyết
             </p>
+            {/* Luôn 1 dòng (mobile thu tracking), chấm tròn cam phân cách — đồng bộ dòng tương tự ở Hero */}
             <p
-              className="mt-3 text-[10px] font-medium tracking-[0.3em] text-white/50 uppercase sm:text-[11px]"
+              className="mt-3 flex items-center gap-2 text-[10px] font-medium tracking-[0.16em] whitespace-nowrap text-white/55 uppercase sm:gap-3 sm:text-[11px] sm:tracking-[0.3em]"
               style={{ animation: "fadeUp .8s cubic-bezier(.22,1,.36,1) .7s both" }}
             >
-              Video production · Studio · Photography
+              Video production
+              <span className="size-1 rounded-full bg-orange-500" />
+              Studio
+              <span className="size-1 rounded-full bg-orange-500" />
+              Photography
             </p>
             <div className="mt-8 h-px w-40 overflow-hidden bg-white/15 sm:w-56">
               <div
