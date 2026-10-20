@@ -1,45 +1,30 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Gitignore gốc của monorepo — mỗi app còn có .gitignore riêng (fe/.gitignore, be/.gitignore)
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# ---------- Dependencies ----------
+node_modules/
 
-# testing
-/coverage
+# ---------- Environment ----------
+.env
+.env.*
+!.env.example
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# ---------- Logs ----------
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
+# ---------- Editor / OS ----------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# Showreel 4K gốc (~1.1GB) — không commit; bản web đã nén nằm ở public/media (npm run video)
-/public/videos/
+# ---------- Bảo mật ----------
+*.pem
+*.key

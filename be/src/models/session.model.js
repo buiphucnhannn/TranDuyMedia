@@ -1,0 +1,27 @@
+import mongoose from "mongoose";
+
+/**
+ * Phiên đăng nhập = một refresh token đang hiệu lực.
+ * - Chỉ lưu SHA-256 của refresh token (lộ DB cũng không dùng được token).
+ * - Mỗi lần refresh: phiên cũ bị thu hồi (revokedAt, replacedBy) và tạo phiên mới (rotation).
+ * - Token đã thu hồi bị dùng lại → coi như bị đánh cắp → thu hồi toàn bộ phiên của user.
+ * - MongoDB tự xoá phiên hết hạn nhờ TTL index trên expiresAt.
+ */
+const sessionSchema = new mongoose.Schema(
+  {
+    user: { type: String, required: true, index: true }, // ID đăng nhập của admin
+    // "Dấu vân tay" của ID + mật khẩu lúc tạo phiên → đổi mật khẩu trong .env là mọi phiên cũ hết hiệu lực
+    credential: { type: String, required: true },
+    tokenHash: { type: String, required: true, unique: true },
+    expiresAt: { type: Date, required: true },
+    revokedAt: { type: Date, default: null },
+    replacedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
+    userAgent: { type: String, default: "", maxlength: 300 },
+    ip: { type: String, default: "" },
+  },
+  { timestamps: true, versionKey: false },
+);
+
+sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+export const Session = mongoose.models.Session ?? mongoose.model("Session", sessionSchema);

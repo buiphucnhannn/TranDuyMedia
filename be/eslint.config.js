@@ -1,0 +1,24 @@
+import js from "@eslint/js";
+import globals from "globals";
+
+export default [
+  { ignores: ["node_modules/", "coverage/", "data/"] },
+  js.configs.recommended,
+  {
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node,
+    },
+    rules: {
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "no-console": ["warn", { allow: ["error"] }],
+      eqeqeq: ["error", "always"],
+      "prefer-const": "error",
+    },
+  },
+  {
+    files: ["src/config/logger.js", "scripts/**/*.js"],
+    rules: { "no-console": "off" },
+  },
+];

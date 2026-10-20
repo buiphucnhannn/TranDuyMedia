@@ -1,0 +1,310 @@
+[
+  {
+    "slug": "lifestyle-vintage-xanh-reu",
+    "title": "Lifestyle Vintage xanh rêu",
+    "category": "Chân dung - Lifestyle",
+    "summary": "Ánh nắng xuyên rèm, nội thất gỗ và một chút hoài niệm.",
+    "description": "Bộ ảnh chân dung và lifestyle trong không gian tone xanh rêu: rèm sáo, ghế mây, đàn guitar, tranh hướng dương. Ánh sáng tự nhiên buổi sáng kết hợp đèn bổ trợ cho màu da trong và cảm giác ấm, nhẹ nhàng.",
+    "usage": "Lookbook, profile cá nhân, nội dung mạng xã hội",
+    "location": "Phòng Vintage xanh rêu",
+    "studioSet": "vintage-green",
+    "kind": "photo",
+    "order": 1,
+    "media": [
+      {
+        "file": "/images/vintage-green/vintage-green-03.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-14.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-09.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-02.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-04.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-05.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-06.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-07.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-08.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-10.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-11.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-12.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-13.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-15.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/vintage-green/vintage-green-01.jpg",
+        "pos": "top"
+      }
+    ]
+  },
+  {
+    "slug": "concept-box-studio-trang",
+    "title": "Concept Box Studio trắng",
+    "category": "Concept - Tối giản",
+    "summary": "Tone trắng – đen tối giản, sạch và hiện đại.",
+    "description": "Bộ ảnh concept tối giản trên phông trắng liền sàn với hệ đèn Godox và softbox. Bố cục gọn, ánh sáng đều — làm nổi bật người mẫu và sản phẩm, dễ dùng lại cho nhiều kênh truyền thông.",
+    "usage": "Lookbook, ảnh profile, ảnh sản phẩm, beauty",
+    "location": "Box Studio trắng",
+    "studioSet": "box-studio",
+    "kind": "photo",
+    "order": 2,
+    "media": [
+      {
+        "file": "/images/box-studio/box-studio-04.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-02.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-05.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-07.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-01.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-06.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-08.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/box-studio/box-studio-03.jpg",
+        "pos": "top"
+      }
+    ]
+  },
+  {
+    "slug": "retro-sai-gon-san-thuong",
+    "title": "Retro Sài Gòn trên sân thượng",
+    "category": "Ngoại cảnh - Retro",
+    "summary": "Tường gạch, poster xưa và nắng chiều.",
+    "description": "Bộ ảnh ngoại cảnh mang không khí Sài Gòn xưa: tường gạch, cửa sổ xanh và bộ sưu tập poster retro. Tận dụng nắng tự nhiên cho màu ảnh ấm, có chiều sâu.",
+    "usage": "Lookbook thời trang, clip ngắn, nội dung concept",
+    "location": "Khu vực sân thượng",
+    "studioSet": "rooftop",
+    "kind": "photo",
+    "order": 3,
+    "media": [
+      {
+        "file": "/images/rooftop/rooftop-clean.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/rooftop/rooftop-01.jpg",
+        "pos": "top"
+      },
+      {
+        "file": "/images/rooftop/rooftop-03.jpg",
+        "pos": "top"
+      },
+      {
+        "file": "/images/rooftop/rooftop-02.jpg",
+        "pos": "center"
+      }
+    ]
+  },
+  {
+    "slug": "bo-anh-giang-sinh",
+    "title": "Giáng sinh an lành",
+    "category": "Concept mùa lễ",
+    "summary": "Tuyết trắng, lò sưởi và áo len đỏ.",
+    "description": "Bộ ảnh Giáng sinh với hai tông: trắng – xanh thông bên lò sưởi, tuyết giả, cầu tuyết; và ấm áp với piano, nến đỏ. Ekip lo trọn từ dựng bối cảnh, trang phục gợi ý đến hậu kỳ màu.",
+    "usage": "Ảnh gia đình, cặp đôi, lookbook áo len, quảng cáo mùa lễ",
+    "location": "Giáng sinh an lành",
+    "studioSet": "christmas",
+    "kind": "photo",
+    "order": 4,
+    "media": [
+      {
+        "file": "/images/christmas/christmas-14.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-07.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-03.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-04.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-05.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-06.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-08.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-09.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-10.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-11.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-13.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-15.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-16.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-17.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-02.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-01.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/christmas/christmas-12.jpg",
+        "pos": "top"
+      }
+    ]
+  },
+  {
+    "slug": "bo-anh-tet-xuan-men-thuong",
+    "title": "Xuân mến thương",
+    "category": "Concept mùa lễ",
+    "summary": "Tết xưa với TV cổ, câu đối và hoa mai.",
+    "description": "Bộ ảnh Tết hoài cổ: TV đen trắng, điện thoại quay số, câu đối đỏ, tường đỏ với ghế gỗ và hoa mai. Màu sắc rực rỡ, đậm chất xuân cho ảnh áo dài và chiến dịch Tết.",
+    "usage": "Ảnh áo dài, gia đình, lookbook Tết, TVC mùa xuân",
+    "location": "Xuân mến thương",
+    "studioSet": "tet",
+    "kind": "photo",
+    "order": 5,
+    "media": [
+      {
+        "file": "/images/tet/tet-03.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-05.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-04.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-06.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-07.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-02.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/tet/tet-01.jpg",
+        "pos": "top"
+      }
+    ]
+  },
+  {
+    "slug": "bo-anh-trung-thu",
+    "title": "Dưới ánh trăng rằm",
+    "category": "Concept mùa lễ",
+    "summary": "Trăng vàng, lồng đèn và cá chép.",
+    "description": "Bộ ảnh Trung thu với trăng tròn, lồng đèn ngôi sao, cá chép và góc TV cổ trên nền tường tre — ấm áp, trong trẻo cho trẻ em và gia đình.",
+    "usage": "Ảnh thiếu nhi, gia đình, quảng cáo bánh trung thu",
+    "location": "Dưới ánh trăng rằm",
+    "studioSet": "trung-thu",
+    "kind": "photo",
+    "order": 6,
+    "media": [
+      {
+        "file": "/images/trung-thu/trung-thu-02.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/trung-thu/trung-thu-03.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/trung-thu/trung-thu-04.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/trung-thu/trung-thu-01.jpg",
+        "pos": "center"
+      },
+      {
+        "file": "/images/trung-thu/trung-thu-05.jpg",
+        "pos": "top"
+      }
+    ]
+  }
+]

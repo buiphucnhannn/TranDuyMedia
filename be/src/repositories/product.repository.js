@@ -1,0 +1,97 @@
+import { Product } from "#models/product.model.js";
+import { MongoRepository } from "#repositories/base.repository.js";
+
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const SORT = { order: 1, createdAt: -1 };
+
+/** Repository sản phẩm — mọi truy vấn bỏ qua bản ghi đã xoá mềm. */
+export class ProductRepository extends MongoRepository {
+  constructor() {
+    super(Product);
+  }
+
+  list({ publishedOnly = false, q, page = 1, limit = 100 } = {}) {
+    const filter = { deletedAt: null };
+    if (publishedOnly) filter.published = true;
+    if (q) {
+      const rx = new RegExp(escapeRegex(q), "i");
+      filter.$or = [{ title: rx }, { category: rx }, { slug: rx }];
+    }
+    return this.findAll({ filter, sort: SORT, page, limit });
+  }
+
+  findBySlug(slug, { publishedOnly = false } = {}) {
+    return this.findOne({ slug, deletedAt: null, ...(publishedOnly && { published: true }) });
+  }
+
+  findById(id) {
+    return this.findOne({ _id: id, deletedAt: null });
+  }
+
+  async slugTaken(slug, exceptId) {
+    const doc = await this.model
+      .exists({ slug, deletedAt: null, ...(exceptId && { _id: { $ne: exceptId } }) })
+      .lean();
+    return Boolean(doc);
+  }
+
+  async update(id, patch) {
+    const doc = await this.model
+      .findOneAndUpdate({ _id: id, deletedAt: null }, patch, { new: true, runValidators: true })
+      .lean();
+    if (!doc) return null;
+    const { _id, ...rest } = doc;
+    return { id: String(_id), ...rest };
+  }
+
+  async softDelete(id) {
+    const res = await this.model.updateOne(
+      { _id: id, deletedAt: null },
+      { $set: { deletedAt: new Date() } },
+    );
+    return res.modifiedCount === 1;
+  }
+
+  /** Thống kê cho trang Tổng quan: số sản phẩm (hiển thị / ẩn) + số ảnh, video trong thư viện. */
+  async stats() {
+    const [row] = await this.model.aggregate([
+      { $match: { deletedAt: null } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+          published: { $sum: { $cond: ["$published", 1, 0] } },
+          images: {
+            $sum: {
+              $size: { $filter: { input: "$media", cond: { $eq: ["$$this.type", "image"] } } },
+            },
+          },
+          videos: {
+            $sum: {
+              $size: { $filter: { input: "$media", cond: { $ne: ["$$this.type", "image"] } } },
+            },
+          },
+        },
+      },
+    ]);
+    const { total = 0, published = 0, images = 0, videos = 0 } = row ?? {};
+    return { total, published, hidden: total - published, images, videos };
+  }
+
+  /** Sản phẩm vừa thêm / sửa gần nhất. */
+  async recentlyUpdated(limit = 4) {
+    const { items } = await this.findAll({
+      filter: { deletedAt: null },
+      sort: { updatedAt: -1 },
+      limit,
+    });
+    return items;
+  }
+
+  async nextOrder() {
+    const last = await this.model.findOne({ deletedAt: null }).sort({ order: -1 }).lean();
+    return (last?.order ?? 0) + 1;
+  }
+}
+
+export const productRepository = new ProductRepository();

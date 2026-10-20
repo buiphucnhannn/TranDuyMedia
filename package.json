@@ -2,32 +2,18 @@
   "name": "tranduymedia",
   "version": "0.1.0",
   "private": true,
+  "description": "Monorepo Tran Duy Media Studio — fe (Next.js) + be (ExpressJS)",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "assets": "node scripts/generate-assets.mjs",
-    "video": "node scripts/encode-showreel.mjs"
-  },
-  "dependencies": {
-    "lenis": "^1.3.26",
-    "next": "16.4.0",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/turbopack": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "16.4.0",
-    "prettier": "^3.9.10",
-    "prettier-plugin-tailwindcss": "^0.8.1",
-    "sharp": "^0.35.5",
-    "tailwindcss": "^4"
+    "install:all": "npm install --prefix fe && npm install --prefix be",
+    "dev:fe": "npm run dev --prefix fe",
+    "dev:be": "npm run dev --prefix be",
+    "build:fe": "npm run build --prefix fe",
+    "start:fe": "npm run start --prefix fe",
+    "start:be": "npm run start --prefix be",
+    "test:be": "npm test --prefix be",
+    "lint": "npm run lint --prefix fe && npm run lint --prefix be"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.9.0"
   }
 }

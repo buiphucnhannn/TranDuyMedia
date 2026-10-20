@@ -1,0 +1,99 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Icon } from "@/components/icons";
+import { siteConfig } from "@/config/site";
+import { inlineShowreel, pickShowreelSrc } from "@/lib/showreel";
+import { lockScroll } from "@/lib/utils";
+
+/**
+ * Popup xem showreel toàn màn hình, CÓ TIẾNG (người dùng vừa bấm nên trình duyệt cho phép).
+ * Mở bằng bất kỳ phần tử nào có thuộc tính data-showreel.
+ * Nếu video trong trang đang chạy: popup tiếp tục đúng giây đó, video trong trang tạm dừng;
+ * đóng popup thì video trong trang chạy tiếp.
+ */
+export function VideoModal() {
+  const [state, setState] = useState(null); // { src, startAt }
+  const resumeInlineRef = useRef(false); // video trong trang đang chạy lúc mở popup → chạy tiếp khi đóng
+
+  const close = useCallback(() => {
+    if (resumeInlineRef.current)
+      inlineShowreel()
+        ?.play()
+        .catch(() => {});
+    resumeInlineRef.current = false;
+    setState(null);
+  }, []);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      const el = e.target.closest("[data-showreel]");
+      if (!el) return;
+      e.preventDefault();
+      const inline = inlineShowreel();
+      resumeInlineRef.current = !!inline && !inline.paused;
+      inline?.pause();
+      setState({
+        src: pickShowreelSrc(),
+        startAt: inline && inline.currentTime > 1 ? inline.currentTime : 0,
+      });
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
+  useEffect(() => {
+    if (!state) return;
+    const onKey = (e) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    lockScroll(true);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      lockScroll(false);
+    };
+  }, [state, close]);
+
+  if (!state) return null;
+  const { showreel } = siteConfig;
+
+  return (
+    <div
+      className="fixed inset-0 z-150 flex items-center justify-center p-3 sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label={showreel.title}
+    >
+      <div
+        className="absolute inset-0 [animation:fadeIn_.4s_ease-out_both] bg-navy-950/95"
+        onClick={close}
+      />
+      <button
+        type="button"
+        onClick={close}
+        aria-label="Đóng"
+        className="absolute top-4 right-4 z-10 flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+      >
+        <Icon name="close" className="size-5" />
+      </button>
+      <div className="relative w-full max-w-6xl [animation:popIn_.55s_cubic-bezier(.22,1,.36,1)_both]">
+        <p className="mb-3 flex items-center gap-3 text-[11px] tracking-eyebrow text-white/60 uppercase">
+          <span className="size-1.5 rounded-full bg-orange-500" />
+          {showreel.title} - {showreel.duration}
+        </p>
+        <div className="aspect-video overflow-hidden rounded-2xl bg-black shadow-soft">
+          <video
+            src={state.src}
+            poster={showreel.poster}
+            controls
+            autoPlay
+            playsInline
+            onLoadedMetadata={(e) => {
+              if (state.startAt) e.currentTarget.currentTime = state.startAt;
+            }}
+            className="size-full bg-black"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
