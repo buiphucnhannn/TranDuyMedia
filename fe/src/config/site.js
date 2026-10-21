@@ -2,13 +2,34 @@
  * Cấu hình chung của website — thông tin lấy từ hồ sơ yêu cầu (docs/demo.docx) và poster của studio.
  * Thay đổi thương hiệu, liên hệ, mạng xã hội, video showreel tại đây.
  */
+/**
+ * URL chính thức của website: NEXT_PUBLIC_SITE_URL → (trên Vercel) tên miền production Vercel tự cấp
+ * → localhost. Giá trị sai định dạng bị bỏ qua (kèm cảnh báo) thay vì làm hỏng cả bản build.
+ */
+function siteUrl() {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL &&
+      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+  ];
+  for (const raw of candidates) {
+    if (!raw) continue;
+    try {
+      return new URL(raw.trim()).origin;
+    } catch {
+      console.warn(`[site] NEXT_PUBLIC_SITE_URL không hợp lệ: "${raw}" — dùng giá trị dự phòng`);
+    }
+  }
+  return "http://localhost:3000";
+}
+
 export const siteConfig = {
   name: "Tran Duy Media Studio",
   shortName: "TD Media",
   tagline: "Sản xuất video thương mại & studio quay chụp",
   description:
     "Tran Duy Media Studio – 10+ năm sản xuất video thương mại quảng cáo (TVC, iTVC, documentary, phim doanh nghiệp, video sự kiện), chụp ảnh thương mại và cho thuê bối cảnh studio tại TP. Hồ Chí Minh.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url: siteUrl(),
   // API backend: gọi cùng tên miền, Next.js chuyển tiếp sang be/ (xem rewrites trong next.config.mjs)
   apiUrl: "/api/v1",
   locale: "vi_VN",
