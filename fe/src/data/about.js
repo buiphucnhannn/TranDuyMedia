@@ -1,16 +1,16 @@
 // Nội dung trang "Về chúng tôi". Ảnh /images/about/reel-* là khung hình trích từ showreel 2026
 // (scripts: chụp từ public/media/showreel-1080.mp4, đã cắt bỏ nhãn thể loại).
 
-const A = (name) => `/images/about/${name}.jpg`;
+const A = (name) => `/images/about/${name}.webp`;
 
 // Nền đầu trang: 6 cột ảnh trôi — ưu tiên ảnh có người & máy quay ở 3 cột đầu (mobile chỉ hiện 3 cột)
 export const aboutHeaderColumns = [
-  ["/images/bts/bts-02.jpg", A("reel-event"), A("reel-short")],
-  ["/images/bts/bts-05.jpg", A("reel-talkshow"), A("reel-warehouse")],
-  [A("reel-camera"), A("reel-interview"), "/images/bts/bts-06.jpg"],
-  ["/images/bts/bts-07.jpg", A("reel-speaker"), A("reel-event-hall")],
-  ["/images/bts/bts-04.jpg", A("reel-portrait"), A("reel-food")],
-  [A("reel-spa"), "/images/bts/bts-02.jpg", A("reel-massage")],
+  ["/images/bts/bts-02.webp", A("reel-event"), A("reel-short")],
+  ["/images/bts/bts-05.webp", A("reel-talkshow"), A("reel-warehouse")],
+  [A("reel-camera"), A("reel-interview"), "/images/bts/bts-06.webp"],
+  ["/images/bts/bts-07.webp", A("reel-speaker"), A("reel-event-hall")],
+  ["/images/bts/bts-04.webp", A("reel-portrait"), A("reel-food")],
+  [A("reel-spa"), "/images/bts/bts-02.webp", A("reel-massage")],
 ];
 
 // Hồ sơ doanh nghiệp — thông tin nhanh
@@ -23,14 +23,14 @@ export const companyFacts = [
 
 // 3 ảnh = 3 mảng dịch vụ: quay video (ảnh cao bên trái) · studio · chụp ảnh thương mại
 export const profileImages = [
-  { src: "/images/bts/bts-02.jpg", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
+  { src: "/images/bts/bts-02.webp", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
   {
-    src: "/images/bts/bts-07.jpg",
+    src: "/images/bts/bts-07.webp",
     alt: "Hệ thống đèn và softbox tại Box Studio",
     pos: "center 45%",
   },
   {
-    src: "/images/bts/bts-06.jpg",
+    src: "/images/bts/bts-06.webp",
     alt: "Buổi chụp thương mại cho cửa hàng trang sức",
     pos: "center 35%",
   },
@@ -82,7 +82,7 @@ export const mission = {
   en: "Mission",
   text: "Giúp doanh nghiệp Việt kể câu chuyện bằng hình ảnh chuyên nghiệp, chi phí hợp lý.",
   tags: ["Chuyên nghiệp", "Chi phí hợp lý", "Hiệu quả đo được"],
-  image: "/images/bts/bts-05.jpg",
+  image: "/images/bts/bts-05.webp",
   imagePos: "center 35%",
 };
 export const vision = {
@@ -90,7 +90,7 @@ export const vision = {
   en: "Vision",
   text: "Đối tác hình ảnh đầu tiên mà SME và startup TP.HCM nghĩ đến.",
   tags: ["SME", "Startup", "TP. Hồ Chí Minh"],
-  image: "/images/about/reel-aerial.jpg",
+  image: "/images/about/reel-aerial.webp",
   imagePos: "center 60%",
 };
 
@@ -138,7 +138,7 @@ export const capabilities = [
 ];
 
 export const behindImages = [
-  { src: "/images/bts/bts-05.jpg", alt: "Ekip quay phim trên trường quay", pos: "center" },
-  { src: "/images/bts/bts-07.jpg", alt: "Hệ thống đèn và softbox tại Box Studio", pos: "center" },
-  { src: "/images/bts/bts-04.jpg", alt: "Setup ánh sáng Godox", pos: "center" },
+  { src: "/images/bts/bts-05.webp", alt: "Ekip quay phim trên trường quay", pos: "center" },
+  { src: "/images/bts/bts-07.webp", alt: "Hệ thống đèn và softbox tại Box Studio", pos: "center" },
+  { src: "/images/bts/bts-04.webp", alt: "Setup ánh sáng Godox", pos: "center" },
 ];

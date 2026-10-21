@@ -25,7 +25,7 @@ export function ErrorScreen({ code, eyebrow, title, description, actions = [], c
     >
       <ScrollLock />
       <Image
-        src="/images/bts/bts-05.jpg"
+        src="/images/bts/bts-05.webp"
         alt=""
         fill
         preload
@@ -48,7 +48,7 @@ export function ErrorScreen({ code, eyebrow, title, description, actions = [], c
       <div className="flex max-w-xl flex-col items-center text-center">
         <Link href="/" aria-label="Tran Duy Media — Trang chủ" className="mb-10 block">
           <Image
-            src="/images/brand/logo-light.png"
+            src="/images/brand/logo-light.webp"
             alt="Tran Duy Media"
             width={989}
             height={768}

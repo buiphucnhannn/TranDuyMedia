@@ -47,7 +47,7 @@ export function BookingDetail({ booking: b, onClose, onStatus, saving }) {
 
   return (
     <div
-      className="fixed inset-0 z-[150] flex items-end justify-center p-0 sm:items-center sm:p-6"
+      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="booking-title"
@@ -59,7 +59,7 @@ export function BookingDetail({ booking: b, onClose, onStatus, saving }) {
       <div
         ref={panel}
         tabIndex={-1}
-        className="relative flex max-h-[92svh] w-full max-w-2xl [animation:popIn_.4s_cubic-bezier(.22,1,.36,1)_both] flex-col overflow-hidden rounded-t-3xl bg-white shadow-soft outline-none sm:rounded-3xl"
+        className="relative flex max-h-[92svh] w-full max-w-2xl [animation:popIn_.4s_cubic-bezier(.22,1,.36,1)_both] flex-col overflow-hidden rounded-3xl bg-white shadow-soft outline-none sm:rounded-3xl"
       >
         {/* Đầu popup */}
         <div className="flex items-start gap-4 border-b border-ink/10 px-6 pt-6 pb-5">

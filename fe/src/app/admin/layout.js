@@ -1,7 +1,8 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const metadata = {
-  title: { default: "Quản trị", template: "%s - Quản trị | Tran Duy Media" },
+  // Tên tab: "Trang | Quản trị Tran Duy Media" — phân biệt rõ với các tab website công khai
+  title: { default: "Quản trị", template: "%s | Quản trị Tran Duy Media" },
   robots: { index: false, follow: false },
 };
 

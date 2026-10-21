@@ -52,7 +52,7 @@ export function StatusMenu({ value, onChange, disabled }) {
     const away = () => setOpen(false);
     document.addEventListener("pointerdown", close);
     document.addEventListener("keydown", esc);
-    window.addEventListener("scroll", away, true);
+    window.addEventListener("scroll", away, { capture: true, passive: true });
     window.addEventListener("resize", away);
     return () => {
       document.removeEventListener("pointerdown", close);
@@ -148,8 +148,10 @@ export function StatusSegmented({ value, onChange, disabled }) {
               on ? s.active : "bg-white text-ink-soft ring-ink/5 hover:text-ink",
             )}
           >
-            <span className={cn("size-1.5 rounded-full", on ? "bg-white" : s.dot)} />
-            <span className="truncate">{s.label}</span>
+            <span className={cn("size-1.5 shrink-0 rounded-full", on ? "bg-white" : s.dot)} />
+            {/* Điện thoại: chữ ngắn để không bị cắt "Chưa giải ..." */}
+            <span className="truncate sm:hidden">{s.short}</span>
+            <span className="truncate max-sm:hidden">{s.label}</span>
           </button>
         );
       })}

@@ -1,7 +1,7 @@
 import { ErrorScreen } from "@/components/ui/ErrorScreen";
 
 export const metadata = {
-  title: "Không tìm thấy trang",
+  title: "404 - Không tìm thấy trang",
   robots: { index: false, follow: false },
 };
 

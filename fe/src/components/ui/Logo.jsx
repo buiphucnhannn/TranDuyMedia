@@ -10,7 +10,7 @@ export function Logo({ className = "h-10", light = false, preload = false }) {
   return (
     <span className={cn("relative block aspect-[989/768]", className)}>
       <Image
-        src="/images/brand/logo.png"
+        src="/images/brand/logo.webp"
         alt="Tran Duy Media Studio"
         fill
         sizes="80px"
@@ -18,7 +18,7 @@ export function Logo({ className = "h-10", light = false, preload = false }) {
         className={cn("object-contain transition-opacity duration-500", light && "opacity-0")}
       />
       <Image
-        src="/images/brand/logo-light.png"
+        src="/images/brand/logo-light.webp"
         alt=""
         fill
         sizes="80px"

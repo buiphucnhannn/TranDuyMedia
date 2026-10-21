@@ -1,5 +1,6 @@
 import { BOOKING_STATUSES, Booking, LEGACY_STATUS_MAP } from "#models/booking.model.js";
 import { MongoRepository } from "#repositories/base.repository.js";
+import { undoable } from "#utils/undo.js";
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -33,6 +34,20 @@ export class BookingRepository extends MongoRepository {
       { $set: { deletedAt: new Date(), deletedBy: by } },
     );
     return res.modifiedCount === 1;
+  }
+
+  /** Hoàn tác xoá — chỉ trong vài giây ngay sau khi xoá (xem utils/undo.js). */
+  async restore(id) {
+    const doc = await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: undoable() },
+        { $set: { deletedAt: null, deletedBy: null } },
+        { new: true },
+      )
+      .lean();
+    if (!doc) return null;
+    const { _id, ...rest } = doc;
+    return { id: String(_id), ...rest };
   }
 
   /** Yêu cầu cùng số điện thoại gửi trong `withinMs` gần nhất (chống gửi trùng). */

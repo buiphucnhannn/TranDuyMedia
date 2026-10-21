@@ -44,7 +44,7 @@ export function Partners() {
               <li
                 key={i}
                 aria-hidden={i >= partners.length ? "true" : undefined}
-                className="group relative flex h-[120px] w-[200px] shrink-0 items-center justify-center sm:h-[150px] sm:w-[290px]"
+                className="group relative flex h-[110px] w-[170px] shrink-0 items-center justify-center sm:h-[150px] sm:w-[290px]"
               >
                 <Image
                   src={p.logo}

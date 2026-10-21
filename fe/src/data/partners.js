@@ -1,5 +1,5 @@
 // Thương hiệu đã đồng hành — logo lấy từ tranduymedia.com (đã cắt viền, nền trong suốt, cao 160px)
-const L = (f) => `/images/partners/${f}.png`;
+const L = (f) => `/images/partners/${f}.webp`;
 
 export const partners = [
   { name: "Solartop", logo: L("solartop"), w: 616 },

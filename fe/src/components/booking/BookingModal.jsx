@@ -70,7 +70,7 @@ export function BookingModal() {
       <div className="relative grid max-h-[calc(100svh-1.5rem)] w-full max-w-[980px] [animation:popIn_.55s_cubic-bezier(.22,1,.36,1)_both] overflow-hidden rounded-[1.5rem] bg-paper shadow-soft sm:max-h-[92svh] sm:rounded-[1.75rem] lg:grid-cols-[0.42fr_0.58fr]">
         {/* Cột ảnh (desktop) */}
         <div className="relative hidden lg:block">
-          <Image src="/images/bts/bts-05.jpg" alt="" fill sizes="420px" className="object-cover" />
+          <Image src="/images/bts/bts-05.webp" alt="" fill sizes="420px" className="object-cover" />
           <div className="absolute inset-0 bg-linear-to-t from-navy-950/90 via-navy-950/30 to-navy-950/10" />
           <div className="absolute inset-x-0 bottom-0 px-8 pt-8 pb-10 text-white">
             <p className="text-[1.75rem] h-display">

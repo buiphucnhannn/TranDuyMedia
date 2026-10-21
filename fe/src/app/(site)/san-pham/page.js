@@ -9,7 +9,7 @@ const headerColumns = (products) => {
   const pool = products.flatMap((p) =>
     p.images.filter((m) => m.type === "image").map((m) => m.src),
   );
-  if (!pool.length) pool.push("/images/bts/bts-05.jpg");
+  if (!pool.length) pool.push("/images/bts/bts-05.webp");
   return Array.from({ length: 6 }, (_, i) =>
     [0, 1, 2].map((k) => pool[(i * 5 + k * 2) % pool.length]),
   );
@@ -20,7 +20,7 @@ export const metadata = createMetadata({
   description:
     "Các dự án hình ảnh và video do Tran Duy Media Studio thực hiện: concept, lookbook, lifestyle, mùa lễ — từ ý tưởng, dựng bối cảnh, ánh sáng đến hậu kỳ.",
   path: "/san-pham",
-  image: "/images/vintage-green/vintage-green-03.jpg",
+  image: "/images/vintage-green/vintage-green-03.webp",
 });
 
 export default async function ProductsPage() {

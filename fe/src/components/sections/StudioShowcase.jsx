@@ -1,29 +1,21 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { DragMarquee } from "@/components/gallery/DragMarquee";
 import { Button, Container } from "@/components/ui";
 import { collections } from "@/data/collections";
-import { getProducts } from "@/lib/products";
-import { cn, pad } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 const CARD_W = "w-[290px] sm:w-[330px] lg:w-[360px]";
 
 /**
  * Bối cảnh studio cho thuê — dải thẻ tự trôi ngang liên tục, chậm rãi (vòng lặp liền mạch), kéo được.
- * - Rê chuột vào → dừng; nhấn-kéo (chuột) / vuốt (điện thoại, touchpad) → lướt qua lại; bấm thẻ → sang trang.
+ * - Rê chuột vào → dừng; nhấn-kéo (chuột) / vuốt (điện thoại, touchpad) → lướt qua lại.
  * - Danh sách được nhân đôi để vòng lặp không có điểm nối. Bản sao ẩn với trình đọc màn hình và
  *   không nhận Tab (aria-hidden + tabIndex -1).
  * - Tốc độ tự trôi: prop speed (px/giây) của DragMarquee.
  * Đặt ở trang dịch vụ "Cho thuê bối cảnh studio" (/dich-vu/cho-thue-studio).
  */
-export async function StudioShowcase({ eyebrow = "Cho thuê studio" }) {
-  // Bối cảnh → sản phẩm thực hiện tại bối cảnh đó (không có thì dẫn về trang Sản phẩm)
-  const products = await getProducts();
-  const hrefOf = (set) => {
-    const p = products.find((x) => x.set === set);
-    return p ? `/san-pham/${p.slug}` : "/san-pham";
-  };
+export function StudioShowcase({ eyebrow = "Cho thuê studio" }) {
   return (
     <section
       id="studio"
@@ -58,8 +50,8 @@ export async function StudioShowcase({ eyebrow = "Cho thuê studio" }) {
           speed={32}
           className="[mask-image:linear-gradient(to_right,transparent,#000_3%,#000_97%,transparent)]"
         >
-          <CardSet hrefOf={hrefOf} />
-          <CardSet hrefOf={hrefOf} clone />
+          <CardSet />
+          <CardSet clone />
         </DragMarquee>
       </div>
     </section>
@@ -67,18 +59,15 @@ export async function StudioShowcase({ eyebrow = "Cho thuê studio" }) {
 }
 
 /** Một bộ thẻ (6 bối cảnh + ô đặt lịch). clone: bản sao cho vòng lặp — ẩn khỏi trình đọc màn hình & Tab. */
-function CardSet({ hrefOf, clone = false }) {
+function CardSet({ clone = false }) {
   const tab = clone ? -1 : undefined;
   return (
     <div className="flex" aria-hidden={clone || undefined}>
-      {collections.map((c, i) => (
+      {collections.map((c) => (
         // pr-5 thay cho gap: khoảng cách nằm trong từng thẻ → 2 bộ nối nhau không bị lệch
         <div key={c.slug} className={cn("shrink-0 pr-5", CARD_W)}>
-          <Link
-            href={hrefOf(c.slug)}
-            tabIndex={tab}
-            className="group relative block overflow-hidden rounded-2xl bg-navy-800"
-          >
+          {/* Thẻ giới thiệu bối cảnh (không còn trang riêng → không dẫn link) */}
+          <article className="group relative overflow-hidden rounded-2xl bg-navy-800">
             <div className="relative aspect-4/5">
               <Image
                 src={c.cover.src}
@@ -88,40 +77,33 @@ function CardSet({ hrefOf, clone = false }) {
                 className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
                 style={{ objectPosition: c.cover.pos }}
               />
-              <div className="absolute inset-0 bg-linear-to-t from-navy-950/90 via-navy-950/10 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-navy-950/95 via-navy-950/20 to-transparent" />
             </div>
-            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 p-4 text-[10px] tracking-[0.18em] whitespace-nowrap uppercase sm:p-5 sm:text-[11px] sm:tracking-eyebrow">
-              {/* Nền tối đặc → đọc được cả trên ảnh sáng (tường trắng, tuyết, nắng) */}
-              <span className="rounded-full bg-orange-500 px-3 py-1.5 font-semibold text-white shadow-[0_6px_18px_-6px_rgba(248,104,8,0.7)]">
+            <div className="absolute inset-x-0 top-0 p-4 text-[10px] tracking-[0.18em] whitespace-nowrap uppercase sm:p-5 sm:text-[11px] sm:tracking-eyebrow">
+              {/* Nền đặc → đọc được cả trên ảnh sáng (tường trắng, tuyết, nắng) */}
+              <span className="inline-block rounded-full bg-orange-500 px-3 py-1.5 font-semibold text-white shadow-[0_6px_18px_-6px_rgba(248,104,8,0.7)]">
                 {c.eyebrow}
               </span>
-              <span className="rounded-full bg-navy-950/75 px-2.5 py-1.5 font-semibold text-white tabular-nums">
-                {pad(i + 1)}
-              </span>
             </div>
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-legible sm:p-6">
-              <div>
-                <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">{c.name}</h3>
-                <p className="mt-1 text-left text-sm text-white/85">{c.tagline}</p>
-                <p className="mt-2 text-[11px] tracking-eyebrow text-white/70 uppercase">
-                  {pad(c.images.length)} ảnh
-                </p>
-              </div>
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-navy-900 transition-all duration-300 group-hover:bg-orange-500 group-hover:text-white">
-                <Icon name="arrowRight" className="size-4" />
-              </span>
+            <div className="absolute inset-x-0 bottom-0 p-5 text-center text-legible sm:p-6">
+              <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">{c.name}</h3>
+              <p className="mt-1.5 line-clamp-2 text-center text-sm leading-relaxed text-balance text-white/85">
+                {c.tagline}
+              </p>
             </div>
-          </Link>
+          </article>
         </div>
       ))}
 
       {/* Ô đặt lịch — cùng kích thước với thẻ ảnh */}
       <div className={cn("shrink-0 pr-5", CARD_W)}>
-        <div className="flex aspect-4/5 flex-col justify-between rounded-2xl border border-white/15 p-6 sm:p-8">
-          <p className="eyebrow">Đặt lịch studio</p>
+        <div className="flex aspect-4/5 flex-col items-center justify-center rounded-2xl border border-white/15 p-6 text-center sm:p-8">
+          <p className="mb-5 eyebrow">Đặt lịch studio</p>
           <div>
-            <p className="text-3xl h-display sm:text-4xl">Thuê theo giờ, tối thiểu 2 giờ.</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/70">
+            <p className="text-3xl h-display text-balance sm:text-4xl">
+              Thuê theo giờ, tối thiểu 2 giờ.
+            </p>
+            <p className="mx-auto mt-4 max-w-[17rem] text-center text-sm leading-relaxed text-balance text-white/70">
               Đã bao gồm đèn, phông, đạo cụ của từng bối cảnh. Gửi lịch mong muốn, chúng tôi xác
               nhận trong ngày.
             </p>

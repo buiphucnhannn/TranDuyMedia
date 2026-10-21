@@ -63,7 +63,11 @@ export function ConfirmDialog({
         <h2 id="confirm-title" className="mt-6 text-xl font-bold tracking-tight text-ink">
           {title}
         </h2>
-        <div id="confirm-desc" className="mt-2 text-center text-sm leading-relaxed text-ink-soft">
+        {/* text-balance: các dòng dài đều nhau, không rớt 1 chữ lẻ xuống dòng cuối */}
+        <div
+          id="confirm-desc"
+          className="mt-2 text-center text-sm leading-relaxed text-balance text-ink-soft"
+        >
           {description}
         </div>
         {children}

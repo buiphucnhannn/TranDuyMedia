@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   const s = getService(slug);
   if (!s) return {};
   return createMetadata({
-    title: s.title,
+    title: `${s.title} | Dịch vụ`,
     description: s.description,
     path: `/dich-vu/${s.slug}`,
     image: s.image,
@@ -248,7 +248,7 @@ async function ServiceView({ params }) {
                 Mọi hạng mục đều rõ ràng ngay từ dự toán — không phát sinh ẩn, không chờ đợi.
               </p>
               <div
-                className="reveal mt-8 flex flex-wrap gap-3"
+                className="reveal btn-row mt-8 flex flex-wrap gap-3"
                 style={{ "--reveal-delay": "200ms" }}
               >
                 <Button variant="white" pill data-booking={s.slug}>

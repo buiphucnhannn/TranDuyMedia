@@ -14,7 +14,7 @@ export function ProductCard({ product: p, index = 0, size, className, sizes }) {
       href={`/san-pham/${p.slug}`}
       className={cn(
         "group reveal relative block overflow-hidden rounded-2xl bg-navy-900 text-white",
-        size === "lg" ? "aspect-4/3" : "aspect-3/4",
+        size === "lg" ? "aspect-4/3" : "aspect-4/5 sm:aspect-3/4", // điện thoại: thấp hơn chút để lướt nhanh
         className,
       )}
       style={{ "--reveal-delay": `${(index % 3) * 90}ms` }}

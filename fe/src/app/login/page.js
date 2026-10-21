@@ -28,7 +28,7 @@ export default function LoginPage() {
       {/* Cột ảnh */}
       <aside className="grain relative isolate hidden overflow-hidden bg-navy-950 text-white lg:block">
         <Image
-          src="/images/bts/bts-05.jpg"
+          src="/images/bts/bts-05.webp"
           alt=""
           fill
           preload

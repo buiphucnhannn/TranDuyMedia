@@ -5,16 +5,16 @@ import { Container } from "@/components/ui";
 import { stats } from "@/data/services";
 
 const FRAMES = [
-  { src: "/images/bts/bts-05.jpg", pos: "center", h: "h-[78%]", speed: 0.05, delay: 0 },
+  { src: "/images/bts/bts-05.webp", pos: "center", h: "h-[78%]", speed: 0.05, delay: 0 },
   {
-    src: "/images/christmas/christmas-07.jpg",
+    src: "/images/christmas/christmas-07.webp",
     pos: "center 30%",
     h: "h-full",
     speed: -0.04,
     delay: 120,
   },
   {
-    src: "/images/vintage-green/vintage-green-03.jpg",
+    src: "/images/vintage-green/vintage-green-03.webp",
     pos: "center",
     h: "h-[86%]",
     speed: 0.07,

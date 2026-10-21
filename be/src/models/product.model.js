@@ -38,7 +38,9 @@ const productSchema = new mongoose.Schema(
     media: { type: [mediaItemSchema], default: [] },
     published: { type: Boolean, default: true, index: true },
     order: { type: Number, default: 0 },
+    // Xoá mềm: bản ghi + tệp trên Cloudinary vẫn giữ (khôi phục / đối soát được), chỉ ẩn khỏi mọi truy vấn
     deletedAt: { type: Date, default: null, index: true },
+    deletedBy: { type: String, default: null },
   },
   { timestamps: true, versionKey: false },
 );

@@ -6,7 +6,9 @@ import { Icon } from "@/components/icons";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { api } from "@/lib/api";
 import { toast } from "@/lib/toast";
+import { cdn } from "@/lib/cdn";
 import { zoomStyle } from "@/lib/crop";
+import { mediaCount } from "@/lib/media-count";
 import { cn } from "@/lib/utils";
 import {
   describeError,
@@ -20,7 +22,7 @@ import { ProductEditor } from "./ProductEditor";
 /** Ảnh bìa: tệp đầu tiên có ảnh (ảnh, hoặc ảnh đại diện video). */
 const coverOf = (p) => {
   const m = p.media?.find((x) => x.type === "image" || x.poster);
-  return m ? (m.type === "image" ? m.url : m.poster) : null;
+  return m ? cdn(m.type === "image" ? m.url : m.poster) : null;
 };
 
 /**
@@ -38,10 +40,15 @@ export function ProductsManager() {
   const [jobs, setJobs] = useState([]);
 
   const [tick, setTick] = useState(0);
-  const load = useCallback(() => setTick((t) => t + 1), []);
+  const [loading, setLoading] = useState(false);
+  const load = useCallback(() => {
+    setLoading(true);
+    setTick((t) => t + 1);
+  }, []);
 
   useEffect(() => {
     let alive = true;
+    const started = Date.now();
     api("/products/manage")
       .then((res) => {
         if (!alive) return;
@@ -51,6 +58,10 @@ export function ProductsManager() {
       .catch((err) => {
         if (err.status === 401) return router.replace("/login");
         if (alive) setError("Không tải được danh sách sản phẩm. Vui lòng thử lại.");
+      })
+      .finally(() => {
+        // Xoay tối thiểu ~0.6s để thấy nút đã nhận lệnh
+        setTimeout(() => alive && setLoading(false), Math.max(0, 600 - (Date.now() - started)));
       });
     return () => {
       alive = false;
@@ -102,6 +113,30 @@ export function ProductsManager() {
     }
   };
 
+  /** Hoàn tác xoá: khôi phục sản phẩm (xoá mềm) và làm mới website. */
+  const restore = async (p) => {
+    const id = toast.loading(`Đang khôi phục “${p.title}”…`, { title: "Đang hoàn tác" });
+    try {
+      const res = await api(`/products/${p.id}/restore`, { method: "POST" });
+      await revalidateSite();
+      load();
+      toast.update(id, {
+        type: "success",
+        title: "Đã khôi phục sản phẩm",
+        message:
+          res.data.slug !== p.slug
+            ? `“${p.title}” đã quay lại, đường dẫn mới: /san-pham/${res.data.slug}`
+            : `“${p.title}” đã quay lại như trước khi xoá.`,
+      });
+    } catch (err) {
+      toast.update(id, {
+        type: "error",
+        title: "Chưa khôi phục được",
+        message: err.status === 404 ? "Đã quá thời gian hoàn tác." : describeError(err),
+      });
+    }
+  };
+
   const confirmDelete = async () => {
     const p = toDelete;
     setBusy(p.id);
@@ -109,7 +144,11 @@ export function ProductsManager() {
       await api(`/products/${p.id}`, { method: "DELETE" });
       setItems((list) => list.filter((x) => x.id !== p.id));
       await revalidateSite();
-      toast.success(`“${p.title}” đã được xoá khỏi website.`, { title: "Đã xoá sản phẩm" });
+      toast.success(`“${p.title}” đã được xoá khỏi website.`, {
+        title: "Đã xoá sản phẩm",
+        duration: 8000, // đủ thời gian bấm "Hoàn tác"
+        action: { label: "Hoàn tác", onClick: () => restore(p) },
+      });
       setToDelete(null);
     } catch (err) {
       setToDelete(null);
@@ -141,8 +180,8 @@ export function ProductsManager() {
             "Đang tải…"
           )}
         </p>
-        <div className="flex gap-2">
-          <label className="relative flex-1 sm:w-72 sm:flex-none">
+        <div className="flex flex-wrap gap-2 sm:flex-nowrap">
+          <label className="relative w-full sm:w-72 sm:flex-none">
             <Icon
               name="search"
               className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted"
@@ -158,8 +197,18 @@ export function ProductsManager() {
           </label>
           <button
             type="button"
+            onClick={load}
+            disabled={loading}
+            aria-label="Tải lại danh sách"
+            title="Tải lại danh sách"
+            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white text-ink-soft ring-1 ring-ink/10 transition hover:text-ink hover:ring-ink/25 disabled:cursor-wait"
+          >
+            <Icon name="refresh" className={cn("size-4", loading && "animate-spin")} />
+          </button>
+          <button
+            type="button"
             onClick={openNew}
-            className="group relative inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-navy-950 pr-1.5 pl-5 text-sm font-semibold text-white transition hover:bg-navy-800"
+            className="group relative inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-navy-950 pr-1.5 pl-5 text-sm font-semibold text-white transition hover:bg-navy-800 max-sm:flex-1 max-sm:justify-between max-sm:pl-6"
           >
             Thêm sản phẩm
             <span className="flex size-9 items-center justify-center rounded-full bg-orange-500">
@@ -275,8 +324,7 @@ export function ProductsManager() {
                 </span>
                 <div className="absolute inset-x-0 bottom-0 p-4 text-white">
                   <p className="text-[11px] tracking-eyebrow text-white/60 uppercase">
-                    {String(p.media?.length ?? 0).padStart(2, "0")}{" "}
-                    {p.kind === "video" ? "video" : "ảnh"}
+                    {mediaCount(p.media ?? [])}
                   </p>
                   <h3 className="mt-0.5 truncate text-lg font-semibold">{p.title}</h3>
                   <p className="truncate text-left text-xs text-white/70">{p.summary}</p>
@@ -356,7 +404,9 @@ export function ProductsManager() {
           toDelete && (
             <>
               <strong className="font-semibold text-ink">“{toDelete.title}”</strong> sẽ bị gỡ khỏi
-              website và danh sách quản lý. Bạn có chắc chắn muốn tiếp tục?
+              website và danh sách <span className="whitespace-nowrap">quản lý.</span>
+              <br />
+              Bạn có chắc chắn muốn tiếp tục?
             </>
           )
         }

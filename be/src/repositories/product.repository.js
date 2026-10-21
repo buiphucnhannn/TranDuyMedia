@@ -1,5 +1,6 @@
 import { Product } from "#models/product.model.js";
 import { MongoRepository } from "#repositories/base.repository.js";
+import { undoable } from "#utils/undo.js";
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const SORT = { order: 1, createdAt: -1 };
@@ -44,12 +45,31 @@ export class ProductRepository extends MongoRepository {
     return { id: String(_id), ...rest };
   }
 
-  async softDelete(id) {
+  async softDelete(id, { by = null } = {}) {
     const res = await this.model.updateOne(
       { _id: id, deletedAt: null },
-      { $set: { deletedAt: new Date() } },
+      { $set: { deletedAt: new Date(), deletedBy: by } },
     );
     return res.modifiedCount === 1;
+  }
+
+  /** Sản phẩm vừa bị xoá, còn trong thời gian cho phép hoàn tác. */
+  findDeletedById(id) {
+    return this.findOne({ _id: id, deletedAt: undoable() });
+  }
+
+  /** Khôi phục sản phẩm đã xoá mềm (kèm slug mới nếu slug cũ đã bị sản phẩm khác dùng). */
+  async restore(id, { slug }) {
+    const doc = await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: undoable() },
+        { $set: { deletedAt: null, deletedBy: null, slug } },
+        { new: true },
+      )
+      .lean();
+    if (!doc) return null;
+    const { _id, ...rest } = doc;
+    return { id: String(_id), ...rest };
   }
 
   /** Thống kê cho trang Tổng quan: số sản phẩm (hiển thị / ẩn) + số ảnh, video trong thư viện. */

@@ -1,4 +1,6 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { cdn } from "@/lib/cdn";
+import { mediaCount } from "@/lib/media-count";
 
 /**
  * Sản phẩm đã thực hiện — lấy từ backend (MongoDB), chỉ dùng phía server.
@@ -8,24 +10,11 @@ import { cacheLife, cacheTag } from "next/cache";
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
 export const PRODUCTS_TAG = "products";
 
-const pad2 = (n) => String(n).padStart(2, "0");
-
-/** "15 ảnh · 01 video" — đếm ảnh và video (cả tải lên lẫn link YouTube / Vimeo) riêng. */
-export function mediaCount(media) {
-  const videos = media.filter((m) => m.type !== "image").length;
-  const photos = media.length - videos;
-  return (
-    [photos && `${pad2(photos)} ảnh`, videos && `${pad2(videos)} video`]
-      .filter(Boolean)
-      .join(" - ") || "00 ảnh"
-  );
-}
-
 /** Dữ liệu API → dạng các component đang dùng (ProductCard, AlbumGallery…). */
 export function toView(p) {
   const media = (p.media ?? []).map((m) => ({
     // video / link nhúng chưa có ảnh đại diện → ảnh hậu trường mặc định
-    src: m.type === "image" ? m.url : (m.poster ?? "/images/bts/bts-05.jpg"),
+    src: cdn(m.type === "image" ? m.url : (m.poster ?? "/images/bts/bts-05.webp")),
     pos: m.pos ?? "center",
     zoom: m.zoom ?? 1,
     width: m.width ?? null,

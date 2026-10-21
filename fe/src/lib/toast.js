@@ -8,6 +8,8 @@
  *   success 3.5s · info 4.5s · warning 5.5s · error 7s — rê chuột / chạm vào toast sẽ tạm dừng đếm.
  *   loading: hiện đến khi được cập nhật — const id = toast.loading("Đang lưu…"); toast.update(id, { type: "success", message });
  *   progress (0–1) hiển thị thanh tiến độ cho tác vụ dài (upload).
+ *   action: { label, onClick } — nút thao tác nhanh (vd. "Hoàn tác" sau khi xoá); bấm xong toast tự đóng.
+ *   Toast có action KHÔNG tạm dừng khi rê chuột → hết giờ là mất nút (khớp hạn hoàn tác ở máy chủ, be/src/utils/undo.js).
  */
 export const DURATION = {
   success: 3500,
@@ -34,14 +36,14 @@ export function dismiss(id) {
   emit();
 }
 
-function push(type, message, { title, duration, progress } = {}) {
+function push(type, message, { title, duration, progress, action } = {}) {
   // Không hiện trùng cùng một thông báo đang hiển thị
   const dup = items.find((t) => t.type === type && t.message === message);
   if (dup) dismiss(dup.id);
   const id = ++seq;
   items = [
     ...items,
-    { id, type, title, message, progress, duration: duration ?? DURATION[type] },
+    { id, type, title, message, progress, action, duration: duration ?? DURATION[type] },
   ].slice(-MAX);
   emit();
   return id;

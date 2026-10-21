@@ -52,5 +52,13 @@ router.delete(
   validate(bookingIdSchema, "params"),
   bookingController.remove,
 );
+// Hoàn tác xoá (xoá mềm)
+router.post(
+  "/:id/restore",
+  requireAdmin,
+  noStore,
+  validate(bookingIdSchema, "params"),
+  bookingController.restore,
+);
 
 export default router;

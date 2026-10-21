@@ -1,4 +1,5 @@
 /** Tiện ích cho trình quản lý ảnh / video của sản phẩm (phía trình duyệt). */
+import { cdn } from "@/lib/cdn";
 
 export const MAX_IMAGE_MB = 10;
 export const MAX_VIDEO_MB = 200;
@@ -65,7 +66,7 @@ export function checkFile(file) {
 }
 
 /** Ảnh xem trước của một mục (tệp mới dùng object URL). */
-export const previewOf = (m) => (m.type === "image" ? (m.preview ?? m.url) : (m.poster ?? null));
+export const previewOf = (m) => cdn(m.type === "image" ? (m.preview ?? m.url) : (m.poster ?? null));
 
 /** Số ảnh đầu bị đóng khung trên website (ảnh bìa + ảnh tiêu biểu) — chỉ những ảnh này cắt được. */
 export const CROPPABLE = 3;

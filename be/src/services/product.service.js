@@ -63,11 +63,24 @@ export class ProductService {
     return product;
   }
 
-  async remove(id) {
-    if (!(await this.repo.softDelete(id))) {
+  /** Xoá mềm: ẩn khỏi website & trang quản trị, giữ nguyên dữ liệu và tệp trên Cloudinary. */
+  async remove(id, by) {
+    if (!(await this.repo.softDelete(id, { by }))) {
       throw ApiError.notFound("Sản phẩm không còn tồn tại hoặc đã bị xoá trước đó");
     }
-    logger.info("Xoá sản phẩm", { id });
+    logger.info("Xoá (mềm) sản phẩm", { id, by });
+  }
+
+  /** Hoàn tác xoá. Slug cũ đã bị sản phẩm khác dùng trong lúc đó → tự thêm hậu tố "-2", "-3"… */
+  async restore(id, by) {
+    const p = await this.repo.findDeletedById(id);
+    if (!p)
+      throw ApiError.notFound(
+        "Đã quá thời gian hoàn tác hoặc sản phẩm đã được khôi phục trước đó.",
+      );
+    const product = await this.repo.restore(id, { slug: await this.#uniqueSlug(p.slug, id) });
+    logger.info("Khôi phục sản phẩm", { id, by });
+    return product;
   }
 }
 

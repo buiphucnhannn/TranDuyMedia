@@ -8,7 +8,7 @@ import { pickShowreelSrc } from "@/lib/showreel";
 import { cn } from "@/lib/utils";
 
 /**
- * Showreel 2026 — video tự host, khung rộng kiểu điện ảnh (2:1 desktop, 16:9 mobile).
+ * Showreel 2026 — video tự host, khung rộng kiểu điện ảnh (2:1 desktop, 16:9 tablet, 4:3 điện thoại — đủ chỗ cho tiêu đề + nút).
  * - Cuộn tới (≥ 35% khung hiện ra) → tự phát; cuộn qua → tự dừng (không tốn CPU/pin khi không xem).
  * - Trình duyệt chỉ cho tự phát khi TẮT TIẾNG → có nút bật tiếng.
  * - 1080p cho máy tính, 720p cho điện thoại (pickShowreelSrc). Chỉ tải khi sắp cuộn tới (preload="none").
@@ -106,7 +106,7 @@ export function Showreel() {
         </div>
 
         <div
-          className="reveal group relative aspect-video overflow-hidden rounded-2xl bg-navy-950 shadow-soft sm:rounded-3xl lg:aspect-2/1"
+          className="reveal group relative aspect-4/3 overflow-hidden rounded-2xl bg-navy-950 shadow-soft sm:aspect-video sm:rounded-3xl lg:aspect-2/1"
           data-reveal="clip"
         >
           <video
@@ -142,28 +142,28 @@ export function Showreel() {
                 playing ? "opacity-0" : "opacity-100",
               )}
             >
-              <span className="relative flex size-20 items-center justify-center rounded-full bg-white/20 text-white transition-all duration-500 group-hover:scale-110 group-hover:bg-orange-500 sm:size-24">
+              <span className="relative flex size-16 -translate-y-4 items-center justify-center rounded-full bg-white/20 text-white transition-all duration-500 group-hover:scale-110 group-hover:bg-orange-500 sm:size-24 sm:translate-y-0">
                 <span className="absolute inset-0 [animation:ripple_2.6s_ease-out_infinite] rounded-full bg-white/30" />
                 <Icon
                   name="play"
-                  className="relative ml-1 size-8"
+                  className="relative ml-1 size-6 sm:size-8"
                   strokeWidth={0}
                   fill="currentColor"
                 />
               </span>
             </span>
-            <span className="absolute bottom-0 left-0 p-6 text-white sm:p-8">
+            <span className="absolute bottom-0 left-0 max-w-[55%] p-5 text-white sm:max-w-none sm:p-8">
               <span className="block text-[11px] tracking-eyebrow text-white/70 uppercase">
                 {showreel.duration}
               </span>
-              <span className="mt-1 block text-2xl font-semibold tracking-tight sm:text-3xl">
+              <span className="mt-1 block text-xl leading-tight font-semibold tracking-tight sm:text-3xl">
                 {showreel.title}
               </span>
             </span>
           </button>
 
           {/* Điều khiển góc phải dưới (nằm trên lớp bấm, không mở popup) */}
-          <div className="absolute right-4 bottom-4 z-10 flex items-center gap-2 sm:right-6 sm:bottom-6">
+          <div className="absolute right-4 bottom-5 z-10 flex items-center gap-2 sm:right-6 sm:bottom-6">
             <button
               type="button"
               onClick={togglePlay}

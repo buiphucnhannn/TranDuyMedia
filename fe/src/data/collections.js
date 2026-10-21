@@ -3,7 +3,7 @@
  * `pos` chỉnh điểm nhìn khi ảnh bị cắt theo khung (object-position).
  */
 const img = (slug, n, pos = "center") => ({
-  src: `/images/${slug}/${slug}-${String(n).padStart(2, "0")}.jpg`,
+  src: `/images/${slug}/${slug}-${String(n).padStart(2, "0")}.webp`,
   pos,
 });
 
@@ -80,9 +80,9 @@ export const collections = [
       "Góc quay clip ngắn",
       "Không gian thoáng",
     ],
-    cover: { src: "/images/rooftop/rooftop-clean.jpg", pos: "center" },
+    cover: { src: "/images/rooftop/rooftop-clean.webp", pos: "center" },
     covers: [
-      { src: "/images/rooftop/rooftop-clean.jpg", pos: "center" },
+      { src: "/images/rooftop/rooftop-clean.webp", pos: "center" },
       img("rooftop", 1),
       img("rooftop", 3),
     ],
@@ -177,18 +177,18 @@ export const getCollection = (slug) => collections.find((c) => c.slug === slug);
 
 // Ảnh hậu trường sản xuất (trang Về chúng tôi, hero)
 export const btsImages = [
-  { src: "/images/bts/bts-02.jpg", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
-  { src: "/images/bts/bts-05.jpg", alt: "Ekip quay phim trên trường quay", pos: "center" },
-  { src: "/images/bts/bts-07.jpg", alt: "Hệ thống đèn và softbox tại Box Studio", pos: "center" },
-  { src: "/images/bts/bts-04.jpg", alt: "Setup ánh sáng Godox", pos: "center" },
+  { src: "/images/bts/bts-02.webp", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
+  { src: "/images/bts/bts-05.webp", alt: "Ekip quay phim trên trường quay", pos: "center" },
+  { src: "/images/bts/bts-07.webp", alt: "Hệ thống đèn và softbox tại Box Studio", pos: "center" },
+  { src: "/images/bts/bts-04.webp", alt: "Setup ánh sáng Godox", pos: "center" },
   {
-    src: "/images/bts/bts-06.jpg",
+    src: "/images/bts/bts-06.webp",
     alt: "Buổi chụp thương mại cho cửa hàng trang sức",
     pos: "center",
   },
-  { src: "/images/bts/bts-01.jpg", alt: "Video production – Tran Duy Media", pos: "top" },
+  { src: "/images/bts/bts-01.webp", alt: "Video production – Tran Duy Media", pos: "top" },
   {
-    src: "/images/bts/bts-03.jpg",
+    src: "/images/bts/bts-03.webp",
     alt: "Sản xuất hình ảnh: key visual, lookbook, profile",
     pos: "top",
   },

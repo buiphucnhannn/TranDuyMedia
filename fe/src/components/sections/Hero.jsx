@@ -127,7 +127,7 @@ export function Hero() {
                 className="absolute top-[28%] left-[62%] -z-10 size-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 blur-2xl"
               />
               <Image
-                src="/images/brand/logo-light.png"
+                src="/images/brand/logo-light.webp"
                 alt="Tran Duy Media Studio"
                 width={989}
                 height={768}

@@ -31,6 +31,10 @@ export const bookingController = {
     res.status(204).end();
   },
 
+  async restore(req, res) {
+    ok(res, await bookingService.restore(req.validated.params.id, req.user.id));
+  },
+
   async updateStatus(req, res) {
     ok(res, await bookingService.updateStatus(req.validated.params.id, req.validated.body.status));
   },

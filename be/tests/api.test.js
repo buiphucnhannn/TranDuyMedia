@@ -258,6 +258,22 @@ describe("API v1", () => {
       assert.ok((await Booking.findById(id).lean()).deletedAt);
     });
 
+    it("hoàn tác xoá → yêu cầu quay lại danh sách; khôi phục lần 2 → 404", async () => {
+      const res = await admin.post(`/api/v1/bookings/${id}/restore`);
+      assert.equal(res.status, 200, JSON.stringify(res.body));
+      assert.equal(res.body.data.deletedAt, null);
+      assert.equal((await admin.get(`/api/v1/bookings/${id}`)).status, 200);
+      assert.equal((await admin.post(`/api/v1/bookings/${id}/restore`)).status, 404);
+      // dọn lại như cũ cho các test sau
+      assert.equal((await admin.delete(`/api/v1/bookings/${id}`)).status, 204);
+    });
+
+    it("quá thời gian hoàn tác (toast đã tắt) → không khôi phục được nữa", async () => {
+      const { Booking } = await import("#models/booking.model.js");
+      await Booking.updateOne({ _id: id }, { $set: { deletedAt: new Date(Date.now() - 60_000) } });
+      assert.equal((await admin.post(`/api/v1/bookings/${id}/restore`)).status, 404);
+    });
+
     it("trạng thái không hợp lệ → 400", async () => {
       const res = await admin.patch(`/api/v1/bookings/${id}/status`).send({ status: "done" });
       assert.equal(res.status, 400);
@@ -318,6 +334,18 @@ describe("API v1", () => {
       assert.equal((await admin.delete(`/api/v1/products/${pid}`)).status, 204);
       assert.equal((await admin.get("/api/v1/products/manage")).body.data.length, 1);
       assert.equal((await admin.delete(`/api/v1/products/${pid}`)).status, 404);
+      const { Product } = await import("#models/product.model.js");
+      const doc = await Product.findById(pid).lean();
+      assert.ok(doc.deletedAt && doc.deletedBy, "xoá mềm phải lưu thời điểm + người xoá");
+    });
+
+    it("hoàn tác xoá sản phẩm → hiện lại, không lộ trường xoá mềm", async () => {
+      const res = await admin.post(`/api/v1/products/${pid}/restore`);
+      assert.equal(res.status, 200, JSON.stringify(res.body));
+      assert.equal(res.body.data.deletedAt, undefined);
+      assert.equal((await admin.get(`/api/v1/products/manage/${pid}`)).status, 200);
+      assert.equal((await admin.post(`/api/v1/products/${pid}/restore`)).status, 404);
+      assert.equal((await admin.delete(`/api/v1/products/${pid}`)).status, 204);
     });
 
     it("nhập link YouTube → dạng nhúng (không cần Cloudinary)", async () => {

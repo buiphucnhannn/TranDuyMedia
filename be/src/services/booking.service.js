@@ -50,6 +50,15 @@ export class BookingService {
     return booking;
   }
 
+  /** Hoàn tác xoá (xoá mềm). */
+  async restore(id, by) {
+    const booking = await this.repo.restore(id);
+    if (!booking)
+      throw ApiError.notFound("Đã quá thời gian hoàn tác hoặc yêu cầu đã được khôi phục trước đó.");
+    logger.info("Khôi phục yêu cầu đặt lịch", { id, by });
+    return booking;
+  }
+
   /** Chỉ xoá được yêu cầu đã giải quyết (xoá mềm). */
   async remove(id, by) {
     const booking = await this.repo.findById(id);

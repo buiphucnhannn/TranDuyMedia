@@ -13,6 +13,7 @@ import path from "node:path";
 import { cloudinary } from "#config/cloudinary.js";
 import { connectDatabase, disconnectDatabase } from "#config/database.js";
 import { env } from "#config/env.js";
+import { IMAGE_UPLOAD } from "#services/media.service.js";
 import { Product } from "#models/product.model.js";
 
 const force = process.argv.includes("--force");
@@ -30,6 +31,7 @@ async function uploadLocal(file, slug) {
     overwrite: force,
     unique_filename: false,
     resource_type: "image",
+    ...IMAGE_UPLOAD, // lưu dạng WebP như ảnh upload từ trang quản trị
   });
   return {
     type: "image",

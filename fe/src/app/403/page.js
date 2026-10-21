@@ -4,7 +4,7 @@ import { ErrorScreen } from "@/components/ui/ErrorScreen";
 import { LoginLink } from "./LoginLink";
 
 export const metadata = {
-  title: "Không có quyền truy cập",
+  title: "403 - Không có quyền truy cập",
   robots: { index: false, follow: false },
 };
 

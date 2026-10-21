@@ -11,7 +11,7 @@ const PANELS = [
     desc: "Quảng cáo 15–60s cho TV và các nền tảng online.",
     shot: "Close-up - 85mm",
     dur: "15–60s",
-    src: "/images/about/reel-food.jpg",
+    src: "/images/about/reel-food.webp",
     pos: "center 40%",
   },
   {
@@ -19,7 +19,7 @@ const PANELS = [
     desc: "TikTok, Reels, Shorts — nhịp nhanh, bám xu hướng.",
     shot: "Vertical - 9:16",
     dur: "15–45s",
-    src: "/images/about/reel-short.jpg",
+    src: "/images/about/reel-short.webp",
     pos: "center",
   },
   {
@@ -27,7 +27,7 @@ const PANELS = [
     desc: "Câu chuyện thương hiệu, chân dung nhà sáng lập.",
     shot: "Medium - 50mm",
     dur: "3–10 phút",
-    src: "/images/about/reel-speaker.jpg",
+    src: "/images/about/reel-speaker.webp",
     pos: "center 30%",
   },
   {
@@ -35,7 +35,7 @@ const PANELS = [
     desc: "Profile, năng lực, nhà xưởng — phục vụ đấu thầu.",
     shot: "Wide - 24mm",
     dur: "2–5 phút",
-    src: "/images/about/reel-warehouse.jpg",
+    src: "/images/about/reel-warehouse.webp",
     pos: "center",
   },
   {
@@ -43,7 +43,7 @@ const PANELS = [
     desc: "Setup đa máy, âm thanh, ánh sáng chuẩn studio.",
     shot: "Two-shot - 3 cam",
     dur: "10–60 phút",
-    src: "/images/about/reel-talkshow.jpg",
+    src: "/images/about/reel-talkshow.webp",
     pos: "center 40%",
   },
   {
@@ -51,7 +51,7 @@ const PANELS = [
     desc: "Hội nghị, ra mắt — highlight bàn giao trong ngày.",
     shot: "Multi-cam - Live",
     dur: "1–3 phút",
-    src: "/images/about/reel-event.jpg",
+    src: "/images/about/reel-event.webp",
     pos: "center",
   },
 ];
@@ -69,7 +69,7 @@ export function VideoFocus() {
       data-nav-theme="dark"
     >
       <Container>
-        <p className="reveal mb-4 eyebrow">Dịch vụ trọng tâm - Sản xuất video</p>
+        <p className="reveal mb-4 eyebrow">Dịch vụ trọng tâm - Sản xuất video thương mại</p>
         {/* Tiêu đề trái + mô tả & nút phải (canh giữa theo chiều cao tiêu đề) */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
           <h2 className="reveal max-w-2xl h-section" style={{ "--reveal-delay": "80ms" }}>

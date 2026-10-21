@@ -2,7 +2,7 @@ import { productService } from "#services/product.service.js";
 import { created, ok } from "#utils/response.js";
 
 /** Dữ liệu công khai: bỏ trường nội bộ. */
-const toPublic = ({ deletedAt: _d, ...p }) => p;
+const toPublic = ({ deletedAt: _d, deletedBy: _b, ...p }) => p;
 
 export const productController = {
   // ---- Công khai (website) ----
@@ -36,7 +36,11 @@ export const productController = {
   },
 
   async remove(req, res) {
-    await productService.remove(req.validated.params.id);
+    await productService.remove(req.validated.params.id, req.user.id);
     res.status(204).end();
+  },
+
+  async restore(req, res) {
+    ok(res, toPublic(await productService.restore(req.validated.params.id, req.user.id)));
   },
 };

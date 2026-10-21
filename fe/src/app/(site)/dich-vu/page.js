@@ -8,11 +8,11 @@ import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
 export const metadata = createMetadata({
-  title: "Dịch vụ",
+  title: "Dịch vụ sản xuất video & hình ảnh",
   description:
     "Sản xuất video thương mại (TVC, iTVC, documentary, phim doanh nghiệp, video sự kiện), cho thuê bối cảnh studio và chụp ảnh thương mại — một ekip, trọn gói.",
   path: "/dich-vu",
-  image: "/images/bts/bts-02.jpg",
+  image: "/images/bts/bts-02.webp",
 });
 
 /**

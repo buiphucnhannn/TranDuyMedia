@@ -559,3 +559,24 @@ main.page-enter {
     transform: none;
   }
 }
+
+/* Hàng nút trên điện thoại: mọi nút rộng bằng nhau (100%), chữ căn giữa, vòng tròn mũi tên neo bên phải
+   — giống hàng nút ở hero trang chủ. Desktop / tablet giữ nguyên. */
+@utility btn-row {
+  @media (width < 40rem) {
+    & > * {
+      position: relative;
+      width: 100%;
+      min-height: 3rem;
+      justify-content: center;
+    }
+    & > * > .btn-circle {
+      position: absolute;
+      top: calc(50% - 1.125rem); /* vòng tròn size-9 */
+      right: 0.375rem;
+    }
+    & > *:has(> .btn-circle) {
+      padding-inline: 3.25rem;
+    }
+  }
+}

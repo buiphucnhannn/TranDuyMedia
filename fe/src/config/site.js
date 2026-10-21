@@ -51,7 +51,7 @@ export const siteConfig = {
   showreel: {
     title: "Showreel 2026",
     duration: "Tổng hợp dự án 2025 – 2026",
-    poster: "/media/showreel-poster.jpg",
+    poster: "/media/showreel-poster.webp",
     hd: "/media/showreel-1080.mp4", // máy tính / tablet
     sd: "/media/showreel-720.mp4", // điện thoại hoặc khi bật tiết kiệm dữ liệu
   },

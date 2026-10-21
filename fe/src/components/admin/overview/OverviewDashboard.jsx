@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { BOOKING_STATUSES } from "@/data/bookings";
 import { api } from "@/lib/api";
+import { cdn } from "@/lib/cdn";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "../bookings/StatusControl";
@@ -22,7 +23,7 @@ const hhmm = new Intl.DateTimeFormat("vi-VN", {
   hour12: false,
 });
 const dayMonth = (ymd) => `${ymd.slice(8, 10)}/${ymd.slice(5, 7)}`;
-const coverSrc = (m) => (m ? (m.type === "image" ? m.url : m.poster) : null);
+const coverSrc = (m) => (m ? cdn(m.type === "image" ? m.url : m.poster) : null);
 
 /** "3 ngày" / "5 giờ" / "12 phút" — đã chờ bao lâu */
 function waited(iso) {
@@ -113,7 +114,7 @@ export function OverviewDashboard() {
   return (
     <div className="space-y-5 sm:space-y-6">
       {/* Hàng 1 — số liệu nhanh */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <Kpi
           href={PENDING}
           icon="inbox"
@@ -130,13 +131,18 @@ export function OverviewDashboard() {
         <Kpi
           href="/admin/bookings"
           icon="calendar"
-          label="Yêu cầu mới - 7 ngày"
+          label={<ShortLabel mobile="Yêu cầu 7 ngày" full="Yêu cầu mới - 7 ngày" />}
           value={b.last7}
           unit="yêu cầu"
           note={
-            <span className="inline-flex items-center gap-1.5">
+            <span className="inline-flex flex-wrap items-center gap-x-1.5 gap-y-1">
               <Trend delta={delta} />
-              <span>so với 7 ngày trước - hôm nay {b.today}</span>
+              <span>
+                <ShortLabel
+                  mobile="so với tuần trước"
+                  full={`so với 7 ngày trước - hôm nay ${b.today}`}
+                />
+              </span>
             </span>
           }
         />
@@ -151,7 +157,7 @@ export function OverviewDashboard() {
         <Kpi
           href="/admin/products"
           icon="film"
-          label="Sản phẩm đang hiển thị"
+          label={<ShortLabel mobile="Đang hiển thị" full="Sản phẩm đang hiển thị" />}
           value={p.published}
           unit={`/ ${p.total}`}
           note={`${p.images} ảnh - ${p.videos} video${p.hidden ? ` - ${p.hidden} đang ẩn` : ""}`}
@@ -319,14 +325,16 @@ function Kpi({ href, icon, label, value, unit, note, accent, bar }) {
       href={href}
       className={cn(
         card,
-        "group flex flex-col p-5 transition hover:-translate-y-0.5 hover:shadow-card",
+        "group flex flex-col p-4 transition hover:-translate-y-0.5 hover:shadow-card sm:p-5",
       )}
     >
-      <span className="flex items-center justify-between gap-3">
-        <span className="text-[13px] font-semibold text-ink-soft">{label}</span>
+      <span className="flex items-start justify-between gap-2 sm:items-center sm:gap-3">
+        <span className="text-xs leading-snug font-semibold text-ink-soft sm:text-[13px]">
+          {label}
+        </span>
         <span
           className={cn(
-            "flex size-9 items-center justify-center rounded-xl transition",
+            "flex size-8 shrink-0 items-center justify-center rounded-xl transition sm:size-9",
             accent ? "bg-orange-500 text-white" : "bg-paper text-navy-900",
           )}
         >
@@ -334,7 +342,7 @@ function Kpi({ href, icon, label, value, unit, note, accent, bar }) {
         </span>
       </span>
       <span className="mt-3 flex items-baseline gap-1.5">
-        <span className="text-[2rem] leading-none font-bold tracking-tight text-ink tabular-nums">
+        <span className="text-[1.75rem] leading-none font-bold tracking-tight text-ink tabular-nums sm:text-[2rem]">
           {value}
         </span>
         {unit && <span className="text-sm font-medium text-ink-muted">{unit}</span>}
@@ -344,7 +352,9 @@ function Kpi({ href, icon, label, value, unit, note, accent, bar }) {
           <span className="block h-full rounded-full bg-emerald-500" style={{ width: `${bar}%` }} />
         </span>
       )}
-      <span className="mt-3 text-left text-xs text-ink-muted">{note}</span>
+      <span className="mt-auto pt-3 text-left text-[11px] leading-snug text-ink-muted sm:text-xs">
+        {note}
+      </span>
     </Link>
   );
 }
@@ -369,10 +379,15 @@ function Trend({ delta }) {
 function DailyChart({ series }) {
   const [hover, setHover] = useState(null);
   const max = Math.max(...series.map((d) => d.n), 0);
-  const step = Math.max(1, Math.ceil(max / 4));
-  const top = step * 4;
-  const ticks = [0, step * 2, top];
+  // Trục "đẹp": bước 1 / 2 / 5 / 10…, tối đa 4 khoảng, luôn ≥ 4 vạch → mọi số nguyên nằm đúng vạch
+  const step = [1, 2, 5, 10, 20, 50, 100, 200, 500].find((s) => s * 4 >= max) ?? Math.ceil(max / 4);
+  const top = Math.max(4, Math.ceil(max / step)) * step;
+  const ticks = Array.from({ length: top / step + 1 }, (_, i) => i * step);
   const last = series.length - 1;
+  const total = series.reduce((a, d) => a + d.n, 0);
+  // Nhãn ngày mỗi tuần, căn đúng giữa cột tương ứng (đếm lùi từ hôm nay)
+  const dateTicks = [last, last - 7, last - 14, last - 21, last - 28].filter((i) => i >= 0);
+  const xOf = (i) => `${((i + 0.5) / series.length) * 100}%`;
 
   return (
     <div>
@@ -381,13 +396,14 @@ function DailyChart({ series }) {
         {ticks.map((t) => (
           <div
             key={t}
-            className="pointer-events-none absolute inset-x-0 flex items-center"
+            // translate-y-1/2: đường lưới nằm ĐÚNG mốc giá trị (khớp chân cột), không lệch nửa chiều cao nhãn
+            className="pointer-events-none absolute inset-x-0 flex translate-y-1/2 items-center"
             style={{ bottom: `${(t / top) * 100}%` }}
           >
             <span className="w-7 -translate-y-px pr-2 text-right text-[10px] text-ink-muted tabular-nums">
               {t}
             </span>
-            <span className={cn("h-px flex-1", t === 0 ? "bg-ink/15" : "bg-ink/5")} />
+            <span className={cn("h-px flex-1", t === 0 ? "bg-ink/20" : "bg-ink/[0.06]")} />
           </div>
         ))}
 
@@ -405,10 +421,14 @@ function DailyChart({ series }) {
               aria-label={`${dayMonth(d.date)}: ${d.n} yêu cầu`}
               className="group relative flex h-full flex-1 cursor-default items-end"
             >
+              {hover === i && (
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-full w-full max-w-[18px] rounded-t-[4px] bg-ink/[0.04]" />
+              )}
               <span
                 className={cn(
                   "mx-auto block w-full max-w-[18px] rounded-t-[4px] transition-colors",
                   d.n ? (hover === i ? "bg-orange-600" : "bg-orange-500") : "bg-transparent",
+                  hover !== null && hover !== i && d.n && "bg-orange-500/45",
                 )}
                 style={{ height: d.n ? `${(d.n / top) * 100}%` : 0 }}
               />
@@ -430,12 +450,26 @@ function DailyChart({ series }) {
           ))}
         </div>
       </div>
-      {/* Nhãn ngày: đầu, giữa, hôm nay */}
-      <div className="mt-2 flex justify-between pl-7 text-[10px] text-ink-muted tabular-nums">
-        <span>{dayMonth(series[0].date)}</span>
-        <span>{dayMonth(series[Math.floor(last / 2)].date)}</span>
-        <span>Hôm nay</span>
+      {/* Nhãn ngày mỗi tuần — căn đúng giữa cột */}
+      <div className="relative mt-2 ml-7 h-4 text-[10px] text-ink-muted tabular-nums">
+        {dateTicks.map((i) => (
+          <span
+            key={i}
+            className={cn(
+              "absolute top-0 whitespace-nowrap",
+              i === last ? "right-0 font-semibold text-ink-soft" : "-translate-x-1/2",
+            )}
+            style={i === last ? undefined : { left: xOf(i) }}
+          >
+            {i === last ? "Hôm nay" : dayMonth(series[i].date)}
+          </span>
+        ))}
       </div>
+      {total === 0 && (
+        <p className="mt-3 text-center text-xs text-ink-muted">
+          Chưa có yêu cầu nào trong 30 ngày qua.
+        </p>
+      )}
       {/* Bảng số liệu cho trình đọc màn hình */}
       <div className="sr-only">
         <table>
@@ -520,7 +554,7 @@ function Skeleton() {
   const block = "animate-pulse rounded-2xl bg-white ring-1 ring-ink/5";
   return (
     <div className="space-y-5 sm:space-y-6" aria-busy="true" aria-label="Đang tải số liệu">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className={cn(block, "h-[148px]")} />
         ))}
@@ -534,5 +568,15 @@ function Skeleton() {
         <div className={cn(block, "h-72")} />
       </div>
     </div>
+  );
+}
+
+/** Chữ ngắn trên điện thoại, chữ đầy đủ từ tablet trở lên (desktop giữ nguyên). */
+function ShortLabel({ mobile, full }) {
+  return (
+    <>
+      <span className="sm:hidden">{mobile}</span>
+      <span className="max-sm:hidden">{full}</span>
+    </>
   );
 }

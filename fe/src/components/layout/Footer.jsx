@@ -22,10 +22,10 @@ export function Footer() {
 
   return (
     <footer className="relative bg-navy-950 text-white/60" data-nav-theme="dark">
-      {/* Dải CTA lớn trên nền ảnh ghép các bối cảnh studio (public/images/cta-collage.jpg — npm run assets) */}
+      {/* Dải CTA lớn trên nền ảnh ghép các bối cảnh studio (public/images/cta-collage.webp — npm run assets) */}
       <div id="lien-he" className="relative isolate overflow-hidden border-b border-white/10">
         <Image
-          src="/images/cta-collage.jpg"
+          src="/images/cta-collage.webp"
           alt=""
           fill
           sizes="100vw"
@@ -42,14 +42,14 @@ export function Footer() {
               Bắt đầu dự án <span className="whitespace-nowrap text-orange-500">tiếp theo</span>
               <br className="max-sm:hidden" /> cùng chúng tôi.
             </h2>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
+            <div className="btn-row flex flex-wrap gap-3 lg:justify-end">
               <button
                 type="button"
                 data-booking
                 className="group inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-1.5 pl-6 text-sm font-medium text-navy-900 transition hover:bg-paper-100"
               >
                 Đặt lịch tư vấn
-                <span className="flex size-9 items-center justify-center rounded-full bg-orange-500 text-white transition-transform group-hover:translate-x-0.5">
+                <span className="btn-circle flex size-9 items-center justify-center rounded-full bg-orange-500 text-white transition-transform group-hover:translate-x-0.5">
                   <Icon name="arrowRight" className="size-4" />
                 </span>
               </button>
@@ -163,7 +163,7 @@ export function Footer() {
           <p>
             © <CopyrightYear /> {siteConfig.name}. All rights reserved.
           </p>
-          <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">
+          <ul className="flex flex-wrap justify-center gap-x-3.5 gap-y-1 sm:gap-x-5">
             {mainNav.map((item) => (
               <li key={item.href}>
                 <Link

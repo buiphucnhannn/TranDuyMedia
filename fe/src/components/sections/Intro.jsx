@@ -23,7 +23,10 @@ export function Intro() {
               Video tốt phải bán được hàng. Từ brief đến bàn giao, một ekip duy nhất chịu trách
               nhiệm trong từng khung hình.
             </p>
-            <div className="reveal mt-8 flex flex-wrap gap-3" style={{ "--reveal-delay": "240ms" }}>
+            <div
+              className="reveal btn-row mt-8 flex flex-wrap gap-3"
+              style={{ "--reveal-delay": "240ms" }}
+            >
               <Button href="/gioi-thieu" pill>
                 Câu chuyện của chúng tôi
               </Button>
@@ -49,7 +52,7 @@ export function Intro() {
                 data-reveal="scale"
               >
                 <Image
-                  src="/images/bts/bts-05.jpg"
+                  src="/images/bts/bts-05.webp"
                   alt="Ekip Tran Duy Media trên trường quay"
                   fill
                   sizes="(min-width: 1024px) 34vw, 68vw"
@@ -64,7 +67,7 @@ export function Intro() {
                 style={{ "--reveal-delay": "200ms" }}
               >
                 <Image
-                  src="/images/bts/bts-04.jpg"
+                  src="/images/bts/bts-04.webp"
                   alt="Hệ thống đèn Godox tại studio"
                   fill
                   sizes="(min-width: 1024px) 26vw, 52vw"

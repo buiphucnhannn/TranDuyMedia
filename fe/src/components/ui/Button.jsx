@@ -58,7 +58,7 @@ export function Button({
       {pill ? (
         <span
           className={cn(
-            "flex size-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5",
+            "btn-circle flex size-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5",
             circle,
           )}
         >

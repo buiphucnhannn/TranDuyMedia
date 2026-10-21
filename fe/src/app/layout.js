@@ -6,14 +6,15 @@ import "./globals.css";
 const sans = Be_Vietnam_Pro({
   variable: "--font-sans",
   subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  // Chỉ các độ đậm thực sự dùng (400–700) → bớt 2 tệp font phải tải
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} – ${siteConfig.tagline}`,
+    default: `${siteConfig.name} | ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -63,7 +64,7 @@ const jsonLd = {
   telephone: "+84" + siteConfig.contact.phoneRaw.slice(1),
   email: siteConfig.contact.email,
   image: `${siteConfig.url}/images/og-image.png`,
-  logo: `${siteConfig.url}/images/brand/logo.png`,
+  logo: `${siteConfig.url}/images/brand/logo.webp`,
   address: {
     "@type": "PostalAddress",
     streetAddress: siteConfig.contact.address,

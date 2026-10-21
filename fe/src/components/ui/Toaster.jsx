@@ -46,15 +46,19 @@ function ToastItem({ toast: t }) {
   const remaining = useRef(t.duration);
   const startedAt = useRef(0);
 
+  // Toast có nút thao tác (vd. "Hoàn tác") chạy đủ thời gian cố định, KHÔNG dừng khi rê chuột:
+  // máy chủ chỉ cho hoàn tác trong một khoảng ngắn → nút phải biến mất trước khi hết hạn
+  const holding = paused && !t.action;
+
   useEffect(() => {
-    if (paused || leaving || !Number.isFinite(t.duration)) return;
+    if (holding || leaving || !Number.isFinite(t.duration)) return;
     startedAt.current = Date.now();
     const timer = setTimeout(() => setLeaving(true), remaining.current);
     return () => {
       clearTimeout(timer);
       remaining.current -= Date.now() - startedAt.current;
     };
-  }, [paused, leaving, t.duration]);
+  }, [holding, leaving, t.duration]);
 
   useEffect(() => {
     if (!leaving) return;
@@ -96,6 +100,19 @@ function ToastItem({ toast: t }) {
               {t.message}
             </p>
           )}
+          {t.action && (
+            <button
+              type="button"
+              onClick={() => {
+                setLeaving(true);
+                t.action.onClick();
+              }}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white ring-1 ring-white/15 transition hover:bg-white hover:text-navy-950"
+            >
+              <Icon name="refresh" className="size-3.5 -scale-x-100" />
+              {t.action.label}
+            </button>
+          )}
         </div>
         <button
           type="button"
@@ -122,7 +139,7 @@ function ToastItem({ toast: t }) {
           className={cn("absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-70", s.bar)}
           style={{
             animation: `toastBar ${t.duration}ms linear forwards`,
-            animationPlayState: paused ? "paused" : "running",
+            animationPlayState: holding ? "paused" : "running",
           }}
         />
       )}

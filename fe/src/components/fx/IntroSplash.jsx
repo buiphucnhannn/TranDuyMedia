@@ -137,7 +137,7 @@ export function IntroSplash() {
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
               <div style={{ animation: "introFocus 1.1s cubic-bezier(.22,1,.36,1) .1s both" }}>
                 <Image
-                  src="/images/brand/logo-light.png"
+                  src="/images/brand/logo-light.webp"
                   alt=""
                   width={989}
                   height={768}

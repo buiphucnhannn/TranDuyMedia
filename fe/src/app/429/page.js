@@ -4,7 +4,7 @@ import { ErrorScreen } from "@/components/ui/ErrorScreen";
 import { RetryButton } from "./RetryButton";
 
 export const metadata = {
-  title: "Thao tác quá nhanh",
+  title: "429 - Truy cập tạm bị giới hạn",
   robots: { index: false, follow: false },
 };
 

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
   const p = await getProduct(slug);
   if (!p) return {};
   return createMetadata({
-    title: `${p.title} – Sản phẩm`,
+    title: `${p.title} | Sản phẩm`,
     description: p.description,
     path: `/san-pham/${p.slug}`,
     image: p.cover.src,
@@ -131,9 +131,9 @@ async function ProductView({ params }) {
 
       <section className="bg-paper section-y" data-nav-theme="light">
         <Container>
-          <div className="mb-10 flex items-center justify-between gap-6">
+          <div className="mb-8 flex flex-col gap-2 sm:mb-10 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
             <h2 className="reveal text-3xl h-display sm:text-4xl">Thư viện sản phẩm</h2>
-            <p className="reveal text-sm text-ink-muted">Bấm để xem lớn</p>
+            <p className="reveal text-left text-sm text-ink-muted">Bấm để xem lớn</p>
           </div>
           <AlbumGallery images={p.images} name={p.title} />
         </Container>

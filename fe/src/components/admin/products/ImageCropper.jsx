@@ -189,7 +189,7 @@ export function ImageCropper({ item, rank = 0, onApply, onClose }) {
             onPointerCancel={endDrag}
             onWheel={(e) => changeZoom(zoom - e.deltaY * 0.0015)}
             className={cn(
-              "relative flex touch-none items-center justify-center overflow-hidden bg-navy-950 px-6 py-8 select-none",
+              "relative flex shrink-0 touch-none items-center justify-center overflow-hidden bg-navy-950 px-6 py-6 select-none max-md:min-h-[calc(min(50svh,420px)+3rem)] md:py-8",
               dragging ? "cursor-grabbing" : "cursor-grab",
             )}
           >
@@ -210,7 +210,7 @@ export function ImageCropper({ item, rank = 0, onApply, onClose }) {
                   moveBy(...d);
                 }
               }}
-              className="relative aspect-3/4 h-[min(56svh,460px)] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+              className="relative aspect-3/4 h-[min(50svh,420px)] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-orange-500 md:h-[min(56svh,460px)]"
             >
               {/* Phần bị cắt bỏ (mờ) */}
               {imgLayer("opacity-30")}

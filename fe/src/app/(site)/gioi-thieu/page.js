@@ -24,7 +24,7 @@ export const metadata = createMetadata({
   description:
     "Tran Duy Media Studio – 10+ năm sản xuất video thương mại, phim doanh nghiệp, chụp ảnh và cho thuê studio tại TP.HCM. 1000+ dự án, 500+ khách hàng doanh nghiệp. Uy tín – Trách nhiệm – Tâm huyết.",
   path: "/gioi-thieu",
-  image: "/images/bts/bts-05.jpg",
+  image: "/images/bts/bts-05.webp",
 });
 
 export default function AboutPage() {
@@ -214,7 +214,10 @@ function BehindTheScenes() {
               </li>
             ))}
           </ul>
-          <div className="reveal mt-10 flex flex-wrap gap-3" style={{ "--reveal-delay": "200ms" }}>
+          <div
+            className="reveal btn-row mt-10 flex flex-wrap gap-3"
+            style={{ "--reveal-delay": "200ms" }}
+          >
             <Button pill data-booking>
               Đặt lịch tư vấn
             </Button>

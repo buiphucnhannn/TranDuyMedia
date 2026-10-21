@@ -44,6 +44,14 @@ router.delete(
   validate(productIdSchema, "params"),
   productController.remove,
 );
+// Hoàn tác xoá (xoá mềm)
+router.post(
+  "/:id/restore",
+  requireAdmin,
+  noStore,
+  validate(productIdSchema, "params"),
+  productController.restore,
+);
 
 // Công khai: chỉ sản phẩm đang hiển thị
 router.get("/", productController.listPublic);

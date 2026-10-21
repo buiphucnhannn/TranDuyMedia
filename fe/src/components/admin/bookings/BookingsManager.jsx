@@ -140,6 +140,30 @@ export function BookingsManager({ initialTab = "all" }) {
     }
   };
 
+  /** Hoàn tác xoá (xoá mềm) → yêu cầu quay lại danh sách. */
+  const restore = async (b) => {
+    const id = toast.loading(`Đang khôi phục yêu cầu của ${b.name}…`, { title: "Đang hoàn tác" });
+    try {
+      await api(`/bookings/${b.id}/restore`, { method: "POST" });
+      load({ silent: true });
+      toast.update(id, {
+        type: "success",
+        title: "Đã khôi phục yêu cầu",
+        message: `Yêu cầu của ${b.name} đã quay lại danh sách.`,
+      });
+    } catch (err) {
+      if (err.status === 401) return router.replace("/login");
+      toast.update(id, {
+        type: "error",
+        title: "Chưa khôi phục được",
+        message:
+          err.status === 404
+            ? "Đã quá thời gian hoàn tác."
+            : err.message || "Đã có lỗi xảy ra, vui lòng thử lại.",
+      });
+    }
+  };
+
   /** Xoá (chỉ yêu cầu Đã giải quyết) — sau khi người dùng xác nhận trong hộp thoại. */
   const confirmDelete = async () => {
     const b = toDelete;
@@ -151,6 +175,8 @@ export function BookingsManager({ initialTab = "all" }) {
       setData((d) => ({ ...d, items: d.items.filter((x) => x.id !== b.id) }));
       toast.success(`Yêu cầu của ${b.name} đã được xoá khỏi danh sách.`, {
         title: "Đã xoá yêu cầu",
+        duration: 8000, // đủ thời gian bấm "Hoàn tác"
+        action: { label: "Hoàn tác", onClick: () => restore(b) },
       });
       // Trang hiện tại trống sau khi xoá → lùi về trang trước
       if (data.items.length === 1 && page > 1) setPage((p) => p - 1);
@@ -284,7 +310,7 @@ export function BookingsManager({ initialTab = "all" }) {
               <table className="w-full min-w-[940px] text-left text-sm">
                 <thead className="border-b border-ink/10 bg-paper/60 text-[11px] font-semibold tracking-eyebrow text-ink-muted uppercase">
                   <tr>
-                    <th className="py-3.5 pr-4 pl-6">Khách hàng</th>
+                    <th className="px-5 py-3.5 text-center">Khách hàng</th>
                     <th className="px-4 py-3.5 text-center">Dịch vụ</th>
                     <th className="px-4 py-3.5 text-center">Ngày mong muốn</th>
                     <th className="px-4 py-3.5 text-center">Ngân sách</th>
@@ -298,13 +324,12 @@ export function BookingsManager({ initialTab = "all" }) {
                     ? Array.from({ length: limit ?? 6 }, (_, i) => <SkeletonRow key={i} />)
                     : data.items.map((b) => (
                         <tr key={b.id} className="transition-colors hover:bg-paper/50">
-                          <td className="py-3.5 pr-4 pl-6">
-                            <div className="flex items-center gap-3">
+                          <td className="px-5 py-3.5">
+                            {/* Cả khối (avatar + tên + SĐT) căn giữa dưới tên cột, như các cột khác */}
+                            <div className="mx-auto flex w-fit max-w-[220px] items-center gap-3 text-left">
                               <Avatar name={b.name} />
                               <div className="min-w-0">
-                                <p className="max-w-[200px] truncate font-semibold text-ink">
-                                  {b.name}
-                                </p>
+                                <p className="truncate font-semibold text-ink">{b.name}</p>
                                 <a
                                   href={`tel:${b.phone}`}
                                   className="text-xs text-ink-soft tabular-nums hover:text-orange-600"
@@ -412,9 +437,16 @@ export function BookingsManager({ initialTab = "all" }) {
         description={
           toDelete && (
             <>
-              Yêu cầu của <strong className="font-semibold text-ink">{toDelete.name}</strong> (
-              {formatPhone(toDelete.phone)}) sẽ bị xoá khỏi danh sách quản lý. Bạn có chắc chắn muốn
-              tiếp tục?
+              {/* Giữ liền tên, số điện thoại, "quản lý"; câu hỏi xác nhận xuống dòng riêng */}
+              Yêu cầu của{" "}
+              <strong className="font-semibold whitespace-nowrap text-ink">
+                {toDelete.name}
+              </strong>{" "}
+              <span className="whitespace-nowrap">({formatPhone(toDelete.phone)})</span>{" "}
+              <span className="whitespace-nowrap">sẽ bị xoá</span> khỏi danh sách{" "}
+              <span className="whitespace-nowrap">quản lý.</span>
+              <br />
+              Bạn có chắc chắn muốn tiếp tục?
             </>
           )
         }
