@@ -2,8 +2,8 @@ import Image from "next/image";
 import { partners } from "@/data/partners";
 
 /**
- * Dải "thương hiệu đã đồng hành" — băng màu cam thương hiệu, 1 dòng tiêu đề ngắn + logo trên thẻ trắng
- * tự lướt ngang liên tục (rê chuột → dừng, thẻ đang trỏ nổi lên + hiện tên). Ít chữ, đặt ngay dưới
+ * Dải "thương hiệu đã đồng hành" — nền cam nhạt, 1 dòng tiêu đề ngắn + logo đặt thẳng trên nền (không khung),
+ * tự lướt ngang liên tục (rê chuột → dừng, logo đang trỏ nở to, nổi lên + hiện tên). Ít chữ, đặt ngay dưới
  * phần mở đầu trang (trang chủ: dưới hero · Về chúng tôi: dưới đầu trang).
  */
 export function Partners() {
@@ -12,44 +12,42 @@ export function Partners() {
 
   return (
     <section
-      className="relative overflow-hidden bg-orange-500 py-10 text-white sm:py-12"
-      data-nav-theme="dark"
+      className="relative overflow-hidden bg-[#fff1e6] pt-10 pb-3 sm:pt-12 sm:pb-4"
+      data-nav-theme="light"
       aria-labelledby="partners-title"
     >
       <h2
         id="partners-title"
-        className="reveal px-5 text-center text-xl font-bold tracking-tight text-balance uppercase sm:text-2xl lg:text-[1.75rem]"
+        className="reveal px-5 text-center text-xl font-bold tracking-tight text-balance text-navy-900 uppercase sm:text-2xl lg:text-[1.75rem]"
       >
         Hàng trăm doanh nghiệp đã tin tưởng
       </h2>
 
-      {/* 2 mép mờ dần vào nền cam cho mềm */}
+      {/* 2 mép mờ dần vào nền cho mềm */}
       <div
-        className="marquee mt-7 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)] sm:mt-8"
+        className="marquee mt-2 [mask-image:linear-gradient(to_right,transparent,#000_7%,#000_93%,transparent)] sm:mt-3"
         aria-label="Thương hiệu đã đồng hành"
       >
-        <div className="bleed-cap overflow-hidden py-2">
-          <ul className="marquee-track" style={{ "--marquee-duration": "36s" }}>
+        <div className="bleed-cap overflow-hidden">
+          <ul className="marquee-track" style={{ "--marquee-duration": "21s" }}>
             {row.map((p, i) => (
-              // px thay cho gap: khoảng cách nằm trong từng thẻ → 2 nửa track nối nhau không bị lệch
+              // ô bề rộng cố định thay cho gap → 2 nửa track nối nhau không bị lệch
               <li
                 key={i}
                 aria-hidden={i >= partners.length ? "true" : undefined}
-                className="shrink-0 px-2 sm:px-2.5"
+                className="group relative flex h-[110px] w-[170px] shrink-0 items-center justify-center sm:h-[150px] sm:w-[290px]"
               >
-                <div className="group relative flex h-[84px] w-[168px] items-center justify-center rounded-2xl bg-white shadow-[0_10px_24px_-14px_rgba(80,30,0,0.45)] transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-1 sm:h-[110px] sm:w-[230px]">
-                  <Image
-                    src={p.logo}
-                    alt={p.name}
-                    width={p.w}
-                    height={160}
-                    sizes="200px"
-                    className="h-auto max-h-9 w-auto max-w-[120px] object-contain transition-transform duration-500 group-hover:scale-105 sm:max-h-12 sm:max-w-[160px]"
-                  />
-                  <span className="pointer-events-none absolute inset-x-2 bottom-1.5 truncate text-center text-[11px] font-semibold text-ink-soft opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    {p.name}
-                  </span>
-                </div>
+                <Image
+                  src={p.logo}
+                  alt={p.name}
+                  width={p.w}
+                  height={160}
+                  sizes="240px"
+                  className="h-auto max-h-11 w-auto max-w-[130px] object-contain opacity-85 transition-[opacity,transform,filter,scale,translate] duration-[1100ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-2 group-hover:scale-[1.3] group-hover:opacity-100 group-hover:drop-shadow-[0_10px_18px_rgba(15,20,32,0.18)] sm:max-h-[52px] sm:max-w-[160px]"
+                />
+                <span className="pointer-events-none absolute inset-x-2 bottom-1.5 translate-y-1 truncate text-center text-[12px] font-semibold text-ink opacity-0 transition-[opacity,translate,transform] delay-150 duration-700 ease-out group-hover:translate-y-0 group-hover:opacity-100 sm:bottom-3">
+                  {p.name}
+                </span>
               </li>
             ))}
           </ul>
