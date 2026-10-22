@@ -36,11 +36,11 @@ export default function AboutPage() {
         description="Studio sản xuất video & hình ảnh thương mại trọn gói tại TP.HCM — hơn 10 năm đồng hành cùng doanh nghiệp Việt."
         columns={aboutHeaderColumns}
       />
+      <Partners />
       <Profile />
       <Capacity />
       <Values />
       <BehindTheScenes />
-      <Partners />
     </>
   );
 }

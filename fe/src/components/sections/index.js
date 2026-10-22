@@ -3,7 +3,6 @@ export { Hero } from "./Hero";
 export { Intro } from "./Intro";
 export { PageHeader } from "./PageHeader";
 export { Process } from "./Process";
-export { ServiceMarquee } from "./ServiceMarquee";
 export { ServicesGrid } from "./ServicesGrid";
 export { Showreel } from "./Showreel";
 export { StudioShowcase } from "./StudioShowcase";

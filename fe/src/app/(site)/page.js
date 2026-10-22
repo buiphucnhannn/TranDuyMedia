@@ -3,7 +3,6 @@ import {
   Intro,
   Partners,
   Process,
-  ServiceMarquee,
   ServicesGrid,
   Showreel,
   Values,
@@ -14,14 +13,13 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <ServiceMarquee />
+      <Partners />
       <Showreel />
       <Intro />
       <VideoFocus />
       <ServicesGrid />
       <Process />
       <Values />
-      <Partners />
     </>
   );
 }
