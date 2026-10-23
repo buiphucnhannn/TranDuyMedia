@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/site";
-import { api, ApiError } from "@/lib/api";
+import { api, ApiError, refreshSession } from "@/lib/api";
 import { toast } from "@/lib/toast";
 
 /**
@@ -36,14 +36,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-const refresh = () =>
-  fetch(`${siteConfig.apiUrl}/auth/refresh`, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: { "X-Requested-With": "fetch" },
-  }).then((r) => r.ok);
-
-/** Upload 1 tệp kèm tiến độ (0–1). Hết hạn phiên → làm mới rồi thử lại 1 lần. */
+/** Upload 1 tệp kèm tiến độ (0–1). Hết hạn phiên → làm mới (dùng chung với lib/api) rồi thử lại 1 lần. */
 function uploadFile(file, folder, onProgress, retried = false) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -61,7 +54,7 @@ function uploadFile(file, folder, onProgress, retried = false) {
         xhr.status === 401 &&
         body?.error?.code === "TOKEN_EXPIRED" &&
         !retried &&
-        (await refresh())
+        (await refreshSession())
       ) {
         return uploadFile(file, folder, onProgress, true).then(resolve, reject);
       }

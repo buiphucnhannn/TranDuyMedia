@@ -5,6 +5,36 @@ import { undoable } from "#utils/undo.js";
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /**
+ * Tìm theo tên KHÔNG cần gõ dấu: mỗi chữ cái tiếng Việt được mở rộng thành lớp ký tự gồm chính nó
+ * và mọi biến thể có dấu ("nguyen" khớp "Nguyễn", "văn" cũng khớp). Ký tự còn lại được escape
+ * như cũ → không chèn được regex. Khoảng trắng khớp 1+ khoảng trắng (gõ thừa / thiếu vẫn ra).
+ */
+const VI_VARIANTS = {
+  a: "àáảãạăắằẳẵặâấầẩẫậ",
+  e: "èéẻẽẹêếềểễệ",
+  i: "ìíỉĩị",
+  o: "òóỏõọôốồổỗộơớờởỡợ",
+  u: "ùúủũụưứừửữự",
+  y: "ỳýỷỹỵ",
+  d: "đ",
+};
+const BASE_OF = new Map(
+  Object.entries(VI_VARIANTS).flatMap(([base, vars]) => [...vars].map((v) => [v, base])),
+);
+const nameSearchRegex = (q) =>
+  new RegExp(
+    [...q.normalize("NFC")]
+      .map((ch) => {
+        const low = ch.toLowerCase();
+        const base = VI_VARIANTS[low] ? low : BASE_OF.get(low);
+        if (base) return `[${base}${VI_VARIANTS[base]}]`;
+        return ch === " " ? "\\s+" : escapeRegex(ch);
+      })
+      .join(""),
+    "i",
+  );
+
+/**
  * Repository cho yêu cầu đặt lịch tư vấn (form "Đặt lịch tư vấn miễn phí" trên website).
  * Truy vấn đặc thù của booking đặt ở đây để service không phải biết cách lưu trữ.
  */
@@ -58,14 +88,26 @@ export class BookingRepository extends MongoRepository {
     );
   }
 
-  /** Bộ lọc danh sách quản trị: trạng thái + tìm theo tên / SĐT (đã escape → không chèn regex). */
+  /**
+   * Bộ lọc danh sách quản trị: trạng thái + tìm linh hoạt theo tên / SĐT.
+   * - Tên: khớp chuỗi con, không cần gõ dấu, không phân biệt hoa thường.
+   * - SĐT: chỉ cần từ 2 chữ số liên tiếp bất kỳ trong số (vd "03", "542026"); chấp nhận cả dạng
+   *   quốc tế 84… lẫn nội địa 0… vì SĐT lưu trong DB luôn bắt đầu bằng 0.
+   */
   buildFilter({ status, q } = {}) {
     const filter = { deletedAt: null };
     if (status) filter.status = status;
-    if (q) {
-      const rx = new RegExp(escapeRegex(q), "i");
-      const digits = q.replace(/\D/g, "");
-      filter.$or = [{ name: rx }, ...(digits.length >= 3 ? [{ phone: new RegExp(digits) }] : [])];
+    const query = (q ?? "").trim().replace(/\s+/g, " ");
+    if (query) {
+      const or = [{ name: nameSearchRegex(query) }];
+      const digits = query.replace(/\D/g, "");
+      if (digits.length >= 2) {
+        const variants = new Set([digits]);
+        if (digits.startsWith("84")) variants.add(`0${digits.slice(2)}`);
+        if (digits.startsWith("0")) variants.add(`84${digits.slice(1)}`);
+        for (const v of variants) or.push({ phone: new RegExp(escapeRegex(v)) });
+      }
+      filter.$or = or;
     }
     return filter;
   }

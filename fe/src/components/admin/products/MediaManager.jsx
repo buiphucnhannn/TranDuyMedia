@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/icons";
 import { zoomStyle } from "@/lib/crop";
+import { detectSmartPos } from "@/lib/smart-focal";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { ImageCropper } from "./ImageCropper";
@@ -47,6 +48,31 @@ export function MediaManager({ items, onChange, error }) {
   // Mọi thay đổi danh sách đều qua đây: luôn đưa ảnh lên các ô bìa / nổi bật
   const commit = (list) => onChange(keepImagesFirst(list));
 
+  // Bản sao mới nhất của danh sách + các ảnh người dùng ĐÃ cắt tay — để cơ chế tự căn chỉnh
+  // chạy nền bên dưới không bao giờ ghi đè lựa chọn thủ công.
+  const itemsRef = useRef(items);
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+  const manualCropKeys = useRef(new Set());
+
+  /**
+   * Tự căn chỉnh ảnh bìa cho ảnh VỪA thêm: tìm vùng chủ thể rồi đặt sẵn pos (thay căn giữa),
+   * người dùng vẫn cắt tay lại được như thường. Chạy nền, không chặn thao tác; ảnh đã bị gỡ
+   * hoặc đã được cắt tay trong lúc phân tích thì bỏ qua.
+   */
+  const autoFit = (item) => {
+    if (item.type !== "image") return;
+    detectSmartPos(previewOf(item)).then((pos) => {
+      if (!pos || manualCropKeys.current.has(item.key)) return;
+      const list = itemsRef.current;
+      const cur = list.find((m) => m.key === item.key);
+      if (cur && cur.pos === "center" && !cur.zoom) {
+        onChange(list.map((m) => (m.key === item.key ? { ...m, pos } : m)));
+      }
+    });
+  };
+
   const addFiles = (files) => {
     const next = [];
     const problems = [];
@@ -69,7 +95,10 @@ export function MediaManager({ items, onChange, error }) {
         title: problems.length > 1 ? `${problems.length} tệp chưa được thêm` : "Tệp chưa được thêm",
       });
     }
-    if (next.length) commit([...items, ...next]);
+    if (next.length) {
+      commit([...items, ...next]);
+      next.forEach(autoFit);
+    }
   };
 
   const addLink = () => {
@@ -84,20 +113,19 @@ export function MediaManager({ items, onChange, error }) {
       return toast.info("Link này đã có trong danh sách.", { title: "Đã thêm trước đó" });
     }
     const embed = parseEmbed(url);
-    commit([
-      ...items,
-      embed
-        ? { key: newKey(), source: "existing", ...embed, sourceUrl: url, pos: "center" }
-        : {
-            key: newKey(),
-            source: "link",
-            type: guessLinkType(url),
-            url,
-            preview: url,
-            sourceUrl: url,
-            pos: "center",
-          },
-    ]);
+    const item = embed
+      ? { key: newKey(), source: "existing", ...embed, sourceUrl: url, pos: "center" }
+      : {
+          key: newKey(),
+          source: "link",
+          type: guessLinkType(url),
+          url,
+          preview: url,
+          sourceUrl: url,
+          pos: "center",
+        };
+    commit([...items, item]);
+    if (!embed) autoFit(item);
     setLink("");
   };
 
@@ -378,6 +406,7 @@ export function MediaManager({ items, onChange, error }) {
           rank={visual.indexOf(cropItem)}
           onClose={() => setCropKey(null)}
           onApply={(crop) => {
+            manualCropKeys.current.add(cropItem.key); // đã cắt tay → tự căn chỉnh không ghi đè nữa
             update(cropItem.key, crop);
             setCropKey(null);
           }}

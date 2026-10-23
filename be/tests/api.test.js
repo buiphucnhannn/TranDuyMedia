@@ -85,7 +85,7 @@ describe("API v1", () => {
       assert.equal((await withCsrf(request(app)).get("/api/v1/auth/me")).status, 401);
     });
 
-    it("refresh xoay vòng token; dùng lại refresh cũ → thu hồi toàn bộ phiên", async () => {
+    it("refresh xoay vòng token; dùng lại token cũ TRONG cửa sổ ân hạn → cấp phiên mới, không huỷ phiên đang dùng", async () => {
       const login = await withCsrf(request(app)).post("/api/v1/auth/login").send(ADMIN);
       const oldRt = login.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
 
@@ -94,9 +94,49 @@ describe("API v1", () => {
       const newRt = r1.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
       assert.notEqual(newRt, oldRt);
 
+      // Ngay sau khi xoay vòng, một request khác (tab khác / proxy / tải tệp nền) cầm token cũ
+      // gọi refresh → race hợp lệ trong cửa sổ ân hạn: vẫn thành công…
+      const reuse = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", oldRt);
+      assert.equal(reuse.status, 200, JSON.stringify(reuse.body));
+      // …và phiên thay thế KHÔNG bị huỷ oan
+      const after = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", newRt);
+      assert.equal(after.status, 200, JSON.stringify(after.body));
+    });
+
+    it("hai request refresh ĐỒNG THỜI bằng cùng một token → cả hai thành công", async () => {
+      const login = await withCsrf(request(app)).post("/api/v1/auth/login").send(ADMIN);
+      const rt = login.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
+      const call = () => withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", rt);
+      const [a, b] = await Promise.all([call(), call()]);
+      assert.equal(a.status, 200, JSON.stringify(a.body));
+      assert.equal(b.status, 200, JSON.stringify(b.body));
+      const rtA = a.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
+      const next = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", rtA);
+      assert.equal(next.status, 200, JSON.stringify(next.body));
+    });
+
+    it("dùng lại refresh token SAU cửa sổ ân hạn → thu hồi toàn bộ phiên", async () => {
+      const login = await withCsrf(request(app)).post("/api/v1/auth/login").send(ADMIN);
+      const oldRt = login.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
+
+      const r1 = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", oldRt);
+      assert.equal(r1.status, 200);
+      const newRt = r1.headers["set-cookie"].find((c) => c.startsWith("tdm_rt=")).split(";")[0];
+
+      // Đẩy thời điểm xoay vòng về quá khứ (ngoài 30s ân hạn) — như cách test hoàn tác xoá vẫn
+      // làm với deletedAt: token cũ bị dùng lại lúc này mới bị coi là đánh cắp.
+      const { Session } = await import("#models/session.model.js");
+      const { createHash } = await import("node:crypto");
+      const raw = oldRt.split(";")[0].split("=").slice(1).join("=");
+      const tokenHash = createHash("sha256").update(raw).digest("hex");
+      await Session.updateOne(
+        { tokenHash },
+        { $set: { revokedAt: new Date(Date.now() - 120_000) } },
+      );
+
       const reuse = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", oldRt);
       assert.equal(reuse.status, 401);
-      // phiên mới cũng bị huỷ vì phát hiện token cũ bị dùng lại
+      // phiên mới cũng bị huỷ vì phát hiện token cũ bị dùng lại ngoài cửa sổ ân hạn
       const after = await withCsrf(request(app)).post("/api/v1/auth/refresh").set("Cookie", newRt);
       assert.equal(after.status, 401);
     });
@@ -209,6 +249,21 @@ describe("API v1", () => {
       assert.equal(byPhone.body.meta.total, 1);
       const injected = await admin.get("/api/v1/bookings?q=" + encodeURIComponent(".*"));
       assert.equal(injected.body.meta.total, 0);
+    });
+
+    it("tìm kiếm linh hoạt: SĐT từng phần từ 2 số, tên không dấu / từng phần / khác hoa thường", async () => {
+      // SĐT đã lưu: 0971542026 — từng đoạn 2 số ở đầu / giữa / cuối đều phải ra
+      for (const q of ["09", "71", "2026", "0971 542", "+84 971 542 026"]) {
+        const res = await admin.get(`/api/v1/bookings?q=${encodeURIComponent(q)}`);
+        assert.equal(res.body.meta.total, 1, `q=${q}`);
+      }
+      // Tên đã lưu: "Nguyễn Văn A" — không dấu, từng phần, hoa thường đều phải ra
+      for (const q of ["nguyen van", "Văn", "NGUYỄN", "van a"]) {
+        const res = await admin.get(`/api/v1/bookings?q=${encodeURIComponent(q)}`);
+        assert.equal(res.body.meta.total, 1, `q=${q}`);
+      }
+      const none = await admin.get("/api/v1/bookings?q=xyz123");
+      assert.equal(none.body.meta.total, 0);
     });
 
     it("họ tên / SĐT không hợp lệ → 400 với thông báo rõ ràng", async () => {

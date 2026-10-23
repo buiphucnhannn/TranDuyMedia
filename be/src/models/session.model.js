@@ -4,7 +4,10 @@ import mongoose from "mongoose";
  * Phiên đăng nhập = một refresh token đang hiệu lực.
  * - Chỉ lưu SHA-256 của refresh token (lộ DB cũng không dùng được token).
  * - Mỗi lần refresh: phiên cũ bị thu hồi (revokedAt, replacedBy) và tạo phiên mới (rotation).
- * - Token đã thu hồi bị dùng lại → coi như bị đánh cắp → thu hồi toàn bộ phiên của user.
+ * - Token đã thu hồi bị dùng lại SAU cửa sổ ân hạn 30s (xem REFRESH_REUSE_GRACE_MS ở
+ *   auth.service) → coi như bị đánh cắp → thu hồi toàn bộ phiên của user. Trong cửa sổ ân hạn,
+ *   việc dùng lại thường là các request refresh chạy đồng thời (nhiều tab / thiết bị) → cấp
+ *   phiên mới thay vì huỷ oan phiên đang dùng tốt.
  * - MongoDB tự xoá phiên hết hạn nhờ TTL index trên expiresAt.
  */
 const sessionSchema = new mongoose.Schema(

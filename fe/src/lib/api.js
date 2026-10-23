@@ -17,7 +17,12 @@ export class ApiError extends Error {
 }
 
 let refreshing = null;
-const refreshSession = () =>
+/**
+ * Làm mới phiên DÙNG CHUNG cho mọi nơi gọi API (api() bên dưới, hàng đợi tải tệp ở jobs.js…):
+ * mọi request hết hạn cùng lúc chỉ tạo MỘT lần refresh — nhiều lần refresh đồng thời bằng cùng
+ * một refresh token sẽ bị backend coi là dùng lại token và có thể thu hồi phiên oan.
+ */
+export const refreshSession = () =>
   (refreshing ??= fetch(`${siteConfig.apiUrl}/auth/refresh`, {
     method: "POST",
     credentials: "same-origin",
