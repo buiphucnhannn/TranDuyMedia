@@ -36,11 +36,11 @@ export function ServicesHero() {
             {/* Chữ chìm "Services" — nằm gọn trong cột chữ, sau dải số liệu */}
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -bottom-4 left-0 -z-10 hidden max-w-full text-[clamp(6rem,8.5vw,8.5rem)] h-display leading-none whitespace-nowrap text-ink/[0.04] select-none lg:block"
+              className="pointer-events-none absolute bottom-1 left-0 -z-10 hidden max-w-full text-[clamp(6rem,8.5vw,8.5rem)] h-display leading-none whitespace-nowrap text-ink/[0.04] select-none lg:block"
             >
               Services
             </span>
-            <p className="reveal eyebrow">Dịch vụ - Tran Duy Media Studio</p>
+            <p className="reveal eyebrow">Dịch vụ - Trần Duy Media Studio</p>
             <SplitText
               as="h1"
               text="Một ekip cho trọn chiến dịch hình ảnh"
@@ -53,9 +53,9 @@ export function ServicesHero() {
               className="reveal mt-6 max-w-lg text-[15px] leading-relaxed text-ink-soft sm:text-base"
               style={{ "--reveal-delay": "250ms" }}
             >
-              Sản xuất video thương mại, cho thuê bối cảnh studio và chụp ảnh thương mại — ba dịch
-              vụ bổ trợ nhau, được thực hiện bởi cùng một đội ngũ nên hình ảnh luôn đồng bộ, tiến độ
-              rõ ràng.
+              Sản xuất video marketing, chụp ảnh thương mại, chụp ảnh sự kiện và cho thuê studio —
+              bốn dịch vụ bổ trợ nhau, được thực hiện bởi cùng một đội ngũ nên hình ảnh luôn đồng
+              bộ, tiến độ rõ ràng.
             </p>
             <div
               className="reveal mt-8 flex flex-wrap items-center gap-3"
@@ -79,14 +79,14 @@ export function ServicesHero() {
               {stats.slice(0, 3).map((s) => (
                 <div key={s.label}>
                   <dt className="text-3xl h-display text-navy-900 sm:text-4xl">{s.value}</dt>
-                  <dd className="mt-1 text-[12px] leading-snug text-ink-muted">{s.label}</dd>
+                  <dd className="mt-1 text-[12px] leading-snug text-balance text-ink-muted">{s.label}</dd>
                 </div>
               ))}
             </dl>
           </div>
 
           {/* 3 ảnh dọc so le */}
-          <div className="relative grid h-[70vw] grid-cols-3 items-end gap-3 sm:h-[52vw] lg:h-[calc(var(--screen)*0.66)] lg:gap-4">
+          <div className="relative grid h-[70vw] grid-cols-3 items-end gap-3 sm:h-[52vw] lg:h-[calc(var(--screen)*0.66)] lg:-translate-y-2 lg:gap-4">
             {FRAMES.map((f, i) => (
               <Parallax key={f.src} desktopOnly speed={f.speed} className={f.h}>
                 <div

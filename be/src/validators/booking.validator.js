@@ -3,7 +3,12 @@ import { BOOKING_STATUSES as STATUSES } from "#models/booking.model.js";
 import { objectId } from "#validators/common.validator.js";
 
 // Khớp với các lựa chọn trong form ở frontend (fe/src/components/booking/BookingForm.jsx)
-export const SERVICES = ["san-xuat-video", "cho-thue-studio", "chup-anh-thuong-mai"];
+export const SERVICES = [
+  "san-xuat-video",
+  "chup-anh-thuong-mai",
+  "chup-anh-su-kien",
+  "cho-thue-studio",
+];
 export const BUDGETS = ["Dưới 20 triệu", "20 – 50 triệu", "50 – 100 triệu", "Trên 100 triệu"];
 export { STATUSES };
 

@@ -4,7 +4,7 @@ import { Button, Container } from "@/components/ui";
 import { stats } from "@/data/services";
 
 /**
- * Giới thiệu ngắn + số liệu (USP: 10+ năm, trọn gói). Ảnh hậu trường xếp lệch, parallax nhẹ.
+ * Giới thiệu ngắn (khớp nội dung trang Về chúng tôi) + số liệu (USP: 10+ năm, trọn gói). Ảnh hậu trường xếp lệch, parallax nhẹ.
  */
 export function Intro() {
   return (
@@ -12,16 +12,19 @@ export function Intro() {
       <Container>
         <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <div>
-            <p className="reveal mb-4 eyebrow">Về Tran Duy Media</p>
+            <p className="reveal mb-4 eyebrow">Về Trần Duy Media</p>
             <h2 className="reveal h-section" style={{ "--reveal-delay": "80ms" }}>
-              Hơn 10 năm sản xuất video thương mại cho doanh nghiệp.
+              Hơn 10 năm <span className="whitespace-nowrap">đồng hành</span>,{" "}
+              <br className="max-sm:hidden" />
+              kiến tạo <span className="whitespace-nowrap">giá trị</span>{" "}
+              <span className="whitespace-nowrap">doanh nghiệp.</span>
             </h2>
             <p
               className="reveal mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg"
               style={{ "--reveal-delay": "160ms" }}
             >
-              Video tốt phải bán được hàng. Từ brief đến bàn giao, một ekip duy nhất chịu trách
-              nhiệm trong từng khung hình.
+              Đơn vị chuyên gia công nội dung truyền thông, thương mại quảng cáo — bắt đầu từ tinh
+              thần yêu nghề và kinh nghiệm thực chiến, cùng doanh nghiệp nâng tầm giá trị vững bền.
             </p>
             <div
               className="reveal btn-row mt-8 flex flex-wrap gap-3"
@@ -39,7 +42,7 @@ export function Intro() {
               {stats.map((s, i) => (
                 <div key={s.label} className="reveal" style={{ "--reveal-delay": `${i * 90}ms` }}>
                   <dd className="text-4xl h-display text-navy-900 sm:text-5xl">{s.value}</dd>
-                  <dt className="mt-2 text-sm text-ink-soft">{s.label}</dt>
+                  <dt className="mt-2 text-sm text-balance text-ink-soft">{s.label}</dt>
                 </div>
               ))}
             </dl>
@@ -53,7 +56,7 @@ export function Intro() {
               >
                 <Image
                   src="/images/bts/bts-05.webp"
-                  alt="Ekip Tran Duy Media trên trường quay"
+                  alt="Ekip Trần Duy Media trên trường quay"
                   fill
                   sizes="(min-width: 1024px) 34vw, 68vw"
                   className="object-cover"

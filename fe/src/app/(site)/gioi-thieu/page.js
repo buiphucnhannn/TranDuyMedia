@@ -4,13 +4,12 @@ import { Icon } from "@/components/icons";
 import { ZoomGroup, ZoomImage } from "@/components/gallery";
 import { PageHeader, Partners } from "@/components/sections";
 import { Button, Container, SectionHeading } from "@/components/ui";
-import { siteConfig } from "@/config/site";
 import {
   aboutHeaderColumns,
   behindImages,
   capabilities,
   companyFacts,
-  coreValues,
+  productionStandards,
   formats,
   mission,
   profileImages,
@@ -22,7 +21,7 @@ import { cn, pad } from "@/lib/utils";
 export const metadata = createMetadata({
   title: "Về chúng tôi",
   description:
-    "Tran Duy Media Studio – 10+ năm sản xuất video thương mại, phim doanh nghiệp, chụp ảnh và cho thuê studio tại TP.HCM. 1000+ dự án, 500+ khách hàng doanh nghiệp. Uy tín – Trách nhiệm – Tâm huyết.",
+    "Trần Duy Media – đơn vị gia công nội dung truyền thông, thương mại quảng cáo với hơn 10 năm kinh nghiệm thực chiến: video marketing, chụp ảnh thương mại, chụp ảnh sự kiện và cho thuê studio tại TP.HCM.",
   path: "/gioi-thieu",
   image: "/images/bts/bts-05.webp",
 });
@@ -33,7 +32,9 @@ export default function AboutPage() {
       <PageHeader
         title="Về chúng tôi"
         eyebrow="Hồ sơ doanh nghiệp"
-        description="Studio sản xuất video & hình ảnh thương mại trọn gói tại TP.HCM — hơn 10 năm đồng hành cùng doanh nghiệp Việt."
+        description={
+          "Gia công nội dung truyền thông, thương mại quảng cáo tại TP.HCM — hơn 10\u00a0năm đồng hành cùng doanh nghiệp Việt."
+        }
         columns={aboutHeaderColumns}
       />
       <Partners />
@@ -53,20 +54,21 @@ function Profile() {
         <div>
           <SectionHeading
             eyebrow="Chúng tôi là ai"
-            title="Một studio, một ekip, một đầu mối trọn gói."
+            title="Gia công nội dung truyền thông, thương mại quảng cáo."
           />
           <div
             className="reveal mt-6 space-y-4 text-base leading-relaxed text-ink-soft sm:text-lg"
             style={{ "--reveal-delay": "160ms" }}
           >
             <p>
-              {siteConfig.name} ra đời từ một niềm tin đơn giản: video thương mại tốt phải bán được
-              hàng. Hơn 10 năm qua, chúng tôi sản xuất trọn gói cho doanh nghiệp — từ startup ra mắt
-              sản phẩm đầu tiên đến SME cần phim năng lực để đấu thầu.
+              Trần Duy Media là đơn vị chuyên gia công nội dung truyền thông, thương mại quảng cáo.
+              Bắt đầu từ tinh thần yêu nghề, kinh nghiệm thực chiến với hơn 10 năm đồng hành chuyên
+              sâu, chúng tôi đã triển khai thành công nhiều dự án.
             </p>
             <p>
-              Studio tại Nhà Bè là nơi mọi thứ diễn ra: phòng quay, hệ đèn, bối cảnh theo mùa và một
-              ekip quen tay với TVC, documentary, phim doanh nghiệp, sự kiện và chụp ảnh.
+              Chúng tôi luôn nỗ lực mỗi ngày — nơi sáng tạo, sự đổi mới không chỉ dừng ở việc phục
+              vụ mục tiêu kinh doanh của khách hàng, mà hơn hết là sự đồng hành cùng kiến tạo và
+              nâng tầm giá trị doanh nghiệp vững bền.
             </p>
           </div>
 
@@ -124,7 +126,7 @@ function Capacity() {
   );
 }
 
-/* ── Sứ mệnh / tầm nhìn + 3 giá trị cốt lõi dạng hàng biên tập ── */
+/* ── Sứ mệnh / tầm nhìn + chuẩn mực sản xuất dạng hàng biên tập ── */
 function Values() {
   return (
     <section className="bg-white section-y" data-nav-theme="light">
@@ -137,39 +139,34 @@ function Values() {
 
         <div className="mt-16 sm:mt-20">
           {/* Tiêu đề trái + mô tả phải canh giữa theo chiều cao TIÊU ĐỀ (eyebrow nằm ngoài hàng để không lệch tâm) */}
-          <p className="reveal mb-4 eyebrow">Giá trị cốt lõi</p>
+          <p className="reveal mb-4 eyebrow">Chuẩn mực sản xuất</p>
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <SectionHeading title="Ba điều chúng tôi cam kết với mọi khách hàng." />
+            <SectionHeading title="Trần Duy Media cam kết chuẩn mực sản xuất." />
+            {/* translate-y nhẹ: tâm NHÌN của tiêu đề lớn thấp hơn tâm hộp chữ (chừa chỗ dấu tiếng Việt) */}
             <p
-              className="reveal max-w-sm text-base leading-relaxed text-ink-soft"
+              className="reveal max-w-sm text-base leading-relaxed text-ink-soft lg:translate-y-1.5"
               style={{ "--reveal-delay": "160ms" }}
             >
-              Không chỉ là khẩu hiệu — đây là cách chúng tôi làm việc trong từng dự án.
+              Năm nguyên tắc chúng tôi giữ vững trong từng{" "}
+              <span className="whitespace-nowrap">dự án,</span> với từng{" "}
+              <span className="whitespace-nowrap">khách hàng.</span>
             </p>
           </div>
-          {/* 3 cột trải hết khung: [số + tên] | mô tả | cam kết (cột cuối rộng cố định → các hàng thẳng cột) */}
+          {/* 2 cột trải hết khung: [số + tên] | mô tả (các hàng thẳng cột) */}
           <ol className="mt-10 border-t border-ink/10">
-            {coreValues.map((v, i) => (
+            {productionStandards.map((v, i) => (
               <li
                 key={v.title}
-                className="reveal grid gap-4 border-b border-ink/10 py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_17.5rem] md:items-center md:gap-12 xl:gap-20"
+                className="reveal grid gap-3 border-b border-ink/10 py-7 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] md:items-center md:gap-12 xl:gap-20"
                 style={{ "--reveal-delay": `${i * 90}ms` }}
               >
                 <div className="flex items-center gap-6 sm:gap-10">
                   <span className="w-6 text-sm font-semibold tracking-widest text-orange-500">
                     {pad(i + 1)}
                   </span>
-                  <h3 className="text-4xl h-display text-ink sm:text-5xl">{v.title}</h3>
+                  <h3 className="text-3xl h-display text-ink sm:text-4xl">{v.title}</h3>
                 </div>
                 <p className="text-base leading-relaxed text-ink-soft">{v.desc}</p>
-                <ul className="space-y-2">
-                  {v.promises.map((p) => (
-                    <li key={p} className="flex items-start gap-2.5 text-sm font-medium text-ink">
-                      <Icon name="check" className="mt-0.5 size-4 shrink-0 text-orange-500" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
               </li>
             ))}
           </ol>
@@ -209,7 +206,7 @@ function BehindTheScenes() {
                 </span>
                 <div>
                   <h3 className="font-bold text-ink">{c.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink-soft">{c.desc}</p>
+                  <p className="mt-1 text-left text-sm leading-relaxed text-ink-soft">{c.desc}</p>
                 </div>
               </li>
             ))}

@@ -57,7 +57,7 @@ const PANELS = [
 ];
 
 /**
- * Trang chủ — dịch vụ trọng tâm "Sản xuất video thương mại" trình bày như một tờ STORYBOARD:
+ * Trang chủ — dịch vụ trọng tâm "Sản xuất video marketing" trình bày như một tờ STORYBOARD:
  * 6 khung phân cảnh (định dạng video), mỗi khung có số cảnh, cỡ cảnh/ống kính, thời lượng và ghi chú.
  * Rê chuột: ảnh trắng-đen → màu, hiện lưới 1/3 khung ngắm, khung nhấc nhẹ. Bấm khung → trang dịch vụ.
  */
@@ -69,7 +69,7 @@ export function VideoFocus() {
       data-nav-theme="dark"
     >
       <Container>
-        <p className="reveal mb-4 eyebrow">Dịch vụ trọng tâm - Sản xuất video thương mại</p>
+        <p className="reveal mb-4 eyebrow">Dịch vụ trọng tâm - Sản xuất video marketing</p>
         {/* Tiêu đề trái + mô tả & nút phải (canh giữa theo chiều cao tiêu đề) */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
           <h2 className="reveal max-w-2xl h-section" style={{ "--reveal-delay": "80ms" }}>
@@ -100,7 +100,7 @@ export function VideoFocus() {
           {/* Đầu tờ: thông tin dự án kiểu bảng phân cảnh */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-dashed border-white/15 pb-5 font-mono text-[11px] tracking-widest text-white/45 uppercase">
             <span>
-              Project: <span className="text-white/80">Tran Duy Media</span>
+              Project: <span className="text-white/80">Trần Duy Media</span>
             </span>
             <span className="hidden sm:inline">Formats: 06</span>
             <span>

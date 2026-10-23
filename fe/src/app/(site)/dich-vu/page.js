@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 export const metadata = createMetadata({
   title: "Dịch vụ sản xuất video & hình ảnh",
   description:
-    "Sản xuất video thương mại (TVC, iTVC, documentary, phim doanh nghiệp, video sự kiện), cho thuê bối cảnh studio và chụp ảnh thương mại — một ekip, trọn gói.",
+    "Sản xuất video marketing (video short quảng cáo, iTVC, video doanh nghiệp & sự kiện, documentary), chụp ảnh thương mại, chụp ảnh sự kiện và cho thuê studio — một ekip, trọn gói.",
   path: "/dich-vu",
   image: "/images/bts/bts-02.webp",
 });
@@ -108,7 +108,7 @@ export default function ServicesPage() {
                     pill
                     variant={p.featured ? "white" : "primary"}
                     data-booking={p.services[0]}
-                    className="mt-7 self-start"
+                    className="mt-7 self-center"
                   >
                     Tư vấn gói này
                   </Button>

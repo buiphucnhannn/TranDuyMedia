@@ -24,11 +24,11 @@ function siteUrl() {
 }
 
 export const siteConfig = {
-  name: "Tran Duy Media Studio",
+  name: "Trần Duy Media Studio",
   shortName: "TD Media",
-  tagline: "Sản xuất video thương mại & studio quay chụp",
+  tagline: "Gia công nội dung truyền thông & quảng cáo",
   description:
-    "Tran Duy Media Studio – 10+ năm sản xuất video thương mại quảng cáo (TVC, iTVC, documentary, phim doanh nghiệp, video sự kiện), chụp ảnh thương mại và cho thuê bối cảnh studio tại TP. Hồ Chí Minh.",
+    "Trần Duy Media Studio – hơn 10 năm gia công nội dung truyền thông, thương mại quảng cáo: sản xuất video marketing, chụp ảnh thương mại, chụp ảnh sự kiện và cho thuê studio tại TP. Hồ Chí Minh.",
   url: siteUrl(),
   // API backend: gọi cùng tên miền, Next.js chuyển tiếp sang be/ (xem rewrites trong next.config.mjs)
   apiUrl: "/api/v1",
@@ -45,7 +45,10 @@ export const siteConfig = {
     "cho thuê studio chụp ảnh",
     "studio quay video",
     "chụp ảnh thương mại",
-    "Tran Duy Media",
+    "chụp ảnh sự kiện",
+    "video marketing",
+    "Trần Duy Media",
+    "Tran Duy Media", // khách hay tìm không dấu
     "Nhà Bè",
   ],
   contact: {

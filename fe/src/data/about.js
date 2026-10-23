@@ -15,13 +15,13 @@ export const aboutHeaderColumns = [
 
 // Hồ sơ doanh nghiệp — thông tin nhanh
 export const companyFacts = [
-  { label: "Thương hiệu", value: "Tran Duy Media Studio" },
-  { label: "Lĩnh vực", value: "Video, chụp ảnh, cho thuê studio" },
-  { label: "Khách hàng", value: "SME, startup, thương hiệu Việt" },
+  { label: "Thương hiệu", value: "Trần Duy Media Studio" },
+  { label: "Lĩnh vực", value: "Nội dung truyền thông, thương mại quảng cáo" },
+  { label: "Kinh nghiệm", value: "Hơn 10 năm thực chiến" },
   { label: "Phương châm", value: "Uy tín – Trách nhiệm – Tâm huyết" },
 ];
 
-// 3 ảnh = 3 mảng dịch vụ: quay video (ảnh cao bên trái) · studio · chụp ảnh thương mại
+// 3 ảnh hồ sơ: quay video (ảnh cao bên trái) · studio · chụp ảnh thương mại
 export const profileImages = [
   { src: "/images/bts/bts-02.webp", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
   {
@@ -80,36 +80,41 @@ export const formats = [
 export const mission = {
   title: "Sứ mệnh",
   en: "Mission",
-  text: "Giúp doanh nghiệp Việt kể câu chuyện bằng hình ảnh chuyên nghiệp, chi phí hợp lý.",
-  tags: ["Chuyên nghiệp", "Chi phí hợp lý", "Hiệu quả đo được"],
+  text: "Đồng hành cùng kiến tạo và nâng tầm giá trị doanh nghiệp.",
+  tags: ["Đồng hành", "Kiến tạo", "Nâng tầm"],
   image: "/images/bts/bts-05.webp",
   imagePos: "center 35%",
 };
 export const vision = {
   title: "Tầm nhìn",
   en: "Vision",
-  text: "Đối tác hình ảnh đầu tiên mà SME và startup TP.HCM nghĩ đến.",
-  tags: ["SME", "Startup", "TP. Hồ Chí Minh"],
+  text: "Trở thành đối tác sản xuất nội dung thương mại quảng cáo được khách hàng tin tưởng lựa chọn hàng đầu.",
+  tags: ["Nội dung thương mại", "Quảng cáo", "Tin tưởng hàng đầu"],
   image: "/images/about/reel-aerial.webp",
   imagePos: "center 60%",
 };
 
-// Giá trị cốt lõi — mỗi giá trị đi kèm cam kết cụ thể với khách hàng
-export const coreValues = [
+// Chuẩn mực sản xuất — Trần Duy Media cam kết trong mọi dự án (theo hồ sơ doanh nghiệp)
+export const productionStandards = [
   {
-    title: "Uy tín",
-    desc: "Hơn 10 năm đồng hành cùng doanh nghiệp — nói được là làm được.",
-    promises: ["Đúng tiến độ đã chốt", "Đúng dự toán, không phát sinh ẩn"],
+    title: "Khách hàng là trọng tâm",
+    desc: "Lấy kết quả, sự hài lòng và mục tiêu của khách hàng làm trọng tâm cho mọi sản phẩm.",
   },
   {
-    title: "Trách nhiệm",
-    desc: "Một đầu mối chịu trách nhiệm từ ý tưởng đến file bàn giao cuối cùng.",
-    promises: ["Báo giá minh bạch từng hạng mục", "Chỉnh sửa theo góp ý đến khi duyệt"],
+    title: "Linh hoạt & sáng tạo",
+    desc: "Linh hoạt cải tiến cách làm, luôn tìm ý tưởng mới phù hợp với từng thương hiệu.",
   },
   {
-    title: "Tâm huyết",
-    desc: "Chăm chút từng khung hình như sản phẩm của chính mình.",
-    promises: ["Đạo diễn theo sát từng cảnh quay", "Hậu kỳ màu & âm thanh kỹ lưỡng"],
+    title: "Đội ngũ tử tế",
+    desc: "Quy tụ đội ngũ sản xuất chuyên môn, làm việc tận tâm và tử tế.",
+  },
+  {
+    title: "Tối ưu chi phí",
+    desc: "Tối ưu chi phí sản xuất, dự toán rõ ràng theo từng hạng mục.",
+  },
+  {
+    title: "Chia sẻ & biết ơn",
+    desc: "Giữ tinh thần chia sẻ và biết ơn trong mọi mối quan hệ hợp tác.",
   },
 ];
 
@@ -127,8 +132,8 @@ export const capabilities = [
   },
   {
     icon: "studio",
-    title: "Studio 6 bối cảnh tại Nhà Bè",
-    desc: "Dựng sẵn theo mùa, thuê theo giờ.",
+    title: "Studio tối giản tại Nhà Bè",
+    desc: "Bố trí setup linh hoạt, thuê theo giờ.",
   },
   {
     icon: "film",

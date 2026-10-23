@@ -50,7 +50,7 @@ export default function LoginPage() {
             Hậu trường của <span className="text-orange-500">mọi khung hình.</span>
           </p>
           <p className="mt-4 max-w-sm text-left text-sm leading-relaxed text-white/65">
-            Quản lý yêu cầu đặt lịch, sản phẩm và thư viện hình ảnh – video của Tran Duy Media.
+            Quản lý yêu cầu đặt lịch, sản phẩm và thư viện hình ảnh – video của Trần Duy Media.
           </p>
         </div>
       </aside>
@@ -73,7 +73,7 @@ export default function LoginPage() {
             </span>
             <h1 className="mt-5 text-[1.9rem] h-display text-ink">Đăng nhập quản trị</h1>
             <p className="mt-2 text-center text-sm text-ink-soft">
-              Chỉ dành cho tài khoản quản trị của Tran Duy Media.
+              Chỉ dành cho tài khoản quản trị của Trần Duy Media.
             </p>
           </div>
 

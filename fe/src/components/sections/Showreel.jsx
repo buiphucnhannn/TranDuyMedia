@@ -98,10 +98,12 @@ export function Showreel() {
             Một phút để thấy cách chúng tôi làm việc.
           </h2>
           <p
-            className="reveal max-w-sm text-sm leading-relaxed text-ink-soft sm:text-base"
+            // translate-y nhẹ: tâm hộp chữ tiêu đề lớn cao hơn tâm NHÌN (khoảng trống chừa dấu tiếng Việt ở trên)
+            // → hạ đoạn mô tả một chút để thẳng tâm thị giác với 2 dòng tiêu đề
+            className="reveal max-w-sm text-sm leading-relaxed text-ink-soft sm:translate-y-1.5 sm:text-base"
             style={{ "--reveal-delay": "160ms" }}
           >
-            Tổng hợp các dự án TVC, phim doanh nghiệp và nội dung quảng cáo trong năm 2025 – 2026.
+            Tổng hợp các dự án video marketing, iTVC, doanh nghiệp và sự kiện trong năm 2025 – 2026.
           </p>
         </div>
 

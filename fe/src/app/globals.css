@@ -132,9 +132,9 @@ html.lenis body {
 @utility eyebrow {
   @apply text-[11px] font-semibold tracking-eyebrow text-orange-500 uppercase;
 }
-/* Giãn dòng 1.12: đủ chỗ cho dấu tiếng Việt (ặ, ậ, ố…) giữa các dòng, vẫn gọn kiểu tiêu đề lớn */
+/* Giãn dòng 1.18: đủ chỗ cho dấu tiếng Việt chồng tầng (ắ, ề, ậ…) giữa các dòng, vẫn gọn kiểu tiêu đề lớn */
 @utility h-display {
-  @apply leading-[1.12] font-bold tracking-[-0.03em];
+  @apply leading-[1.18] font-bold tracking-[-0.03em];
 }
 /* Mobile: chữ 16px — iOS tự phóng to trang khi chạm vào ô nhập có chữ < 16px */
 @utility field {
@@ -499,7 +499,9 @@ html[data-intro="skip"] #intro {
   h3,
   h4,
   .h-display,
-  figcaption {
+  figcaption,
+  dt {
+    /* dt: nhãn số liệu ngắn 1–2 dòng — chia đều 2 dòng, không rớt 1 chữ lẻ */
     text-wrap: balance;
   }
   p,

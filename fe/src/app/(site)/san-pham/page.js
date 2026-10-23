@@ -18,7 +18,7 @@ const headerColumns = (products) => {
 export const metadata = createMetadata({
   title: "Sản phẩm đã thực hiện",
   description:
-    "Các dự án hình ảnh và video do Tran Duy Media Studio thực hiện: concept, lookbook, lifestyle, mùa lễ — từ ý tưởng, dựng bối cảnh, ánh sáng đến hậu kỳ.",
+    "Các dự án video marketing, chụp ảnh thương mại, chụp ảnh sự kiện do Trần Duy Media Studio thực hiện — từ ý tưởng, sản xuất đến hậu kỳ.",
   path: "/san-pham",
   image: "/images/vintage-green/vintage-green-03.webp",
 });
@@ -30,7 +30,7 @@ export default async function ProductsPage() {
       <PageHeader
         title="Sản phẩm"
         eyebrow="Dự án đã thực hiện"
-        description="Những dự án hình ảnh và video do Tran Duy Media thực hiện — từ ý tưởng, dựng bối cảnh đến hậu kỳ."
+        description="Những dự án video marketing, chụp ảnh thương mại và sự kiện do Trần Duy Media thực hiện — từ ý tưởng đến hậu kỳ."
         columns={headerColumns(products)}
       />
 

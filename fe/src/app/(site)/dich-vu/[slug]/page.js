@@ -6,7 +6,7 @@ import { Icon } from "@/components/icons";
 import { BentoGallery } from "@/components/gallery";
 import { Journey, ServiceItems } from "@/components/services";
 import { Button, Container, Marquee } from "@/components/ui";
-import { Faq, PageHeader, StudioShowcase } from "@/components/sections";
+import { Faq, PageHeader } from "@/components/sections";
 import { siteConfig } from "@/config/site";
 import { getService, services } from "@/data/services";
 import { createMetadata } from "@/lib/metadata";
@@ -33,7 +33,7 @@ const headerColumns = (pool) =>
   Array.from({ length: 6 }, (_, i) => [0, 1, 2].map((k) => pool[(i * 3 + k) % pool.length]));
 
 /**
- * Trang dịch vụ con — CẤU TRÚC GIỐNG NHAU cho cả 3 dịch vụ, mọi nội dung lấy từ data/services.js:
+ * Trang dịch vụ con — CẤU TRÚC GIỐNG NHAU cho cả 4 dịch vụ, mọi nội dung lấy từ data/services.js:
  * 1. Đầu trang: nền cột ảnh trôi (ghép từ ảnh của dịch vụ) · 2. Tổng quan + số liệu
  * 3. Hạng mục (rê chuột đổi ảnh) · 4. Dải bàn giao chạy ngang · 6. Quy trình · 5. Tác phẩm thực tế
  * 7. Bàn giao (tràn ngang, nền ảnh) · 8. FAQ riêng · 9. Dịch vụ khác — nền sáng/tối xen kẽ.
@@ -99,8 +99,11 @@ async function ServiceView({ params }) {
                 style={{ "--reveal-delay": "200ms" }}
               >
                 {s.highlights.map((h) => (
-                  <div key={h.label}>
-                    <dd className="text-2xl h-display text-navy-900 sm:text-3xl">{h.value}</dd>
+                  <div key={h.label} className="@container min-w-0">
+                    {/* Cỡ chữ theo bề rộng cột (container query) → giá trị dài như "Ảnh + video" vẫn 1 dòng, không tràn */}
+                    <dd className="text-[clamp(0.9rem,16.5cqi,1.875rem)] h-display whitespace-nowrap text-navy-900">
+                      {h.value}
+                    </dd>
                     <dt className="mt-1 text-xs text-ink-muted">{h.label}</dt>
                   </div>
                 ))}
@@ -173,8 +176,6 @@ async function ServiceView({ params }) {
         </Container>
       </section>
 
-      {/* 3b ---------- Riêng dịch vụ cho thuê studio: dải 6 bối cảnh tự trôi, kéo được ---------- */}
-      {s.slug === "cho-thue-studio" && <StudioShowcase eyebrow="Bối cảnh có sẵn" />}
 
       {/* 4 ---------- Dải bàn giao chạy ngang ---------- */}
       <div
@@ -198,7 +199,7 @@ async function ServiceView({ params }) {
           <p className="reveal mb-4 eyebrow">Tác phẩm thực tế</p>
           <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="reveal h-section" style={{ "--reveal-delay": "80ms" }}>
-              Thực hiện tại Tran Duy Media.
+              Thực hiện tại Trần Duy Media.
             </h2>
             <p className="reveal text-sm text-ink-muted">Bấm vào ảnh để xem lớn</p>
           </div>
@@ -302,19 +303,20 @@ async function ServiceView({ params }) {
               />
             </Link>
           </div>
-          <div className="grid gap-5 md:grid-cols-2">
+          {/* 3 dịch vụ còn lại: 1 hàng 3 thẻ từ lg; md 2 cột, thẻ cuối trải ngang cho cân */}
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {others.map((o, i) => (
               <Link
                 key={o.slug}
                 href={`/dich-vu/${o.slug}`}
-                className="reveal group relative block aspect-4/3 overflow-hidden rounded-3xl bg-navy-900 text-white sm:aspect-16/9"
+                className="reveal group relative block aspect-4/3 overflow-hidden rounded-3xl bg-navy-900 text-white sm:aspect-16/9 md:last:odd:col-span-2 lg:aspect-4/5 lg:last:odd:col-span-1 xl:aspect-[5/6]"
                 style={{ "--reveal-delay": `${i * 100}ms` }}
               >
                 <Image
                   src={o.image}
                   alt=""
                   fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
                   style={{ objectPosition: o.imagePos }}
                 />
@@ -324,7 +326,7 @@ async function ServiceView({ params }) {
                     <p className="text-[11px] tracking-eyebrow text-white/60 uppercase">
                       Dịch vụ {o.number}
                     </p>
-                    <h3 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+                    <h3 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl lg:text-[1.65rem]">
                       {o.title}
                     </h3>
                     <p className="mt-1 text-sm text-white/75">{o.tagline}</p>

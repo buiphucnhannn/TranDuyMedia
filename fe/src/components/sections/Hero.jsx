@@ -173,8 +173,8 @@ export function Hero() {
                 anim("[animation:fadeUp_1s_1.4s_both]"),
               )}
             >
-              Hơn 10 năm sản xuất trọn gói TVC, phim doanh nghiệp, video sự kiện và chụp ảnh thương
-              mại cho SME & Startup.
+              Hơn 10 năm gia công video marketing, chụp ảnh thương mại, sự kiện và cho thuê studio
+              cho doanh nghiệp.
             </p>
 
             <div

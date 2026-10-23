@@ -32,16 +32,16 @@ export function ServicesGrid() {
           className="reveal mt-5 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg"
           style={{ "--reveal-delay": "160ms" }}
         >
-          Ba mảng dịch vụ bổ trợ nhau, một đầu mối chịu trách nhiệm từ ý tưởng đến file bàn giao.
+          Hệ sinh thái dịch vụ đặc trưng tại Trần Duy Media.
         </p>
 
-        {/* Từ md: 3 thẻ dùng chung 6 hàng (subgrid) — ảnh · tiêu đề · dòng cam · mô tả · "Phù hợp cho" · link.
-            Mỗi hàng cao bằng nội dung dài nhất trong 3 thẻ → các mục giống nhau luôn nằm ngang nhau. */}
-        <ul className="mt-12 grid gap-x-5 gap-y-5 md:grid-cols-3 md:gap-y-0">
+        {/* Từ md: 4 thẻ xếp 2×2, mỗi hàng 2 thẻ dùng chung 6 hàng (subgrid) — ảnh · tiêu đề · dòng cam ·
+            mô tả · "Phù hợp cho" · link. Mỗi hàng cao bằng nội dung dài nhất → các mục luôn nằm ngang nhau. */}
+        <ul className="mt-12 grid gap-x-5 gap-y-5 md:grid-cols-2 md:gap-y-0">
           {services.map((s, i) => (
             <li
               key={s.slug}
-              className="reveal md:row-span-6 md:grid md:grid-rows-subgrid"
+              className="reveal md:row-span-6 md:grid md:grid-rows-subgrid md:[&:nth-child(-n+2)]:mb-5"
               style={{ "--reveal-delay": `${i * 110}ms` }}
             >
               <Link
@@ -53,7 +53,7 @@ export function ServicesGrid() {
                     src={s.image}
                     alt={s.title}
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
+                    sizes="(min-width: 768px) 50vw, 100vw"
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
                     style={{ objectPosition: s.imagePos }}
                   />
@@ -77,10 +77,11 @@ export function ServicesGrid() {
                     <p className="text-[11px] tracking-eyebrow text-ink-muted uppercase">
                       Phù hợp cho
                     </p>
-                    <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-ink">
+                    {/* 3 cột trải hết chiều ngang thẻ: cột đầu sát lề trái, cột cuối sát lề phải, khoảng giữa chia đều → mọi thẻ xếp giống nhau (điện thoại 2 cột) */}
+                    <ul className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-ink sm:grid-cols-[repeat(3,auto)] sm:justify-between sm:gap-x-6">
                       {s.goodFor.map((g) => (
-                        <li key={g} className="flex items-center gap-1.5">
-                          <span className="size-1 rounded-full bg-orange-500" />
+                        <li key={g} className="flex items-start gap-1.5 leading-snug">
+                          <span className="mt-[0.45em] size-1 shrink-0 rounded-full bg-orange-500" />
                           {g}
                         </li>
                       ))}

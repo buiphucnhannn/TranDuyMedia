@@ -186,7 +186,7 @@ export const btsImages = [
     alt: "Buổi chụp thương mại cho cửa hàng trang sức",
     pos: "center",
   },
-  { src: "/images/bts/bts-01.webp", alt: "Video production – Tran Duy Media", pos: "top" },
+  { src: "/images/bts/bts-01.webp", alt: "Video production – Trần Duy Media", pos: "top" },
   {
     src: "/images/bts/bts-03.webp",
     alt: "Sản xuất hình ảnh: key visual, lookbook, profile",

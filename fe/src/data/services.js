@@ -1,5 +1,5 @@
 /**
- * 3 mảng dịch vụ chính theo hồ sơ yêu cầu.
+ * 4 mảng dịch vụ chính theo hồ sơ yêu cầu (đúng thứ tự trong hồ sơ).
  * `slug`: đường dẫn trang con /dich-vu/[slug] và giá trị chọn sẵn trong form đặt lịch (data-booking).
  * `menuDesc`: mô tả 1 dòng trong dropdown header. `highlights`: 3 số liệu nổi bật ở hero trang con.
  */
@@ -7,7 +7,7 @@ export const services = [
   {
     slug: "san-xuat-video",
     heroDesc:
-      "Gia công trọn gói TVC, phim doanh nghiệp và video sự kiện — từ ý tưởng, kịch bản đến quay dựng, hậu kỳ, tối ưu cho từng kênh quảng cáo.",
+      "Video short quảng cáo, iTVC, video giới thiệu doanh nghiệp, sự kiện và documentary — gia công trọn gói từ ý tưởng, kịch bản đến quay dựng, hậu kỳ.",
     // extra:san-xuat-video
     pool: [
       "/images/bts/bts-02.webp",
@@ -26,12 +26,12 @@ export const services = [
     deliverTitle: "Nhận gì khi kết thúc dự án.",
     faqs: [
       {
-        q: "Chi phí sản xuất một TVC là bao nhiêu?",
+        q: "Chi phí sản xuất một video quảng cáo là bao nhiêu?",
         a: "Tuỳ thời lượng, số ngày quay, diễn viên và mức độ hậu kỳ. Sau buổi brief, chúng tôi gửi dự toán chi tiết trong 24–48 giờ, chia theo hạng mục để bạn chủ động điều chỉnh.",
       },
       {
         q: "Thời gian hoàn thành một dự án video?",
-        a: "Video sự kiện: 3–7 ngày. Phim doanh nghiệp / TVC: 2–4 tuần tính từ lúc duyệt kịch bản. Dự án gấp có thể thoả thuận ekip tăng cường.",
+        a: "Video short / video sự kiện: 3–7 ngày. Video doanh nghiệp / iTVC: 2–4 tuần tính từ lúc duyệt kịch bản. Dự án gấp có thể thoả thuận ekip tăng cường.",
       },
       {
         q: "Có hỗ trợ ý tưởng và kịch bản nếu chúng tôi chưa có gì?",
@@ -44,40 +44,40 @@ export const services = [
     ],
     number: "01",
     icon: "film",
-    title: "Sản xuất video thương mại",
-    menuDesc: "TVC, documentary, phim doanh nghiệp, sự kiện",
+    title: "Sản xuất video marketing",
+    menuDesc: "Video short quảng cáo, iTVC, doanh nghiệp, documentary",
     tagline: "Video được thiết kế để bán hàng.",
     highlights: [
       { value: "4K", label: "Quay & bàn giao" },
-      { value: "15–60s", label: "TVC / iTVC" },
+      { value: "15–60s", label: "Video short / iTVC" },
       { value: "2 vòng", label: "Chỉnh sửa hậu kỳ" },
     ],
-    short: "TVC - iTVC - Documentary - Phim doanh nghiệp - Video sự kiện",
+    short: "Video short quảng cáo - iTVC - Doanh nghiệp & sự kiện - Documentary",
     description:
-      "Gia công trọn gói từ ý tưởng, kịch bản đến quay dựng và hậu kỳ. Video được thiết kế để bán hàng: rõ thông điệp, đúng đối tượng và tối ưu cho các kênh performance.",
+      "Chuyên sản xuất video marketing cho doanh nghiệp: video short thương mại quảng cáo, iTVC, video giới thiệu doanh nghiệp, sự kiện và documentary — rõ thông điệp, đúng đối tượng, tối ưu cho từng kênh.",
     image: "/images/bts/bts-02.webp",
     imagePos: "center 40%",
     gallery: ["/images/bts/bts-05.webp", "/images/bts/bts-01.webp", "/images/bts/bts-04.webp"],
     items: [
       {
-        name: "TVC / iTVC quảng cáo",
+        name: "Video short thương mại quảng cáo",
+        image: "/images/about/reel-short.webp",
+        desc: "Video ngắn dọc 9:16 cho TikTok, Reels, Shorts — nhịp nhanh, hook mạnh, tối ưu quảng cáo.",
+      },
+      {
+        name: "Video iTVC",
         image: "/images/bts/bts-02.webp",
-        desc: "Phim quảng cáo 15s – 60s cho truyền hình, YouTube, Facebook, TikTok.",
+        desc: "Quảng cáo online 15s – 60s cho YouTube, Facebook, TikTok và các nền tảng số.",
+      },
+      {
+        name: "Video giới thiệu doanh nghiệp, sự kiện",
+        image: "/images/bts/bts-07.webp",
+        desc: "Profile công ty, video năng lực, ghi hình & recap hội nghị, lễ ra mắt, khai trương.",
       },
       {
         name: "Video documentary",
         image: "/images/bts/bts-05.webp",
-        desc: "Phim tài liệu thương hiệu, câu chuyện người thật việc thật, phóng sự doanh nghiệp.",
-      },
-      {
-        name: "Phim giới thiệu doanh nghiệp",
-        image: "/images/bts/bts-06.webp",
-        desc: "Corporate film, profile công ty, video năng lực phục vụ đấu thầu & đối tác.",
-      },
-      {
-        name: "Video sự kiện doanh nghiệp",
-        image: "/images/bts/bts-07.webp",
-        desc: "Ghi hình hội nghị, lễ ra mắt, year-end party; highlight phát ngay trong ngày.",
+        desc: "Phim tài liệu thương hiệu, câu chuyện người thật việc thật, chân dung nhà sáng lập.",
       },
     ],
     goodFor: ["SME & Startup", "Chiến dịch push sale", "Quảng cáo performance", "Ra mắt sản phẩm"],
@@ -89,106 +89,9 @@ export const services = [
     ],
   },
   {
-    slug: "cho-thue-studio",
-    heroDesc:
-      "Sáu bối cảnh đã setup sẵn ánh sáng, phông nền và đạo cụ cho chụp ảnh, quay quảng cáo và livestream — thuê theo giờ, có kỹ thuật hỗ trợ.",
-    // extra:cho-thue-studio
-    pool: [
-      "/images/vintage-green/vintage-green-03.webp",
-      "/images/box-studio/box-studio-04.webp",
-      "/images/christmas/christmas-14.webp",
-      "/images/tet/tet-04.webp",
-      "/images/vintage-green/vintage-green-07.webp",
-      "/images/christmas/christmas-01.webp",
-      "/images/box-studio/box-studio-05.webp",
-      "/images/tet/tet-05.webp",
-      "/images/vintage-green/vintage-green-12.webp",
-      "/images/vintage-green/vintage-green-11.webp",
-      "/images/christmas/christmas-10.webp",
-      "/images/box-studio/box-studio-08.webp",
-      "/images/tet/tet-07.webp",
-      "/images/vintage-green/vintage-green-05.webp",
-      "/images/trung-thu/trung-thu-02.webp",
-      "/images/christmas/christmas-03.webp",
-    ],
-    deliverTitle: "Thuê studio, nhận đủ đồ nghề.",
-    faqs: [
-      {
-        q: "Thuê studio tính phí thế nào, có bao gồm đèn không?",
-        a: "Tính theo giờ, tối thiểu 2 giờ, đã gồm hệ đèn Godox, phông nền và đạo cụ sẵn có của từng bối cảnh. Có gói kèm kỹ thuật viên ánh sáng.",
-      },
-      {
-        q: "Cần đặt lịch trước bao lâu?",
-        a: "Nên đặt trước tối thiểu 1 ngày; dịp lễ (Giáng sinh, Tết, Trung thu) nên đặt trước 1–2 tuần. Chúng tôi xác nhận lịch trong ngày.",
-      },
-      {
-        q: "Có được mang ekip và đạo cụ riêng vào không?",
-        a: "Được. Bạn có thể mang nhiếp ảnh gia, máy móc và đạo cụ riêng; studio hỗ trợ sắp xếp bối cảnh và ánh sáng tại chỗ.",
-      },
-      {
-        q: "Studio có phòng thay đồ, trang điểm không?",
-        a: "Có phòng thay đồ và bàn trang điểm riêng, phù hợp cho buổi chụp lookbook, profile hay quay quảng cáo cần nhiều trang phục.",
-      },
-    ],
-    number: "02",
-    icon: "studio",
-    title: "Cho thuê bối cảnh studio",
-    menuDesc: "6 bối cảnh sẵn đèn, phông, đạo cụ",
-    tagline: "Mang ý tưởng đến, mọi thứ khác đã sẵn sàng.",
-    highlights: [
-      { value: "6", label: "Bối cảnh sẵn có" },
-      { value: "2 giờ", label: "Thuê tối thiểu" },
-      { value: "8–21h", label: "Mở cửa mỗi ngày" },
-    ],
-    short: "Phòng chụp & quay quảng cáo - 6 bối cảnh sẵn có - Đèn, phông, đạo cụ",
-    description:
-      "Không gian studio đã setup sẵn ánh sáng và đạo cụ cho chụp ảnh, quay video quảng cáo, lookbook, livestream. Đặt lịch theo giờ, có ekip hỗ trợ kỹ thuật khi cần.",
-    image: "/images/vintage-green/vintage-green-03.webp",
-    imagePos: "center",
-    gallery: [
-      "/images/box-studio/box-studio-04.webp",
-      "/images/vintage-green/vintage-green-09.webp",
-      "/images/christmas/christmas-14.webp",
-    ],
-    items: [
-      {
-        name: "Box Studio trắng",
-        image: "/images/box-studio/box-studio-04.webp",
-        desc: "Tone trắng tối giản cho lookbook, profile, sản phẩm nhỏ, beauty.",
-      },
-      {
-        name: "Phòng Vintage xanh rêu",
-        image: "/images/vintage-green/vintage-green-03.webp",
-        desc: "Ánh sáng tự nhiên, nội thất gỗ, nhiều góc chụp ấm áp.",
-      },
-      {
-        name: "Khu vực sân thượng",
-        image: "/images/rooftop/rooftop-clean.webp",
-        desc: "Ánh sáng tự nhiên, tường gạch & poster retro cho clip ngắn.",
-      },
-      {
-        name: "Bối cảnh theo mùa",
-        image: "/images/christmas/christmas-14.webp",
-        desc: "Giáng sinh, Tết, Trung thu được dựng mới mỗi dịp lễ.",
-      },
-    ],
-    goodFor: [
-      "Lookbook & profile",
-      "Livestream bán hàng",
-      "Chụp sản phẩm",
-      "Clip ngắn TikTok/Reels",
-    ],
-    deliverables: [
-      "Đèn Godox & softbox",
-      "Phông nền & đạo cụ",
-      "Phòng thay đồ, trang điểm",
-      "Hỗ trợ kỹ thuật tại chỗ",
-    ],
-  },
-  {
     slug: "chup-anh-thuong-mai",
     heroDesc:
-      "Key visual, lookbook, ảnh sản phẩm và profile doanh nghiệp — hình ảnh đồng bộ với cả chiến dịch, bàn giao đủ bản web và bản in.",
+      "Chụp ảnh quảng cáo sản phẩm — nền trắng chuẩn sàn TMĐT, ảnh có bối cảnh và key visual cho quảng cáo, bàn giao đủ bản web và bản in.",
     // extra:chup-anh-thuong-mai
     pool: [
       "/images/christmas/christmas-07.webp",
@@ -211,31 +114,31 @@ export const services = [
         a: "Ảnh xem trước gửi trong 24 giờ để bạn chọn; ảnh đã retouch bàn giao trong 3–5 ngày làm việc, đủ bản web và bản in.",
       },
       {
-        q: "Có hỗ trợ người mẫu, stylist, trang điểm không?",
-        a: "Có. Chúng tôi giới thiệu người mẫu, stylist và makeup phù hợp concept; chi phí báo riêng trong dự toán.",
+        q: "Có hỗ trợ concept, đạo cụ, người mẫu cầm sản phẩm không?",
+        a: "Có. Chúng tôi đề xuất concept, chuẩn bị đạo cụ theo sản phẩm và giới thiệu người mẫu khi cần; chi phí báo riêng trong dự toán.",
       },
       {
         q: "Chụp tại studio hay tại cửa hàng của chúng tôi?",
-        a: "Cả hai. Có thể chụp tại 6 bối cảnh của studio hoặc mang thiết bị đến cửa hàng, văn phòng, công trình của bạn.",
+        a: "Cả hai. Có thể chụp tại studio của Trần Duy Media hoặc mang thiết bị đến cửa hàng, văn phòng, công trình của bạn.",
       },
       {
         q: "Ảnh có dùng được cho quảng cáo và sàn TMĐT không?",
         a: "Có. Ảnh được xuất đúng tỉ lệ và dung lượng cho quảng cáo Facebook, TikTok, Shopee/Lazada và bản in khổ lớn.",
       },
     ],
-    number: "03",
+    number: "02",
     icon: "camera",
     title: "Chụp ảnh thương mại",
-    menuDesc: "Key visual, lookbook, sản phẩm, profile",
-    tagline: "Hình ảnh đồng bộ với cả chiến dịch.",
+    menuDesc: "Chụp ảnh quảng cáo sản phẩm",
+    tagline: "Sản phẩm đẹp, bán hàng tốt hơn.",
     highlights: [
       { value: "3–5 ngày", label: "Bàn giao ảnh" },
       { value: "Web + in", label: "Đủ định dạng" },
       { value: "12 tháng", label: "Lưu trữ file gốc" },
     ],
-    short: "Key visual - Lookbook - Sản phẩm - Profile doanh nghiệp",
+    short: "Chụp ảnh quảng cáo sản phẩm - Nền trắng TMĐT - Bối cảnh - Key visual",
     description:
-      "Hình ảnh đồng bộ với chiến dịch video: key visual cho quảng cáo, lookbook thời trang, ảnh sản phẩm e-commerce và ảnh profile đội ngũ.",
+      "Chuyên chụp ảnh quảng cáo sản phẩm: ảnh nền trắng cho sàn thương mại điện tử, ảnh có bối cảnh cho social và key visual cho quảng cáo — đồng bộ với chiến dịch video.",
     image: "/images/bts/bts-06.webp",
     imagePos: "center",
     gallery: [
@@ -245,32 +148,217 @@ export const services = [
     ],
     items: [
       {
-        name: "Key visual chiến dịch",
-        image: "/images/christmas/christmas-07.webp",
-        desc: "Ảnh chủ đạo cho quảng cáo, billboard, landing page.",
-      },
-      {
-        name: "Lookbook & thời trang",
-        image: "/images/vintage-green/vintage-green-15.webp",
-        desc: "Concept, model, stylist theo bộ sưu tập.",
-      },
-      {
-        name: "Ảnh sản phẩm",
+        name: "Ảnh sản phẩm nền trắng",
         image: "/images/box-studio/box-studio-06.webp",
-        desc: "Nền trắng chuẩn sàn TMĐT hoặc lifestyle có bối cảnh.",
+        desc: "Chuẩn kích thước, ánh sáng cho Shopee, Lazada, TikTok Shop và website.",
       },
       {
-        name: "Profile doanh nghiệp",
-        image: "/images/bts/bts-06.webp",
-        desc: "Chân dung lãnh đạo, đội ngũ, không gian làm việc.",
+        name: "Ảnh sản phẩm có bối cảnh",
+        image: "/images/vintage-green/vintage-green-15.webp",
+        desc: "Đặt sản phẩm vào không gian sử dụng thật — lifestyle cho social và quảng cáo.",
+      },
+      {
+        name: "Key visual quảng cáo",
+        image: "/images/christmas/christmas-07.webp",
+        desc: "Ảnh chủ đạo cho chiến dịch, banner, billboard, landing page.",
+      },
+      {
+        name: "Ảnh sản phẩm theo mùa",
+        image: "/images/tet/tet-07.webp",
+        desc: "Concept Tết, Giáng sinh, Trung thu cho chiến dịch bán hàng dịp lễ.",
       },
     ],
-    goodFor: ["Thương hiệu thời trang", "Trang sức & mỹ phẩm", "F&B", "Sàn thương mại điện tử"],
+    goodFor: ["Shop sàn TMĐT", "Mỹ phẩm & trang sức", "F&B", "Thương hiệu thời trang"],
     deliverables: [
       "Ảnh retouch chuẩn in ấn",
       "Bản web & social",
       "Bàn giao trong 3–5 ngày",
       "Lưu trữ 12 tháng",
+    ],
+  },
+  {
+    slug: "chup-anh-su-kien",
+    heroDesc:
+      "Ghi lại trọn vẹn hội nghị, hội thảo, lễ ra mắt, khai trương và tiệc doanh nghiệp — ảnh tự nhiên, đủ khoảnh khắc chính, bàn giao nhanh cho truyền thông.",
+    // extra:chup-anh-su-kien
+    pool: [
+      "/images/about/reel-event-hall.webp",
+      "/images/about/reel-event.webp",
+      "/images/about/reel-speaker.webp",
+      "/images/about/reel-talkshow.webp",
+      "/images/bts/bts-07.webp",
+      "/images/about/reel-interview.webp",
+      "/images/bts/bts-05.webp",
+      "/images/about/reel-camera.webp",
+      "/images/about/reel-portrait.webp",
+      "/images/bts/bts-02.webp",
+      "/images/about/reel-warehouse.webp",
+      "/images/bts/bts-04.webp",
+    ],
+    deliverTitle: "Nhận gì sau sự kiện.",
+    faqs: [
+      {
+        q: "Bao lâu thì nhận được ảnh sự kiện?",
+        a: "Ảnh chọn lọc gửi sớm để kịp đăng truyền thông; trọn bộ ảnh đã chỉnh màu bàn giao trong vài ngày làm việc, tuỳ quy mô sự kiện.",
+      },
+      {
+        q: "Sự kiện lớn có bố trí nhiều nhiếp ảnh gia không?",
+        a: "Có. Tuỳ số khu vực và lịch trình, chúng tôi bố trí đủ nhân sự để không bỏ lỡ khoảnh khắc ở sân khấu, khách mời và hậu trường.",
+      },
+      {
+        q: "Có chụp kèm quay video sự kiện không?",
+        a: "Có. Có thể kết hợp chụp ảnh và quay video recap trong cùng một ekip để hình ảnh đồng bộ và tiết kiệm chi phí.",
+      },
+      {
+        q: "Có nhận chụp sự kiện ngoài TP.HCM không?",
+        a: "Có. Liên hệ để được báo giá kèm chi phí di chuyển và lưu trú cho ekip.",
+      },
+    ],
+    number: "03",
+    icon: "camera",
+    title: "Chụp ảnh sự kiện",
+    menuDesc: "Hội nghị, ra mắt, khai trương, tiệc doanh nghiệp",
+    tagline: "Không bỏ lỡ khoảnh khắc nào.",
+    highlights: [
+      { value: "Trọn gói", label: "Từ check-in đến kết thúc" },
+      { value: "Ảnh nhanh", label: "Kịp đăng truyền thông" },
+      { value: "Ảnh + video", label: "Kết hợp cùng một ekip" },
+    ],
+    short: "Hội nghị, hội thảo - Ra mắt, khai trương - Tiệc doanh nghiệp",
+    description:
+      "Chụp ảnh sự kiện cho doanh nghiệp: hội nghị, hội thảo, lễ ra mắt sản phẩm, khai trương và tiệc cuối năm — ghi lại khoảnh khắc tự nhiên, đủ góc sân khấu, khách mời và hậu trường.",
+    image: "/images/about/reel-event-hall.webp",
+    imagePos: "center",
+    gallery: [
+      "/images/about/reel-event.webp",
+      "/images/about/reel-speaker.webp",
+      "/images/about/reel-talkshow.webp",
+    ],
+    items: [
+      {
+        name: "Hội nghị, hội thảo",
+        image: "/images/about/reel-speaker.webp",
+        desc: "Diễn giả, sân khấu, khán phòng và các phiên thảo luận.",
+      },
+      {
+        name: "Lễ ra mắt, khai trương",
+        image: "/images/about/reel-event-hall.webp",
+        desc: "Nghi thức, cắt băng, khách mời và không khí ngày khai trương.",
+      },
+      {
+        name: "Tiệc & sự kiện nội bộ",
+        image: "/images/about/reel-event.webp",
+        desc: "Year-end party, kỷ niệm thành lập, vinh danh nhân viên.",
+      },
+      {
+        name: "Talkshow & giao lưu",
+        image: "/images/about/reel-talkshow.webp",
+        desc: "Khoảnh khắc khách mời, khán giả và hậu trường chương trình.",
+      },
+    ],
+    goodFor: ["Hội nghị, hội thảo", "Ra mắt sản phẩm", "Khai trương", "Tiệc doanh nghiệp"],
+    deliverables: [
+      "Ảnh chọn lọc gửi sớm",
+      "Trọn bộ ảnh đã chỉnh màu",
+      "Bản web & social",
+      "Có thể kết hợp video recap",
+    ],
+  },
+  {
+    slug: "cho-thue-studio",
+    heroDesc:
+      "Studio tối giản, bố trí linh hoạt các setup cho nhu cầu chụp ảnh sản phẩm, lookbook, chân dung, profile, livestream và video short TikTok — thuê theo giờ.",
+    // extra:cho-thue-studio
+    pool: [
+      "/images/vintage-green/vintage-green-03.webp",
+      "/images/box-studio/box-studio-04.webp",
+      "/images/christmas/christmas-14.webp",
+      "/images/tet/tet-04.webp",
+      "/images/vintage-green/vintage-green-07.webp",
+      "/images/christmas/christmas-01.webp",
+      "/images/box-studio/box-studio-05.webp",
+      "/images/tet/tet-05.webp",
+      "/images/vintage-green/vintage-green-12.webp",
+      "/images/vintage-green/vintage-green-11.webp",
+      "/images/christmas/christmas-10.webp",
+      "/images/box-studio/box-studio-08.webp",
+      "/images/tet/tet-07.webp",
+      "/images/vintage-green/vintage-green-05.webp",
+      "/images/trung-thu/trung-thu-02.webp",
+      "/images/christmas/christmas-03.webp",
+    ],
+    deliverTitle: "Thuê studio, sẵn sàng sáng tạo.",
+    faqs: [
+      {
+        q: "Thuê studio tính phí thế nào, có bao gồm đèn không?",
+        a: "Tính theo giờ, tối thiểu 2 giờ, đã gồm hệ đèn Godox, phông nền và đạo cụ sẵn có tại studio. Có gói kèm kỹ thuật viên ánh sáng.",
+      },
+      {
+        q: "Cần đặt lịch trước bao lâu?",
+        a: "Nên đặt trước tối thiểu 1 ngày; dịp lễ (Giáng sinh, Tết, Trung thu) nên đặt trước 1–2 tuần. Chúng tôi xác nhận lịch trong ngày.",
+      },
+      {
+        q: "Có được mang ekip và đạo cụ riêng vào không?",
+        a: "Được. Bạn có thể mang nhiếp ảnh gia, máy móc và đạo cụ riêng; studio hỗ trợ sắp xếp bối cảnh và ánh sáng tại chỗ.",
+      },
+      {
+        q: "Studio có phòng thay đồ, trang điểm không?",
+        a: "Có phòng thay đồ và bàn trang điểm riêng, phù hợp cho buổi chụp lookbook, profile hay quay quảng cáo cần nhiều trang phục.",
+      },
+    ],
+    number: "04",
+    icon: "studio",
+    title: "Cho thuê studio",
+    menuDesc: "Studio tối giản, setup linh hoạt",
+    tagline: "Tối giản, linh hoạt, sẵn sàng sáng tạo.",
+    highlights: [
+      { value: "Linh hoạt", label: "Tự do bố trí setup" },
+      { value: "2 giờ", label: "Thuê tối thiểu" },
+      { value: "8–21h", label: "Mở cửa mỗi ngày" },
+    ],
+    short: "Studio tối giản - Setup linh hoạt - Sản phẩm, lookbook, livestream, TikTok",
+    description:
+      "Cho thuê studio tối giản giúp bạn bố trí linh hoạt các setup để thoả sức sáng tạo — phù hợp nhu cầu nhỏ: chụp ảnh sản phẩm, lookbook, chân dung, profile, livestream, video short TikTok.",
+    image: "/images/vintage-green/vintage-green-03.webp",
+    imagePos: "center",
+    gallery: [
+      "/images/box-studio/box-studio-04.webp",
+      "/images/vintage-green/vintage-green-09.webp",
+      "/images/christmas/christmas-14.webp",
+    ],
+    items: [
+      {
+        name: "Chụp ảnh sản phẩm",
+        image: "/images/box-studio/box-studio-06.webp",
+        desc: "Phông trơn, đèn sẵn, dễ dựng setup nền trắng hoặc có bối cảnh cho sản phẩm.",
+      },
+      {
+        name: "Lookbook, chân dung, profile",
+        image: "/images/vintage-green/vintage-green-15.webp",
+        desc: "Không gian tối giản, tự do bố trí ánh sáng và đạo cụ theo concept riêng.",
+      },
+      {
+        name: "Livestream bán hàng",
+        image: "/images/box-studio/box-studio-04.webp",
+        desc: "Góc máy gọn gàng, ánh sáng ổn định cho phiên live dài trên các sàn và mạng xã hội.",
+      },
+      {
+        name: "Video short TikTok",
+        image: "/images/about/reel-short.webp",
+        desc: "Quay clip ngắn dọc 9:16, thay setup nhanh để làm nhiều nội dung trong một buổi.",
+      },
+    ],
+    goodFor: [
+      "Chụp ảnh sản phẩm",
+      "Lookbook, chân dung, profile",
+      "Livestream bán hàng",
+      "Video short TikTok",
+    ],
+    deliverables: [
+      "Đèn Godox & softbox",
+      "Phông nền & đạo cụ",
+      "Phòng thay đồ, trang điểm",
+      "Hỗ trợ kỹ thuật tại chỗ",
     ],
   },
 ];
@@ -280,7 +368,7 @@ export const packages = [
   {
     title: "Ra mắt sản phẩm",
     goal: "Tạo tiếng vang trong tuần đầu mở bán",
-    includes: ["TVC 30s & bản cut 15s", "Key visual cho quảng cáo", "3 clip dọc 9:16 cho social"],
+    includes: ["iTVC 30s & bản cut 15s", "Ảnh quảng cáo sản phẩm", "3 video short dọc 9:16"],
     services: ["san-xuat-video", "chup-anh-thuong-mai"],
     image: "/images/bts/bts-02.webp",
     pos: "center 40%",
@@ -290,8 +378,8 @@ export const packages = [
     goal: "Đều đặn nội dung, chi phí dự đoán được",
     includes: [
       "Thuê studio theo buổi",
-      "8–12 clip ngắn TikTok / Reels",
-      "Bộ ảnh sản phẩm & lifestyle",
+      "8–12 video short TikTok / Reels",
+      "Bộ ảnh sản phẩm hằng tháng",
     ],
     services: ["cho-thue-studio", "san-xuat-video", "chup-anh-thuong-mai"],
     image: "/images/box-studio/box-studio-04.webp",
@@ -299,15 +387,11 @@ export const packages = [
     featured: true,
   },
   {
-    title: "Hồ sơ năng lực doanh nghiệp",
-    goal: "Thuyết phục đối tác & hồ sơ đấu thầu",
-    includes: [
-      "Phim giới thiệu doanh nghiệp",
-      "Ảnh profile lãnh đạo & đội ngũ",
-      "Ảnh không gian làm việc",
-    ],
-    services: ["san-xuat-video", "chup-anh-thuong-mai"],
-    image: "/images/bts/bts-05.webp",
+    title: "Sự kiện doanh nghiệp",
+    goal: "Lưu giữ & lan toả hình ảnh thương hiệu",
+    includes: ["Chụp ảnh sự kiện trọn gói", "Video recap sự kiện", "Video giới thiệu doanh nghiệp"],
+    services: ["chup-anh-su-kien", "san-xuat-video"],
+    image: "/images/about/reel-event-hall.webp",
     pos: "center",
   },
 ];
@@ -320,7 +404,7 @@ export const processSteps = [
     image: "/images/box-studio/box-studio-04.webp",
     imagePos: "center",
     title: "Brief & tư vấn",
-    desc: "Lắng nghe mục tiêu kinh doanh, đối tượng, kênh phát và ngân sách. Đề xuất định dạng video phù hợp.",
+    desc: "Lắng nghe mục tiêu kinh doanh, đối tượng, kênh phát và ngân sách. Đề xuất hình thức video / hình ảnh phù hợp.",
   },
   {
     step: "02",
@@ -334,7 +418,7 @@ export const processSteps = [
     image: "/images/bts/bts-04.webp",
     imagePos: "center",
     title: "Tiền kỳ",
-    desc: "Casting, chọn bối cảnh, đạo cụ, lịch quay; chuẩn bị thiết bị và ekip.",
+    desc: "Casting, chọn bối cảnh, đạo cụ, lịch quay / chụp; chuẩn bị thiết bị và ekip.",
   },
   {
     step: "04",
@@ -348,7 +432,7 @@ export const processSteps = [
     image: "/images/bts/bts-06.webp",
     imagePos: "center 30%",
     title: "Hậu kỳ & bàn giao",
-    desc: "Dựng, chỉnh màu, âm thanh, đồ hoạ. 2 vòng chỉnh sửa, bàn giao đa định dạng cho từng kênh.",
+    desc: "Dựng, chỉnh màu, retouch, âm thanh, đồ hoạ. 2 vòng chỉnh sửa, bàn giao đa định dạng cho từng kênh.",
   },
 ];
 
@@ -373,11 +457,12 @@ export const values = [
   },
 ];
 
+// \u00a0 = khoảng trắng không ngắt: giữ liền từ ghép ("dịch vụ", "trọn gói"…) khi nhãn xuống dòng
 export const stats = [
-  { value: "10+", label: "Năm kinh nghiệm" },
-  { value: "3", label: "Mảng dịch vụ trọn gói" },
-  { value: "6", label: "Bối cảnh studio sẵn có" },
-  { value: "A–Z", label: "Một đầu mối chịu trách nhiệm" },
+  { value: "10+", label: "Năm kinh\u00a0nghiệm" },
+  { value: "4", label: "Mảng dịch\u00a0vụ trọn\u00a0gói" },
+  { value: "1", label: "Studio tối\u00a0giản, setup linh\u00a0hoạt" },
+  { value: "A–Z", label: "Một đầu\u00a0mối chịu trách\u00a0nhiệm" },
 ];
 
 // Ngành hàng đã đồng hành — hiện dạng dải chữ chạy. Khi có logo đối tác, thay bằng ảnh tại src/data/partners.js
@@ -410,7 +495,7 @@ export const industryWork = [
 
 export const faqs = [
   {
-    q: "Chi phí sản xuất một TVC là bao nhiêu?",
+    q: "Chi phí sản xuất một video quảng cáo là bao nhiêu?",
     a: "Tuỳ thời lượng, số ngày quay, diễn viên và mức độ hậu kỳ. Sau buổi brief, chúng tôi gửi dự toán chi tiết trong 24–48 giờ, chia theo hạng mục để bạn chủ động điều chỉnh.",
   },
   {
@@ -419,7 +504,7 @@ export const faqs = [
   },
   {
     q: "Thuê studio tính phí thế nào, có bao gồm đèn không?",
-    a: "Tính theo giờ, tối thiểu 2 giờ, đã bao gồm hệ thống đèn Godox, phông nền và đạo cụ sẵn có của từng bối cảnh. Có gói kèm kỹ thuật viên ánh sáng.",
+    a: "Tính theo giờ, tối thiểu 2 giờ, đã bao gồm hệ thống đèn Godox, phông nền và đạo cụ sẵn có tại studio. Có gói kèm kỹ thuật viên ánh sáng.",
   },
   {
     q: "Có hỗ trợ ý tưởng và kịch bản nếu chúng tôi chưa có gì?",
