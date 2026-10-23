@@ -12,6 +12,7 @@ import {
   ACCEPT,
   checkFile,
   guessLinkType,
+  MAX_FILES,
   MAX_IMAGE_MB,
   MAX_VIDEO_MB,
   newKey,
@@ -76,9 +77,11 @@ export function MediaManager({ items, onChange, error }) {
   const addFiles = (files) => {
     const next = [];
     const problems = [];
+    let skipped = 0;
     for (const file of files) {
       const problem = checkFile(file);
       if (problem) problems.push(problem);
+      else if (items.length + next.length >= MAX_FILES) skipped++;
       else
         next.push({
           key: newKey(),
@@ -89,6 +92,12 @@ export function MediaManager({ items, onChange, error }) {
           name: file.name,
           pos: "center",
         });
+    }
+    if (skipped) {
+      toast.warning(
+        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video. Đã bỏ qua ${skipped} tệp cuối — xoá bớt nếu muốn thay bằng tệp khác.`,
+        { title: `Vượt quá ${MAX_FILES} ảnh và video` },
+      );
     }
     if (problems.length) {
       toast.warning(problems.slice(0, 3).join(" "), {
@@ -111,6 +120,12 @@ export function MediaManager({ items, onChange, error }) {
     }
     if (items.some((m) => m.url === url || m.sourceUrl === url)) {
       return toast.info("Link này đã có trong danh sách.", { title: "Đã thêm trước đó" });
+    }
+    if (items.length >= MAX_FILES) {
+      return toast.warning(
+        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video. Xoá bớt để thêm mới.`,
+        { title: `Đã đủ ${MAX_FILES} ảnh và video` },
+      );
     }
     const embed = parseEmbed(url);
     const item = embed
@@ -184,8 +199,8 @@ export function MediaManager({ items, onChange, error }) {
           Kéo thả ảnh / video vào đây hoặc bấm để chọn
         </span>
         <span className="mt-1 text-xs text-ink-muted">
-          JPG, PNG, WEBP (≤ {MAX_IMAGE_MB}MB) - MP4, MOV, WEBM (≤ {MAX_VIDEO_MB}MB) - chọn được
-          nhiều tệp
+          JPG, PNG, WEBP (≤ {MAX_IMAGE_MB}MB) - MP4, MOV, WEBM (≤ {MAX_VIDEO_MB}MB) - tối đa{" "}
+          {MAX_FILES} ảnh và video
         </span>
       </button>
       <input

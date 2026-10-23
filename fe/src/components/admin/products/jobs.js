@@ -84,7 +84,11 @@ async function pool(tasks, limit = 3) {
 
 /** Lỗi → câu thông báo dễ hiểu cho người dùng. */
 export function describeError(err) {
-  if (err?.code === "VALIDATION_ERROR") return "Thông tin chưa hợp lệ, vui lòng kiểm tra lại.";
+  // Nêu đúng lý do đầu tiên backend trả về (vd. "Tối đa 60 tệp") thay vì câu chung chung
+  if (err?.code === "VALIDATION_ERROR")
+    return err.details?.[0]?.message
+      ? `Thông tin chưa hợp lệ: ${err.details[0].message}.`
+      : "Thông tin chưa hợp lệ, vui lòng kiểm tra lại.";
   if (["CLOUDINARY_FORBIDDEN", "IMPORT_FAILED", "STORAGE_NOT_CONFIGURED"].includes(err?.code))
     return err.message;
   if (err?.status === 413)

@@ -52,7 +52,10 @@ const base = {
   location: text("bối cảnh", 120).optional().default(""),
   studioSet: z.string().trim().max(60).nullish().default(null),
   kind: z.enum(PRODUCT_KINDS).default("photo"),
-  media: z.array(mediaItem).min(1, "Cần ít nhất 1 ảnh hoặc video").max(60, "Tối đa 60 tệp"),
+  media: z
+    .array(mediaItem)
+    .min(1, "Cần ít nhất 1 ảnh hoặc video")
+    .max(60, "Mỗi sản phẩm chỉ chứa tối đa 60 ảnh và video"),
   published: z.boolean().default(true),
 };
 

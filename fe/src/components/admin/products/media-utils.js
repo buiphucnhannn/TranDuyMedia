@@ -3,6 +3,7 @@ import { cdn } from "@/lib/cdn";
 
 export const MAX_IMAGE_MB = 10;
 export const MAX_VIDEO_MB = 200;
+export const MAX_FILES = 60; // khớp giới hạn của backend (product.validator.js)
 export const ACCEPT =
   "image/jpeg,image/png,image/webp,image/avif,image/gif,video/mp4,video/quicktime,video/webm";
 
