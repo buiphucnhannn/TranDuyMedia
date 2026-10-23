@@ -93,10 +93,16 @@ export function MediaManager({ items, onChange, error }) {
           pos: "center",
         });
     }
-    if (skipped) {
+    if (skipped && !next.length) {
+      // Đã đủ từ trước → không thêm được tệp nào
+      toast.warning(`Sản phẩm đã có đủ ${MAX_FILES} ảnh và video. Hãy xoá bớt rồi thêm tệp mới.`, {
+        title: `Đã đủ ${MAX_FILES} ảnh và video`,
+      });
+    } else if (skipped) {
+      // Còn chỗ cho một phần → thêm phần vừa đủ, báo số tệp chưa thêm
       toast.warning(
-        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video. Đã bỏ qua ${skipped} tệp cuối — xoá bớt nếu muốn thay bằng tệp khác.`,
-        { title: `Vượt quá ${MAX_FILES} ảnh và video` },
+        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video, nên ${skipped} tệp còn lại chưa được thêm.`,
+        { title: `Đã thêm ${next.length}/${next.length + skipped} tệp` },
       );
     }
     if (problems.length) {
@@ -123,7 +129,7 @@ export function MediaManager({ items, onChange, error }) {
     }
     if (items.length >= MAX_FILES) {
       return toast.warning(
-        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video. Xoá bớt để thêm mới.`,
+        `Mỗi sản phẩm chỉ chứa tối đa ${MAX_FILES} ảnh và video. Hãy xoá bớt để thêm mới.`,
         { title: `Đã đủ ${MAX_FILES} ảnh và video` },
       );
     }

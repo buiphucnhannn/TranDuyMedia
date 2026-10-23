@@ -9,8 +9,6 @@ import { downloadRemoteFile } from "#utils/remote-file.js";
  * TẦNG SERVICE — ảnh & video. Upload lên Cloudinary rồi lưu metadata vào MongoDB (qua repository).
  * Nếu lưu DB thất bại sau khi upload → xoá file vừa upload trên Cloudinary để không bị "rác".
  */
-/** Tuỳ chọn upload ảnh: chuyển sang WebP ngay khi lưu, chất lượng "auto:best" (mức cao nhất). */
-export const IMAGE_UPLOAD = { format: "webp", transformation: [{ quality: "auto:best" }] };
 
 export class MediaService {
   constructor(repo = mediaRepository, storage = cloudinary) {
@@ -43,8 +41,8 @@ export class MediaService {
 
   /** Đẩy buffer lên Cloudinary qua stream (không ghi file tạm). Video lớn → upload theo từng phần 20MB. */
   #uploadBuffer(buffer, options) {
-    // Ảnh: Cloudinary lưu sẵn dạng WebP, chất lượng cao nhất của chế độ tự động (nhẹ hơn, không khác bằng mắt)
-    if (options.resource_type === "image") options = { ...IMAGE_UPLOAD, ...options };
+    // Ảnh lưu NGUYÊN BẢN GỐC (không nén lại khi tải lên) → website tự thu nhỏ & chuyển WebP từ bản gốc
+    // đúng 1 lần cho từng kích thước hiển thị, giữ tối đa chi tiết.
     return new Promise((resolve, reject) => {
       const done = (err, result) => (err ? reject(err) : resolve(result));
       const chunked = options.resource_type === "video" && buffer.length > 20 * 1024 * 1024;

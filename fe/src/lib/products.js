@@ -1,5 +1,4 @@
 import { cacheLife, cacheTag } from "next/cache";
-import { cdn } from "@/lib/cdn";
 import { mediaCount } from "@/lib/media-count";
 
 /**
@@ -14,8 +13,10 @@ export const PRODUCTS_TAG = "products";
 export function toView(p) {
   const media = (p.media ?? []).map((m) => ({
     // video / link nhúng chưa có ảnh đại diện → src null: thư viện tự lấy khung hình thật của video
-    // (thay vì gắn tạm một ảnh không liên quan, sai cả nội dung lẫn tỉ lệ khung)
-    src: cdn(m.type === "image" ? m.url : (m.poster ?? null)),
+    // (thay vì gắn tạm một ảnh không liên quan, sai cả nội dung lẫn tỉ lệ khung).
+    // Ảnh dùng BẢN GỐC trên Cloudinary: next/image thu nhỏ + nén WebP từ bản gốc đúng 1 lần → nét nhất
+    // (không đi qua bản WebP nén sẵn của Cloudinary rồi mới nén thêm lần nữa).
+    src: m.type === "image" ? m.url : (m.poster ?? null),
     pos: m.pos ?? "center",
     zoom: m.zoom ?? 1,
     width: m.width ?? null,
