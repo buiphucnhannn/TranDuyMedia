@@ -20,7 +20,7 @@ export function Partners() {
         id="partners-title"
         className="reveal px-5 text-center text-xl font-bold tracking-tight text-balance text-navy-900 uppercase sm:text-2xl lg:text-[1.75rem]"
       >
-        Hàng trăm doanh nghiệp đã tin tưởng
+        Đối tác tiêu biểu đồng hành
       </h2>
 
       {/* 2 mép mờ dần vào nền cho mềm */}
