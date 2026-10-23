@@ -292,7 +292,8 @@ export function ProductsManager() {
               className="group overflow-hidden rounded-2xl bg-white ring-1 ring-ink/10 transition hover:shadow-card"
             >
               {/* Thẻ giống ngoài website */}
-              <div className="relative aspect-4/3 overflow-hidden bg-navy-900">
+              {/* Cùng khung 3:4 với thẻ ngoài website → phần ảnh bị cắt ở đây giống hệt ngoài web */}
+              <div className="relative aspect-3/4 overflow-hidden bg-navy-900">
                 {coverOf(p) && (
                   <span className="absolute inset-0" style={zoomStyle(p.media?.[0])}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- ảnh bìa từ Cloudinary / website */}

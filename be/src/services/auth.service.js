@@ -93,8 +93,7 @@ export class AuthService {
 
     // ID / mật khẩu trong .env đã đổi kể từ lúc đăng nhập → phiên không còn hợp lệ
     const user = adminUser();
-    const credentialOk =
-      session.user === user.id && session.credential === credentialFingerprint();
+    const credentialOk = session.user === user.id && session.credential === credentialFingerprint();
 
     if (session.revokedAt) {
       // Token ĐÃ ĐƯỢC XOAY VÒNG (có token mới thay thế) mà vẫn bị dùng lại.

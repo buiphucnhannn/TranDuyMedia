@@ -52,7 +52,7 @@ function uploadFile(file, folder, onProgress, retried = false) {
       } catch {}
       if (
         xhr.status === 401 &&
-        body?.error?.code === "TOKEN_EXPIRED" &&
+        ["TOKEN_EXPIRED", "UNAUTHENTICATED"].includes(body?.error?.code) &&
         !retried &&
         (await refreshSession())
       ) {

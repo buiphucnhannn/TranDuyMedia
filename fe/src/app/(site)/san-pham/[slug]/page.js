@@ -11,8 +11,10 @@ import { getProduct, getProducts } from "@/lib/products";
 import { createMetadata } from "@/lib/metadata";
 
 /** 6 cột × 3 ảnh cho nền đầu trang, lấy vòng từ hình ảnh của sản phẩm */
-const headerColumns = (pool) =>
-  Array.from({ length: 6 }, (_, i) => [0, 1, 2].map((k) => pool[(i * 3 + k) % pool.length]));
+const headerColumns = (srcs, fallback) => {
+  const pool = srcs.length ? srcs : [fallback]; // chỉ có video chưa có ảnh đại diện → dùng ảnh bìa
+  return Array.from({ length: 6 }, (_, i) => [0, 1, 2].map((k) => pool[(i * 3 + k) % pool.length]));
+};
 
 export async function generateStaticParams() {
   const products = await getProducts();
@@ -71,7 +73,7 @@ async function ProductView({ params }) {
         eyebrow={`${p.category} - ${p.count}`}
         description={p.summary}
         crumbs={[{ label: "Sản phẩm", href: "/san-pham" }]}
-        columns={headerColumns(p.images.map((im) => im.src))}
+        columns={headerColumns(p.images.map((im) => im.src).filter(Boolean), p.cover.src)}
       />
 
       {/* Tổng quan: mô tả + thông tin dự án (trái) | 3 ảnh tiêu biểu so le (phải) */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { api } from "@/lib/api";
@@ -8,7 +8,6 @@ import { toast } from "@/lib/toast";
 import { safeNext } from "@/lib/safe-next";
 import { cn } from "@/lib/utils";
 
-/**
 /**
  * Form đăng nhập quản trị (ID + mật khẩu). Token KHÔNG đi qua JavaScript: backend đặt cookie HttpOnly
  * trong response, form chỉ chuyển trang khi thành công.
@@ -28,7 +27,17 @@ function friendlyError(err) {
 }
 export function LoginForm() {
   const router = useRouter();
-  const next = safeNext(useSearchParams().get("next"));
+  const params = useSearchParams();
+  const next = safeNext(params.get("next"));
+  const expired = params.get("het-phien") === "1";
+
+  // Bị chuyển về đây vì phiên đã hết hạn → báo nhẹ nhàng, đăng nhập xong quay lại đúng trang cũ
+  useEffect(() => {
+    if (expired)
+      toast.info("Vui lòng đăng nhập lại để tiếp tục công việc.", {
+        title: "Phiên đăng nhập đã hết hạn",
+      });
+  }, [expired]);
   const [form, setForm] = useState({ username: "", password: "" });
   const [show, setShow] = useState(false);
   const [pending, setPending] = useState(false);

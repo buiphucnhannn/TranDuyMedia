@@ -78,6 +78,29 @@ describe("API v1", () => {
       assert.match(cookies, /tdm_rt=[^;]+; Max-Age=\d+; Path=\/api\/v1\/auth/);
       assert.match(cookies, /SameSite=Strict/);
       assert.equal(res.headers["cache-control"], "no-store");
+      // Cookie access phải sống bằng refresh token: nếu tự mất sau 15 phút, request kế tiếp không
+      // mang token → backend báo "chưa đăng nhập" thay vì "hết hạn" → frontend báo hết phiên oan
+      const maxAge = (name) =>
+        Number(
+          res.headers["set-cookie"].find((c) => c.startsWith(`${name}=`)).match(/Max-Age=(\d+)/)[1],
+        );
+      assert.equal(maxAge("tdm_at"), maxAge("tdm_rt"));
+    });
+
+    it("access token hết hạn → 401 TOKEN_EXPIRED (frontend dựa vào mã này để tự làm mới phiên)", async () => {
+      const { default: jwt } = await import("jsonwebtoken");
+      const { env } = await import("#config/env.js");
+      const expired = jwt.sign({ typ: "access", role: "admin" }, env.JWT_ACCESS_SECRET, {
+        subject: ADMIN.username,
+        issuer: "tranduymedia-api",
+        audience: "tranduymedia-web",
+        expiresIn: -10,
+      });
+      const res = await withCsrf(request(app))
+        .get("/api/v1/auth/me")
+        .set("Cookie", `tdm_at=${expired}`);
+      assert.equal(res.status, 401);
+      assert.equal(res.body.error.code, "TOKEN_EXPIRED");
     });
 
     it("GET /auth/me khi có cookie → 200, không có → 401", async () => {
@@ -251,9 +274,9 @@ describe("API v1", () => {
       assert.equal(injected.body.meta.total, 0);
     });
 
-    it("tìm kiếm linh hoạt: SĐT từng phần từ 2 số, tên không dấu / từng phần / khác hoa thường", async () => {
+    it("tìm kiếm linh hoạt: SĐT từng phần (kể cả 1 số), tên không dấu / từng phần / khác hoa thường", async () => {
       // SĐT đã lưu: 0971542026 — từng đoạn 2 số ở đầu / giữa / cuối đều phải ra
-      for (const q of ["09", "71", "2026", "0971 542", "+84 971 542 026"]) {
+      for (const q of ["7", "09", "71", "2026", "0971 542", "0971.542.026", "+84 971 542 026"]) {
         const res = await admin.get(`/api/v1/bookings?q=${encodeURIComponent(q)}`);
         assert.equal(res.body.meta.total, 1, `q=${q}`);
       }

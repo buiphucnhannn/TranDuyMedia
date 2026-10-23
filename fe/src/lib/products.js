@@ -13,8 +13,9 @@ export const PRODUCTS_TAG = "products";
 /** Dữ liệu API → dạng các component đang dùng (ProductCard, AlbumGallery…). */
 export function toView(p) {
   const media = (p.media ?? []).map((m) => ({
-    // video / link nhúng chưa có ảnh đại diện → ảnh hậu trường mặc định
-    src: cdn(m.type === "image" ? m.url : (m.poster ?? "/images/bts/bts-05.webp")),
+    // video / link nhúng chưa có ảnh đại diện → src null: thư viện tự lấy khung hình thật của video
+    // (thay vì gắn tạm một ảnh không liên quan, sai cả nội dung lẫn tỉ lệ khung)
+    src: cdn(m.type === "image" ? m.url : (m.poster ?? null)),
     pos: m.pos ?? "center",
     zoom: m.zoom ?? 1,
     width: m.width ?? null,
@@ -30,7 +31,7 @@ export function toView(p) {
   // Ảnh bìa + ảnh nổi bật chỉ lấy ẢNH (video chỉ hiện trong thư viện); không có ảnh nào → dùng ảnh đại diện video
   const photos = images.filter((m) => m.type === "image");
   const featured = photos.length ? photos : images.filter((m) => m.poster);
-  const cover = featured[0] ?? images[0];
+  const cover = featured[0] ?? { src: "/images/bts/bts-05.webp", pos: "center", type: "image" };
   return {
     id: p.id,
     slug: p.slug,
@@ -55,7 +56,7 @@ export function toView(p) {
  * để xếp hàng ngay ngắn. Ảnh trên Cloudinary đã có sẵn width/height lúc tải lên.
  */
 async function withSizes(view) {
-  const missing = view.images.filter((m) => !(m.width && m.height) && m.src.startsWith("/"));
+  const missing = view.images.filter((m) => !(m.width && m.height) && m.src?.startsWith("/"));
   if (!missing.length) return view;
   const [{ default: sharp }, { join }] = await Promise.all([import("sharp"), import("node:path")]);
   await Promise.all(

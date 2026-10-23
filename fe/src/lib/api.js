@@ -4,7 +4,8 @@ import { siteConfig } from "@/config/site";
 
 /**
  * Gọi API backend từ trình duyệt (cùng tên miền → cookie HttpOnly tự gửi kèm, JS không đọc được token).
- * Access token hết hạn (401 TOKEN_EXPIRED) → tự gọi /auth/refresh MỘT lần rồi thử lại request.
+ * Access token hết hạn / mất (401) → tự gọi /auth/refresh MỘT lần rồi thử lại request; phiên hết
+ * hạn thật (refresh cũng thất bại) → về trang đăng nhập, đăng nhập xong quay lại đúng trang cũ.
  * Nhiều request hết hạn cùng lúc chỉ dùng chung một lần refresh.
  */
 export class ApiError extends Error {
@@ -54,9 +55,25 @@ export async function api(path, { body, headers, retry = true, ...init } = {}) {
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
 
-  if (res.status === 401 && data?.error?.code === "TOKEN_EXPIRED" && retry) {
+  // 401 ở API thường (không phải đăng nhập / làm mới phiên): access token hết hạn HOẶC không còn
+  // (cookie bị trình duyệt xoá) → thử làm mới phiên bằng refresh token rồi gọi lại đúng 1 lần.
+  const isAuthCall = path.startsWith("/auth/");
+  if (res.status === 401 && !isAuthCall && retry && SESSION_CODES.has(data?.error?.code)) {
     if (await refreshSession()) return api(path, { body, headers, retry: false, ...init });
+    // Refresh token cũng hết hạn / bị thu hồi → phiên kết thúc thật: về trang đăng nhập, đăng nhập
+    // xong quay lại đúng trang đang làm. Promise treo lại để nơi gọi không hiện thêm lỗi chồng lên.
+    if (redirectToLogin()) return new Promise(() => {});
   }
   if (!res.ok) throw new ApiError(res.status, data);
   return data;
+}
+
+const SESSION_CODES = new Set(["TOKEN_EXPIRED", "UNAUTHENTICATED", "SESSION_EXPIRED"]);
+
+/** Chuyển sang /login?next=<trang hiện tại>&het-phien=1 (chỉ trong khu quản trị). */
+export function redirectToLogin() {
+  if (typeof window === "undefined" || !window.location.pathname.startsWith("/admin")) return false;
+  const next = window.location.pathname + window.location.search;
+  window.location.replace(`/login?next=${encodeURIComponent(next)}&het-phien=1`);
+  return true;
 }

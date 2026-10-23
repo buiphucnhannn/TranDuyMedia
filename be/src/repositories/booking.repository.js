@@ -101,7 +101,7 @@ export class BookingRepository extends MongoRepository {
     if (query) {
       const or = [{ name: nameSearchRegex(query) }];
       const digits = query.replace(/\D/g, "");
-      if (digits.length >= 2) {
+      if (digits.length >= 1) {
         const variants = new Set([digits]);
         if (digits.startsWith("84")) variants.add(`0${digits.slice(2)}`);
         if (digits.startsWith("0")) variants.add(`84${digits.slice(1)}`);

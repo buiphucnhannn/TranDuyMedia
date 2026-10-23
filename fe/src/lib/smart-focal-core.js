@@ -44,8 +44,12 @@ export function focalFromPixels({ data, width, height }, ratio = 3 / 4) {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const i = y * width + x;
-      const gx = Math.abs(lum[y * width + Math.min(x + 1, width - 1)] - lum[y * width + Math.max(x - 1, 0)]);
-      const gy = Math.abs(lum[Math.min(y + 1, height - 1) * width + x] - lum[Math.max(y - 1, 0) * width + x]);
+      const gx = Math.abs(
+        lum[y * width + Math.min(x + 1, width - 1)] - lum[y * width + Math.max(x - 1, 0)],
+      );
+      const gy = Math.abs(
+        lum[Math.min(y + 1, height - 1) * width + x] - lum[Math.max(y - 1, 0) * width + x],
+      );
       imp[i] += gx + gy;
     }
   }
@@ -61,7 +65,10 @@ export function focalFromPixels({ data, width, height }, ratio = 3 / 4) {
     }
   }
   const windowSum = (x, y, w, h) =>
-    sum[(y + h) * stride + x + w] - sum[y * stride + x + w] - sum[(y + h) * stride + x] + sum[y * stride + x];
+    sum[(y + h) * stride + x + w] -
+    sum[y * stride + x + w] -
+    sum[(y + h) * stride + x] +
+    sum[y * stride + x];
 
   // Cửa sổ lớn nhất đúng tỉ lệ khung
   let winW = width;

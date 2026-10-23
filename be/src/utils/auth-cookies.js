@@ -1,5 +1,5 @@
 import { env } from "#config/env.js";
-import { ACCESS_TTL_MS, REFRESH_TTL_MS } from "#services/token.service.js";
+import { REFRESH_TTL_MS } from "#services/token.service.js";
 
 /**
  * Cookie chứa token — JavaScript phía trình duyệt KHÔNG đọc được (HttpOnly) → chống XSS đánh cắp token.
@@ -27,7 +27,10 @@ export const SESSION_HINT_COOKIE = prod ? "__Host-tdm_session" : "tdm_session";
 const base = { httpOnly: true, secure: prod, sameSite: "strict" };
 
 export function setAuthCookies(res, { accessToken, refreshToken }) {
-  res.cookie(ACCESS_COOKIE, accessToken, { ...base, path: "/", maxAge: ACCESS_TTL_MS });
+  // Cookie access sống bằng refresh token (bản thân JWT bên trong vẫn hết hạn sau 15 phút):
+  // nếu cookie tự mất theo JWT, request sau đó không mang token → backend báo "chưa đăng nhập"
+  // thay vì "token hết hạn" → frontend không biết để làm mới phiên → báo hết phiên oan.
+  res.cookie(ACCESS_COOKIE, accessToken, { ...base, path: "/", maxAge: REFRESH_TTL_MS });
   res.cookie(REFRESH_COOKIE, refreshToken, { ...base, path: REFRESH_PATH, maxAge: REFRESH_TTL_MS });
   res.cookie(SESSION_HINT_COOKIE, "1", { ...base, path: "/", maxAge: REFRESH_TTL_MS });
 }
