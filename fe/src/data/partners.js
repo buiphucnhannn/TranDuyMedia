@@ -1,17 +1,16 @@
-// Thương hiệu đã đồng hành — logo lấy từ tranduymedia.com (đã cắt viền, nền trong suốt, cao 160px)
+// Thương hiệu đã đồng hành — logo WebP lossless, nền trong suốt, đã cắt sát viền
+// (chuẩn hoá bằng scripts/partner-logos.mjs; Elipsport & Move giữ nguyên khối đỏ chính thức).
+// w = bề rộng tương ứng chiều cao 160px.
 const L = (f) => `/images/partners/${f}.webp`;
 
+// Tên chuẩn theo hồ sơ khách hàng (viết hoa đúng như hồ sơ), cùng thứ tự
 export const partners = [
-  { name: "Solartop", logo: L("solartop"), w: 616 },
-  { name: "TP Solar", logo: L("tpsolar"), w: 334 },
-  { name: "Yun Cosplay", logo: L("yuncosplay"), w: 690 },
-  { name: "Sao Thiên Ưng", logo: L("stu"), w: 517 },
-  { name: "LIS Pharma", logo: L("lispharma"), w: 675 },
-  { name: "Cánh Buồm Education Group", logo: L("canhbuom"), w: 549 },
-  { name: "E Plus", logo: L("eplus"), w: 594 },
-  { name: "Gia Sư Số 1", logo: L("giasu"), w: 530 },
-  { name: "VinaFocus", logo: L("vinafocus"), w: 719 },
-  { name: "Vietnam Dragon Elite", logo: L("vde"), w: 445 },
-  { name: "APlus", logo: L("aplus"), w: 543 },
-  { name: "Chiron", logo: L("chiron"), w: 588 },
+  { name: "DONG DUONG GROUP", logo: L("ddg"), w: 257 },
+  { name: "MOVE", logo: L("move-red"), w: 191 },
+  { name: "ZEMA", logo: L("zema"), w: 182 },
+  { name: "VTC ACADEMY", logo: L("vtc-academy"), w: 310 },
+  { name: "YONNY", logo: L("yonny"), w: 534 },
+  { name: "VGEMS", logo: L("vgems"), w: 484 },
+  { name: "ELIPSPORT", logo: L("elipsport-red"), w: 288 },
+  { name: "NAM SAN RESTAURANT", logo: L("namsan"), w: 160, big: true }, // logo tròn → cao hơn chút cho cân với logo ngang
 ];
