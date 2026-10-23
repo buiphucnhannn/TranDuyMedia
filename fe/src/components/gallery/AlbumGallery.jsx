@@ -10,76 +10,58 @@ const MIN_RATIO = 0.5; // ảnh dọc rất cao (≈ 1:2) — hẹp hơn nữa s
 const MAX_RATIO = 2.4; // ảnh ngang / panorama rất dài
 const VIDEO_RATIO = 16 / 9;
 const MAX_STRETCH = 1.25; // hàng không cao quá 125% chiều cao chuẩn (ảnh tự cắt nhẹ cho vừa)
-const FILL_LAST_ROW = 0.7; // hàng cuối đã lấp ≥ 70% chiều ngang → giãn cho kín luôn
 
 /**
  * Chia ảnh thành các hàng "đều" (justified rows, như Google Photos): mỗi hàng lấp kín chiều ngang,
  * mọi ô trong hàng cao bằng nhau, chiều cao các hàng xấp xỉ nhau (≈ rowH).
- * - Thêm dần từng ảnh; khi hàng đã đủ thấp (≤ rowH) thì chọn ngắt TRƯỚC hoặc SAU ảnh vừa thêm, tuỳ
- *   phương án nào gần rowH hơn → không còn hàng cao vọt vì 1 ảnh panorama đứng cạnh 1 ảnh dọc.
- * - Hàng vẫn cao quá rowH × MAX_STRETCH → giữ chiều cao tối đa, ô giãn ngang cho kín (object-cover
- *   cắt nhẹ trên / dưới) — khung luôn đồng đều.
- * - Hàng cuối thiếu ảnh: giữ chiều cao chuẩn, căn trái (không phóng to bất thường).
+ * Chọn cách ngắt hàng TỐI ƯU cho cả thư viện (quy hoạch động, như cách dàn trang chữ): mỗi hàng bị
+ * "phạt" theo độ lệch chiều cao so với rowH → không còn hàng cao vọt (panorama cạnh ảnh dọc),
+ * hàng quá thấp hay 1 ảnh mồ côi ở cuối; mọi hàng — kể cả hàng cuối — đều kín chiều ngang.
+ * Hàng vẫn cao hơn rowH × MAX_STRETCH → giữ chiều cao tối đa, ô cắt nhẹ trên / dưới (object-cover).
  * Trả [{ height, items: [{ i, width }] }].
  */
 function layoutRows(ratios, width, rowH, gap) {
-  const rows = [];
-  const heightOf = (sum, n) => (width - gap * (n - 1)) / sum;
-  let start = 0;
-  while (start < ratios.length) {
+  const n = ratios.length;
+  const maxH = rowH * MAX_STRETCH;
+  const heightOf = (sum, count) => (width - gap * (count - 1)) / sum;
+  const penalty = (h) => {
+    const shown = Math.min(h, maxH);
+    const off = Math.log(shown / rowH); // lệch so với chiều cao chuẩn (tỉ lệ, đối xứng to / nhỏ)
+    const crop = h > maxH ? Math.log(h / maxH) * 2 : 0; // phải cắt nhiều → phạt nặng hơn
+    return off * off + crop * crop;
+  };
+  // best[i] = chi phí nhỏ nhất để xếp ảnh 0..i-1; from[i] = vị trí bắt đầu hàng cuối
+  const best = new Array(n + 1).fill(Infinity);
+  const from = new Array(n + 1).fill(0);
+  best[0] = 0;
+  for (let end = 1; end <= n; end++) {
     let sum = 0;
-    let end = start;
-    let height = Infinity;
-    while (end < ratios.length) {
-      const nextSum = sum + ratios[end];
-      const nextH = heightOf(nextSum, end - start + 1);
-      if (nextH <= rowH && end > start) {
-        // So sánh ngắt trước / sau ảnh này: lấy phương án có chiều cao gần rowH hơn (theo tỉ lệ)
-        if (Math.abs(Math.log(nextH / rowH)) < Math.abs(Math.log(height / rowH))) {
-          sum = nextSum;
-          height = nextH;
-          end++;
-        }
-        break;
+    for (let start = end - 1; start >= 0; start--) {
+      sum += ratios[start];
+      const h = heightOf(sum, end - start);
+      if (h < rowH * 0.5) break; // thêm ảnh nữa chỉ càng thấp hơn
+      const cost = best[start] + penalty(h);
+      if (cost < best[end]) {
+        best[end] = cost;
+        from[end] = start;
       }
-      sum = nextSum;
-      height = nextH;
-      end++;
     }
-    const n = end - start;
-    const isLast = end >= ratios.length;
-    const natural = heightOf(sum, n);
-    const fill = (sum * rowH + gap * (n - 1)) / width;
-    let h = Math.min(natural, rowH * MAX_STRETCH);
-    if (isLast && natural > rowH && fill < FILL_LAST_ROW) h = rowH; // hàng cuối thưa: giữ cỡ chuẩn
-    const stretch = isLast && h === rowH && natural > rowH; // hàng cuối không giãn ngang
-    const free = width - gap * (n - 1);
-    const items = [];
-    for (let k = start; k < end; k++) {
-      items.push({ i: k, width: stretch ? ratios[k] * h : (ratios[k] / sum) * free });
-    }
-    rows.push({ height: h, items, sum, start, end });
-    start = end;
   }
-
-  // Hàng cuối chỉ lèo tèo 1–2 ảnh (lấp < 1/2 chiều ngang) → gộp vào hàng trên, hàng trên thấp xuống
-  // một chút (không dưới 70% chuẩn) — tránh 1 ảnh mồ côi đứng lẻ cuối thư viện
-  const last = rows.at(-1);
-  const prev = rows.at(-2);
-  if (prev && last.sum * rowH + gap * (last.items.length - 1) < width * 0.5) {
-    const n = prev.items.length + last.items.length;
-    const sum = prev.sum + last.sum;
-    const h = heightOf(sum, n);
-    if (h >= rowH * 0.7) {
-      const free = width - gap * (n - 1);
-      rows.splice(-2, 2, {
-        height: h,
-        items: Array.from({ length: n }, (_, k) => ({
-          i: prev.start + k,
-          width: (ratios[prev.start + k] / sum) * free,
-        })),
-      });
-    }
+  const rows = [];
+  for (let end = n; end > 0; end = from[end]) {
+    const start = from[end];
+    let sum = 0;
+    for (let k = start; k < end; k++) sum += ratios[k];
+    const free = width - gap * (end - start - 1);
+    const natural = heightOf(sum, end - start);
+    // Quá ít ảnh để lấp kín (vd. sản phẩm chỉ 1 ảnh dọc) → giữ đúng tỉ lệ ở cỡ chuẩn, căn giữa,
+    // thay vì kéo ngang rồi cắt mất phần lớn ảnh
+    const fit = natural <= maxH * 1.3;
+    const height = fit ? Math.min(natural, maxH) : rowH;
+    const items = [];
+    for (let k = start; k < end; k++)
+      items.push({ i: k, width: fit ? (ratios[k] / sum) * free : ratios[k] * rowH });
+    rows.unshift({ height, items, centered: !fit });
   }
   return rows;
 }
@@ -197,7 +179,7 @@ export function AlbumGallery({ images, name }) {
       >
         {rows
           ? rows.map((row, r) => (
-              <div key={r} className="flex">
+              <div key={r} className={cn("flex", row.centered && "justify-center")}>
                 {row.items.map(({ i, width }) =>
                   tile(images[i], i, { width, height: row.height, flex: "none" }),
                 )}
