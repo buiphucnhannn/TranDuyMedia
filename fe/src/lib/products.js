@@ -87,7 +87,8 @@ export async function getProducts() {
   cacheTag(PRODUCTS_TAG);
   cacheLife("minutes");
   try {
-    return ((await request("/products")) ?? []).map(toView);
+    // Kích thước ảnh thật → thẻ sản phẩm chọn đúng bản ảnh đủ nét cho khung đóng sẵn
+    return await Promise.all(((await request("/products")) ?? []).map((p) => withSizes(toView(p))));
   } catch {
     return [];
   }

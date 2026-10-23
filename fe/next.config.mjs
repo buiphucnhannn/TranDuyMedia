@@ -23,8 +23,9 @@ const nextConfig = {
   images: {
     // Chỉ WebP: AVIF nén nhỏ hơn chút nhưng giải mã nặng hơn nhiều → giật khi ảnh vừa cuộn tới
     formats: ["image/webp"],
-    // Next 16 chỉ cho phép các mức chất lượng liệt kê ở đây (ngoài danh sách bị ép về mức gần nhất)
-    qualities: [70, 75, 90],
+    // MỌI ảnh nén ở chất lượng 90 (nét, gần như không mất chi tiết). Chỉ khai báo đúng 1 mức: ảnh không ghi
+    // quality (mặc định 75) tự được đưa về mức gần nhất là 90 — không còn cảnh báo "unconfigured qualities".
+    qualities: [90],
     // Ảnh đã tối ưu được trình duyệt / CDN giữ 31 ngày (mặc định chỉ vài giờ) → lần sau mở trang không phải nén lại
     minimumCacheTTL: 2678400,
     // Ảnh / poster video lưu trên Cloudinary (chỉ cho phép đúng cloud của studio nếu đã cấu hình)

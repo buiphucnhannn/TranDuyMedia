@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { Journey, ServiceList, ServicesHero } from "@/components/services";
 import { Button, Container } from "@/components/ui";

@@ -1,7 +1,7 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
-import { zoomStyle } from "@/lib/crop";
+import { coverSizes, zoomStyle } from "@/lib/crop";
 import { cn } from "@/lib/utils";
 
 /**
@@ -24,7 +24,13 @@ export function ProductCard({ product: p, index = 0, size, className, sizes }) {
           src={p.cover.src}
           alt={p.title}
           fill
-          sizes={sizes || "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
+          ratio={p.cover.width && p.cover.height ? p.cover.width / p.cover.height : undefined}
+          // Khung 3:4 (lg: 4:3) — tính thêm phần ảnh bị phóng khi cắt khung → ảnh bìa luôn đủ nét
+          sizes={coverSizes(
+            sizes || "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+            p.cover,
+            size === "lg" ? 4 / 3 : 3 / 4,
+          )}
           className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
           style={{ objectPosition: p.cover.pos }}
         />

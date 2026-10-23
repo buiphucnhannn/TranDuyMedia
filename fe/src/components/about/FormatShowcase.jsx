@@ -95,7 +95,6 @@ export function FormatShowcase({ formats }) {
                 alt={f.name}
                 pos={f.pos}
                 sizes="(min-width: 1024px) 55vw, (min-width: 640px) 50vw, 100vw"
-                quality={90}
                 className="aspect-16/10 w-full rounded-2xl bg-navy-800 ring-1 ring-white/10"
               />
               {/* Ảnh luôn rõ nét; chỉ chú thích của khung chưa xem mờ đi */}

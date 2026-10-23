@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { AlbumGallery, ProductCard } from "@/components/gallery";
 import { Container } from "@/components/ui";
 import { PageHeader } from "@/components/sections";
-import { zoomStyle } from "@/lib/crop";
+import { coverSizes, zoomStyle } from "@/lib/crop";
 import { getProduct, getProducts } from "@/lib/products";
 import { createMetadata } from "@/lib/metadata";
 
@@ -119,7 +119,8 @@ async function ProductView({ params }) {
                       src={img.src}
                       alt=""
                       fill
-                      sizes="(min-width: 1024px) 16vw, 33vw"
+                      sizes={coverSizes("(min-width: 1024px) 16vw, 33vw", img, 3 / 4)}
+                      ratio={img.width && img.height ? img.width / img.height : undefined}
                       className="object-cover"
                       style={{ objectPosition: img.pos }}
                     />

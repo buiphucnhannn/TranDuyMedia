@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { SplitText } from "@/components/fx";
 import { Container } from "@/components/ui";
@@ -92,7 +92,6 @@ export function Hero() {
                 fill
                 preload={i === 0}
                 sizes="100vw"
-                quality={80}
                 className={cn("object-cover", i === idx && "animate-kenburns")}
                 style={{ objectPosition: s.pos }}
               />

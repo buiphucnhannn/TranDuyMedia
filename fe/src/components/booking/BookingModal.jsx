@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/ui";
 import { siteConfig } from "@/config/site";

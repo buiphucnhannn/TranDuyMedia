@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { Lightbox } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -30,7 +30,7 @@ export function ZoomImage({
   alt,
   sizes,
   pos,
-  quality = 90,
+
   className,
   imgClassName,
   children,
@@ -48,7 +48,6 @@ export function ZoomImage({
         alt={alt}
         fill
         sizes={sizes}
-        quality={quality}
         className={cn(
           "object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105",
           imgClassName,

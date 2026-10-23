@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { Parallax, SplitText } from "@/components/fx";
 import { Container } from "@/components/ui";
@@ -79,7 +79,9 @@ export function ServicesHero() {
               {stats.slice(0, 3).map((s) => (
                 <div key={s.label}>
                   <dt className="text-3xl h-display text-navy-900 sm:text-4xl">{s.value}</dt>
-                  <dd className="mt-1 text-[12px] leading-snug text-balance text-ink-muted">{s.label}</dd>
+                  <dd className="mt-1 text-[12px] leading-snug text-balance text-ink-muted">
+                    {s.label}
+                  </dd>
                 </div>
               ))}
             </dl>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/icons";
 import { ProductCard } from "./ProductCard";
 
@@ -15,6 +15,11 @@ const fold = (s = "") =>
  */
 export function ProductBrowser({ products }) {
   const [query, setQuery] = useState("");
+  // Điện thoại: gợi ý ngắn để không bị cắt cụt trong ô tìm kiếm
+  const [hint, setHint] = useState("Tìm sản phẩm theo tên, thể loại, bối cảnh…");
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 639px)").matches) setHint("Tìm theo tên, thể loại…"); // eslint-disable-line react-hooks/set-state-in-effect
+  }, []);
   const input = useRef(null);
 
   const index = useMemo(
@@ -50,7 +55,7 @@ export function ProductBrowser({ products }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Escape" && setQuery("")}
-            placeholder="Tìm sản phẩm theo tên, thể loại, bối cảnh…"
+            placeholder={hint}
             maxLength={80}
             className="h-14 w-full rounded-full border border-ink/10 bg-white pr-14 pl-14 text-base text-ink shadow-[0_12px_32px_-18px_rgba(10,16,32,0.35)] transition outline-none placeholder:text-ink-muted focus:border-orange-500/60 focus:ring-4 focus:ring-orange-500/10 [&::-webkit-search-cancel-button]:hidden"
           />

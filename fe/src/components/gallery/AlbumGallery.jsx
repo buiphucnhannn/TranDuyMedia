@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { Lightbox } from "@/components/ui";
 import { cn, pad } from "@/lib/utils";
@@ -115,6 +115,13 @@ export function AlbumGallery({ images, name }) {
     if (w && h) setMeasured((m) => (m[k] ? m : { ...m, [k]: w / h }));
   };
 
+  // Bề rộng thật ảnh hiển thị (px) — ô hẹp hơn tỉ lệ ảnh thì object-cover phóng ảnh lên cho kín ô
+  const sizesOf = (img, i, w) => {
+    if (!w) return "(min-width: 1024px) 50vw, (min-width: 640px) 60vw, 90vw";
+    const real = img.width && img.height ? img.width / img.height : measured[keyOf(img, i)];
+    return `${Math.ceil(w * Math.max(1, (real || ratios[i]) / ratios[i]))}px`;
+  };
+
   const tile = (img, i, style) => (
     <button
       type="button"
@@ -129,7 +136,8 @@ export function AlbumGallery({ images, name }) {
           src={img.src}
           alt=""
           fill
-          sizes="(min-width: 1024px) 50vw, (min-width: 640px) 60vw, 90vw"
+          sizes={sizesOf(img, i, style.width)}
+          ratio={img.width && img.height ? img.width / img.height : undefined}
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           onLoad={(e) =>
             remember(img, i, e.currentTarget.naturalWidth, e.currentTarget.naturalHeight)

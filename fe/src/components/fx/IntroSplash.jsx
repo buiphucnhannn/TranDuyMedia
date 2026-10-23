@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { cn } from "@/lib/utils";
 
 // Mốc thời gian (ms) tính từ LÚC MỞ TRANG (performance.now) — khớp với animation CSS vốn chạy từ khung

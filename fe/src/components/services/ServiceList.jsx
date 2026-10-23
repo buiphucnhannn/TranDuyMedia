@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Container } from "@/components/ui";

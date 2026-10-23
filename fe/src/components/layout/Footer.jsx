@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Container, Logo } from "@/components/ui";
@@ -29,7 +29,6 @@ export function Footer() {
           alt=""
           fill
           sizes="100vw"
-          quality={70}
           className="-z-10 object-cover"
         />
         {/* Phủ tối: đậm bên trái (chữ), nhạt dần sang phải để ảnh còn thấy rõ */}

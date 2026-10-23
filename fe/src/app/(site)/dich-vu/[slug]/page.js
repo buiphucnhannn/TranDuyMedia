@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Icon } from "@/components/icons";
@@ -176,7 +176,6 @@ async function ServiceView({ params }) {
         </Container>
       </section>
 
-
       {/* 4 ---------- Dải bàn giao chạy ngang ---------- */}
       <div
         className="border-y border-orange-600 bg-orange-500 py-5 text-white"
@@ -222,7 +221,6 @@ async function ServiceView({ params }) {
                 src={src}
                 alt=""
                 fill
-                quality={60}
                 sizes="(min-width: 1024px) 17vw, 34vw"
                 className="object-cover grayscale transition-[filter] duration-700 group-hover/bg:grayscale-0"
               />
@@ -291,7 +289,9 @@ async function ServiceView({ params }) {
       <section className="bg-white section-y" data-nav-theme="light">
         <Container>
           <div className="mb-10 flex items-center justify-between gap-6">
-            <h2 className="reveal text-3xl h-display sm:text-4xl">Dịch vụ khác</h2>
+            <h2 className="reveal text-3xl h-display whitespace-nowrap sm:text-4xl">
+              Dịch vụ khác
+            </h2>
             <Link
               href="/dich-vu"
               className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"

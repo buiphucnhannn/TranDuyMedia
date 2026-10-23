@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Parallax } from "@/components/fx";
 import { Button, Container } from "@/components/ui";
 import { stats } from "@/data/services";
@@ -48,7 +48,7 @@ export function Intro() {
             </dl>
           </div>
 
-          <div className="relative min-h-[420px] lg:min-h-0">
+          <div className="relative aspect-[100/88] lg:aspect-auto lg:min-h-0">
             <Parallax speed={0.08} className="absolute top-0 right-0 w-[68%]" desktopOnly>
               <div
                 className="reveal relative aspect-4/5 overflow-hidden rounded-2xl shadow-soft"

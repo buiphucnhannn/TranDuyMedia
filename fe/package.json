@@ -10,7 +10,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "assets": "node scripts/generate-assets.mjs",
-    "video": "node scripts/encode-showreel.mjs"
+    "video": "node scripts/encode-showreel.mjs",
+    "images:dims": "node scripts/image-dims.mjs",
+    "prebuild": "node scripts/image-dims.mjs"
   },
   "dependencies": {
     "lenis": "^1.3.26",

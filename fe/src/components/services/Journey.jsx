@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Container } from "@/components/ui";
 import { processSteps } from "@/data/services";
 import { cn } from "@/lib/utils";

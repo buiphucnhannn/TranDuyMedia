@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { lockScroll, pad } from "@/lib/utils";
 
@@ -124,7 +124,6 @@ export function Lightbox({ images, index, onClose, onChange }) {
             alt={img.alt || ""}
             fill
             sizes="92vw"
-            quality={90}
             className="object-contain"
           />
         )}

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Container } from "@/components/ui";
@@ -32,7 +32,8 @@ export function ServicesGrid() {
           className="reveal mt-5 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg"
           style={{ "--reveal-delay": "160ms" }}
         >
-          Hệ sinh thái dịch vụ đặc trưng tại Trần Duy Media.
+          Hệ sinh thái dịch vụ đặc trưng tại{" "}
+          <span className="whitespace-nowrap">Trần Duy Media.</span>
         </p>
 
         {/* Từ md: 4 thẻ xếp 2×2, mỗi hàng 2 thẻ dùng chung 6 hàng (subgrid) — ảnh · tiêu đề · dòng cam ·
@@ -78,7 +79,7 @@ export function ServicesGrid() {
                       Phù hợp cho
                     </p>
                     {/* 3 cột trải hết chiều ngang thẻ: cột đầu sát lề trái, cột cuối sát lề phải, khoảng giữa chia đều → mọi thẻ xếp giống nhau (điện thoại 2 cột) */}
-                    <ul className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-ink sm:grid-cols-[repeat(3,auto)] sm:justify-between sm:gap-x-6">
+                    <ul className="mt-2.5 grid grid-cols-1 gap-x-6 gap-y-1.5 text-sm text-ink lg:grid-cols-2 xl:grid-cols-[repeat(3,auto)] xl:justify-between">
                       {s.goodFor.map((g) => (
                         <li key={g} className="flex items-start gap-1.5 leading-snug">
                           <span className="mt-[0.45em] size-1 shrink-0 rounded-full bg-orange-500" />

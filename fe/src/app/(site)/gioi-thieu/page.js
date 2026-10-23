@@ -1,5 +1,5 @@
 import { FormatShowcase } from "@/components/about/FormatShowcase";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { ZoomGroup, ZoomImage } from "@/components/gallery";
 import { PageHeader, Partners } from "@/components/sections";

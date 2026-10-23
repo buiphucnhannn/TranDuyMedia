@@ -30,3 +30,27 @@ export const formatPos = ({ x, y }) => `${round(x)}% ${round(y)}%`;
 /** Style cho lớp bọc ảnh (đặt `absolute inset-0` quanh <Image fill>) — chỉ có tác dụng khi zoom > 1. */
 export const zoomStyle = ({ pos, zoom } = {}) =>
   zoom > 1 ? { transform: `scale(${zoom})`, transformOrigin: pos || "center" } : undefined;
+
+/**
+ * `sizes` của ảnh bị phóng (zoom > 1) — nhân kích thước khai báo lên đúng mức phóng để trình duyệt tải
+ * bản ảnh lớn tương ứng → ảnh bìa cắt / phóng từ ảnh to vẫn nét (không bị kéo giãn bản nhỏ).
+ * "(min-width: 1024px) 33vw, 100vw" × 1.5 → "(min-width: 1024px) 50vw, 150vw"
+ */
+export function zoomSizes(sizes, zoom = 1) {
+  const z = Math.min(Math.max(Number(zoom) || 1, 1), 4);
+  if (z === 1) return sizes;
+  return sizes.replace(
+    /(?<![\w-])(\d+(?:\.\d+)?)(vw|px)(?!\))/g,
+    (_, n, u) => `${Math.ceil(n * z)}${u}`,
+  );
+}
+
+/**
+ * `sizes` cho ảnh object-cover trong khung có tỉ lệ `frameRatio` (rộng / cao). Ảnh ngang đặt vào khung dọc
+ * thực chất được phóng to (chỉ hiện một phần) → khai báo bề rộng khung là chưa đủ, trình duyệt tải bản
+ * nhỏ rồi kéo giãn → mờ. Nhân thêm hệ số phóng của object-cover (và zoom cắt khung) để luôn đủ nét.
+ */
+export function coverSizes(sizes, { width, height, zoom } = {}, frameRatio = 1) {
+  const cover = width && height ? Math.max(1, width / height / frameRatio) : 1;
+  return zoomSizes(sizes, (Number(zoom) || 1) * cover);
+}

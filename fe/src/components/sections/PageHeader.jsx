@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Container } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -50,7 +50,6 @@ export function PageHeader({
                       src={src}
                       alt=""
                       fill
-                      quality={70}
                       preload={k === 0 && i < 3}
                       sizes="(min-width: 1024px) 17vw, (min-width: 640px) 25vw, 34vw"
                       className="object-cover saturate-[0.85]"
@@ -69,7 +68,6 @@ export function PageHeader({
             fill
             preload
             sizes="100vw"
-            quality={75}
             className="-z-10 object-cover opacity-45"
             style={{ objectPosition: imagePos }}
           />

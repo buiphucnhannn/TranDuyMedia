@@ -511,11 +511,11 @@ html[data-intro="skip"] #intro {
     text-wrap: pretty;
   }
 
-  /* Căn đều 2 bên cho mọi đoạn văn (từ tablet trở lên — màn hẹp căn đều tạo khoảng trắng lớn giữa chữ).
+  /* Căn đều 2 bên cho mọi đoạn văn (từ laptop ≥1024px — tablet / điện thoại cột hẹp, căn đều tạo khoảng trắng lớn giữa chữ).
      Bỏ qua chỗ đang căn giữa (.text-center hoặc nằm trong khối căn giữa) → không phá bố cục căn giữa.
      Dòng cuối vẫn căn trái như bình thường; đoạn 1 dòng không bị ảnh hưởng.
      Bỏ qua tiêu đề lớn (.h-display / .h-section viết bằng thẻ p) — căng đều chữ to tạo khoảng hở xấu. */
-  @media (width >= 40rem) {
+  @media (width >= 64rem) {
     :is(p, blockquote, .text-justify):not(
       .text-center,
       .text-center *,

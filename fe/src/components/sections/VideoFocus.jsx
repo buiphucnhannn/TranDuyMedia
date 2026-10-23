@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Button, Container } from "@/components/ui";
@@ -118,7 +118,6 @@ export function VideoFocus() {
                       src={p.src}
                       alt={p.name}
                       fill
-                      quality={90}
                       sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw"
                       className="object-cover grayscale transition-[filter,transform] duration-700 group-hover:scale-105 group-hover:grayscale-0"
                       style={{ objectPosition: p.pos }}

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/ui";
@@ -33,7 +33,6 @@ export default function LoginPage() {
           fill
           preload
           sizes="52vw"
-          quality={80}
           className="-z-20 object-cover grayscale"
         />
         <div className="absolute inset-0 -z-10 bg-linear-to-t from-navy-950 via-navy-950/55 to-navy-950/30" />
