@@ -174,7 +174,7 @@ function CoreValues() {
               data-reveal="scale"
               style={{ "--reveal-delay": `${i * 110}ms` }}
             >
-              <div className="relative aspect-4/3 overflow-hidden md:aspect-4/5">
+              <div className="relative aspect-4/3 overflow-hidden md:aspect-[6/7]">
                 <Image
                   src={c.image}
                   alt=""
