@@ -16,7 +16,7 @@ const dims = {};
 const walk = (dir) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p);
+    if (e.isDirectory()) e.name !== "images_real" && walk(p); // ảnh gốc khách gửi — không dùng trực tiếp
     else if (/\.(webp|png|jpe?g|avif)$/i.test(e.name)) dims["/" + path.relative(pub, p).split(path.sep).join("/")] = p;
   }
 };

@@ -1,16 +1,19 @@
-// Nội dung trang "Về chúng tôi". Ảnh /images/about/reel-* là khung hình trích từ showreel 2026
-// (scripts: chụp từ public/media/showreel-1080.mp4, đã cắt bỏ nhãn thể loại).
+// Nội dung trang "Về chúng tôi". Thứ tự theo hồ sơ khách hàng: câu chuyện → tầm nhìn → sứ mệnh →
+// chuẩn mực sản xuất → năng lực sản xuất → hậu trường.
+// Ảnh /images/about-hd/* là ảnh HD gốc do studio cung cấp (WebP, cạnh dài ≤ 3200px);
+// /images/about/reel-* là khung hình trích từ showreel 2026 — chỉ giữ cho khung thành phẩm chưa có ảnh chụp.
 
 const A = (name) => `/images/about/${name}.webp`;
+const H = (name) => `/images/about-hd/${name}.webp`;
 
 // Nền đầu trang: 6 cột ảnh trôi — ưu tiên ảnh có người & máy quay ở 3 cột đầu (mobile chỉ hiện 3 cột)
 export const aboutHeaderColumns = [
-  ["/images/bts/bts-02.webp", A("reel-event"), A("reel-short")],
-  ["/images/bts/bts-05.webp", A("reel-talkshow"), A("reel-warehouse")],
-  [A("reel-camera"), A("reel-interview"), "/images/bts/bts-06.webp"],
-  ["/images/bts/bts-07.webp", A("reel-speaker"), A("reel-event-hall")],
-  ["/images/bts/bts-04.webp", A("reel-portrait"), A("reel-food")],
-  [A("reel-spa"), "/images/bts/bts-02.webp", A("reel-massage")],
+  [H("camera-operator"), H("event-screen"), A("reel-short")],
+  [H("crew-portrait"), H("talkshow-set"), H("jewelry-consult")],
+  [H("documentary-set"), H("interview"), H("event-backdrop")],
+  [H("tvc-monitor"), A("reel-food"), H("event-hall")],
+  [H("lighting-setup"), H("handshake"), A("reel-spa")],
+  [H("product-shoot"), H("tvc-bedroom"), A("reel-portrait")],
 ];
 
 // Hồ sơ doanh nghiệp — thông tin nhanh
@@ -21,18 +24,18 @@ export const companyFacts = [
   { label: "Phương châm", value: "Uy tín – Trách nhiệm – Tâm huyết" },
 ];
 
-// 3 ảnh hồ sơ: quay video (ảnh cao bên trái) · studio · chụp ảnh thương mại
+// 3 ảnh hồ sơ — đủ 3 mảng chính: quay video (ảnh cao bên trái) · chụp ảnh thương mại · chụp sự kiện
 export const profileImages = [
-  { src: "/images/bts/bts-02.webp", alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
+  { src: H("camera-operator"), alt: "Quay phim với máy cinema tại studio", pos: "center 40%" },
   {
-    src: "/images/bts/bts-07.webp",
-    alt: "Hệ thống đèn và softbox tại Box Studio",
-    pos: "center 45%",
+    src: H("jewelry-shoot"),
+    alt: "Buổi chụp ảnh thương mại cho cửa hàng trang sức",
+    pos: "center 40%",
   },
   {
-    src: "/images/bts/bts-06.webp",
-    alt: "Buổi chụp thương mại cho cửa hàng trang sức",
-    pos: "center 35%",
+    src: H("event-backdrop"),
+    alt: "Chụp ảnh sự kiện tiệc tất niên doanh nghiệp",
+    pos: "center 45%",
   },
 ];
 
@@ -41,8 +44,8 @@ export const formats = [
   {
     name: "TVC & iTVC",
     desc: "Quảng cáo truyền hình và online — kịch bản, casting, quay, dựng, chỉnh màu.",
-    src: A("reel-food"),
-    pos: "center 40%",
+    src: H("tvc-bedroom"),
+    pos: "center 45%",
   },
   {
     name: "Video ngắn thương mại",
@@ -53,45 +56,49 @@ export const formats = [
   {
     name: "Documentary",
     desc: "Phim tài liệu, chân dung nhà sáng lập, câu chuyện thương hiệu.",
-    src: A("reel-speaker"),
-    pos: "center 30%",
+    src: H("interview"),
+    pos: "center 35%",
   },
   {
     name: "Talkshow & phỏng vấn",
     desc: "Setup nhiều máy, âm thanh, ánh sáng cho talkshow, podcast, phỏng vấn.",
-    src: A("reel-talkshow"),
-    pos: "center 40%",
+    src: H("talkshow-set"),
+    pos: "center 55%",
   },
   {
     name: "Video sự kiện",
     desc: "Ghi hình và recap hội nghị, khai trương, ra mắt sản phẩm — bàn giao nhanh.",
-    src: A("reel-event"),
-    pos: "center",
+    src: H("event-hall"),
+    pos: "center 60%",
   },
   {
     name: "Phim doanh nghiệp",
     desc: "Giới thiệu năng lực, nhà xưởng, quy trình — phục vụ đấu thầu và tuyển dụng.",
-    src: A("reel-warehouse"),
+    src: H("corporate-aerial"),
     pos: "center",
   },
 ];
 
-// Sứ mệnh / tầm nhìn — mỗi khối là một khung hình có ảnh nền
-export const mission = {
-  title: "Sứ mệnh",
-  en: "Mission",
-  text: "Đồng hành cùng kiến tạo và nâng tầm giá trị doanh nghiệp.",
-  tags: ["Đồng hành", "Kiến tạo", "Nâng tầm"],
-  image: "/images/bts/bts-05.webp",
-  imagePos: "center 35%",
-};
+// Giá trị cốt lõi — 3 khung ảnh đứng: tầm nhìn · sứ mệnh · chuẩn mực sản xuất (danh sách bên dưới)
 export const vision = {
   title: "Tầm nhìn",
   en: "Vision",
   text: "Trở thành đối tác sản xuất nội dung thương mại quảng cáo được khách hàng tin tưởng lựa chọn hàng đầu.",
-  tags: ["Nội dung thương mại", "Quảng cáo", "Tin tưởng hàng đầu"],
-  image: "/images/about/reel-aerial.webp",
-  imagePos: "center 60%",
+  image: H("event-screen"),
+  imagePos: "center 45%",
+};
+export const mission = {
+  title: "Sứ mệnh",
+  en: "Mission",
+  text: "Đồng hành cùng kiến tạo và nâng tầm giá trị doanh nghiệp — mỗi sản phẩm phục vụ đúng mục tiêu kinh doanh của khách hàng.",
+  image: H("handshake"),
+  imagePos: "center 40%",
+};
+export const standardsCard = {
+  title: "Chuẩn mực sản xuất",
+  en: "Standards",
+  image: H("tvc-monitor"),
+  imagePos: "center 45%",
 };
 
 // Chuẩn mực sản xuất — Trần Duy Media cam kết trong mọi dự án (theo hồ sơ doanh nghiệp)
@@ -143,7 +150,7 @@ export const capabilities = [
 ];
 
 export const behindImages = [
-  { src: "/images/bts/bts-05.webp", alt: "Ekip quay phim trên trường quay", pos: "center" },
-  { src: "/images/bts/bts-07.webp", alt: "Hệ thống đèn và softbox tại Box Studio", pos: "center" },
-  { src: "/images/bts/bts-04.webp", alt: "Setup ánh sáng Godox", pos: "center" },
+  { src: H("documentary-set"), alt: "Ekip quay phim tài liệu tại bối cảnh", pos: "22% 50%" },
+  { src: H("lighting-setup"), alt: "Setup ánh sáng Godox tại studio", pos: "center 55%" },
+  { src: H("product-shoot"), alt: "Chụp sản phẩm tại studio", pos: "center 40%" },
 ];

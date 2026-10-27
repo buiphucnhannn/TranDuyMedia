@@ -13,6 +13,7 @@ import {
   formats,
   mission,
   profileImages,
+  standardsCard,
   vision,
 } from "@/data/about";
 import { createMetadata } from "@/lib/metadata";
@@ -38,22 +39,23 @@ export default function AboutPage() {
         columns={aboutHeaderColumns}
       />
       <Partners />
+      {/* Theo hồ sơ khách hàng: câu chuyện → tầm nhìn · sứ mệnh · chuẩn mực → năng lực → hậu trường */}
       <Profile />
+      <CoreValues />
       <Capacity />
-      <Values />
       <BehindTheScenes />
     </>
   );
 }
 
-/* ── Chúng tôi là ai: giới thiệu + hồ sơ nhanh | 3 ảnh cao bằng cột chữ ── */
+/* ── Thông điệp & câu chuyện: giới thiệu + hồ sơ nhanh | 3 ảnh cao bằng cột chữ ── */
 function Profile() {
   return (
     <section className="bg-paper section-y" data-nav-theme="light">
       <Container className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
         <div>
           <SectionHeading
-            eyebrow="Chúng tôi là ai"
+            eyebrow="Câu chuyện của chúng tôi"
             title="Gia công nội dung truyền thông, thương mại quảng cáo."
           />
           <div
@@ -115,7 +117,7 @@ function Profile() {
   );
 }
 
-/* ── 6 định dạng đã sản xuất: trái đứng yên, phải lướt ảnh (ảnh trích từ showreel) ── */
+/* ── Năng lực sản xuất — 6 định dạng: trái đứng yên, phải lướt ảnh dự án ── */
 function Capacity() {
   return (
     <section className="grain relative bg-navy-950 section-y text-white" data-nav-theme="dark">
@@ -126,50 +128,79 @@ function Capacity() {
   );
 }
 
-/* ── Sứ mệnh / tầm nhìn + chuẩn mực sản xuất dạng hàng biên tập ── */
-function Values() {
+/* ── Giá trị cốt lõi: 3 khung ảnh đứng cạnh nhau — Tầm nhìn · Sứ mệnh · Chuẩn mực sản xuất.
+   Ảnh đen trắng, tên giá trị lớn ở chân ảnh, nội dung trên dải navy viền cam (cùng chiều cao 3 cột).
+   Rê chuột: ảnh hiện màu + phóng nhẹ. ── */
+function CoreValues() {
+  const cards = [
+    {
+      ...vision,
+      body: <p className="text-left text-[15px] leading-relaxed text-white/75">{vision.text}</p>,
+    },
+    {
+      ...mission,
+      body: <p className="text-left text-[15px] leading-relaxed text-white/75">{mission.text}</p>,
+    },
+    {
+      ...standardsCard,
+      body: (
+        <ol className="space-y-2">
+          {productionStandards.map((v, i) => (
+            <li key={v.title} className="flex gap-3 text-[15px] leading-snug text-white/80">
+              <span className="w-5 shrink-0 pt-px text-xs font-semibold tracking-widest text-orange-400">
+                {pad(i + 1)}
+              </span>
+              {v.title}
+            </li>
+          ))}
+        </ol>
+      ),
+    },
+  ];
   return (
     <section className="bg-white section-y" data-nav-theme="light">
       <Container>
-        <div className="grid gap-5 md:grid-cols-2">
-          {[mission, vision].map((b, i) => (
-            <StatementCard key={b.title} item={b} index={i} />
-          ))}
-        </div>
-
-        <div className="mt-16 sm:mt-20">
-          {/* Tiêu đề trái + mô tả phải canh giữa theo chiều cao TIÊU ĐỀ (eyebrow nằm ngoài hàng để không lệch tâm) */}
-          <p className="reveal mb-4 eyebrow">Chuẩn mực sản xuất</p>
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <SectionHeading title="Trần Duy Media cam kết chuẩn mực sản xuất." />
-            {/* translate-y nhẹ: tâm NHÌN của tiêu đề lớn thấp hơn tâm hộp chữ (chừa chỗ dấu tiếng Việt) */}
-            <p
-              className="reveal max-w-sm text-base leading-relaxed text-ink-soft lg:translate-y-1.5"
-              style={{ "--reveal-delay": "160ms" }}
+        <SectionHeading
+          align="center"
+          eyebrow="Trần Duy Media"
+          title="Những giá trị cốt lõi."
+          description="Sức mạnh và uy tín của Trần Duy Media bắt nguồn từ tầm nhìn, sứ mệnh và chuẩn mực trong từng dự án."
+        />
+        <div className="mt-12 grid gap-5 sm:mt-14 md:grid-cols-3 md:gap-4 lg:gap-5">
+          {cards.map((c, i) => (
+            <article
+              key={c.title}
+              className="group reveal flex flex-col overflow-hidden rounded-2xl bg-navy-950 text-white shadow-card"
+              data-reveal="scale"
+              style={{ "--reveal-delay": `${i * 110}ms` }}
             >
-              Năm nguyên tắc chúng tôi giữ vững trong từng{" "}
-              <span className="whitespace-nowrap">dự án,</span> với từng{" "}
-              <span className="whitespace-nowrap">khách hàng.</span>
-            </p>
-          </div>
-          {/* 2 cột trải hết khung: [số + tên] | mô tả (các hàng thẳng cột) */}
-          <ol className="mt-10 border-t border-ink/10">
-            {productionStandards.map((v, i) => (
-              <li
-                key={v.title}
-                className="reveal grid gap-3 border-b border-ink/10 py-7 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] md:items-center md:gap-12 xl:gap-20"
-                style={{ "--reveal-delay": `${i * 90}ms` }}
-              >
-                <div className="flex items-center gap-6 sm:gap-10">
-                  <span className="w-6 text-sm font-semibold tracking-widest text-orange-500">
-                    {pad(i + 1)}
-                  </span>
-                  <h3 className="text-3xl h-display text-ink sm:text-4xl">{v.title}</h3>
+              <div className="relative aspect-4/3 overflow-hidden md:aspect-4/5">
+                <Image
+                  src={c.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover grayscale transition-[filter,scale] duration-[1400ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:grayscale-0"
+                  style={{ objectPosition: c.imagePos }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-linear-to-t from-navy-950 via-navy-950/25 to-transparent"
+                />
+                <div className="absolute inset-x-0 bottom-0 px-6 pb-5 sm:px-7">
+                  <p className="text-[11px] font-semibold tracking-eyebrow text-orange-400 uppercase">
+                    {pad(i + 1)} - {c.en}
+                  </p>
+                  <h3 className="mt-2 text-[1.7rem] leading-[1.15] font-bold tracking-tight text-balance uppercase lg:text-3xl">
+                    {c.title}
+                  </h3>
                 </div>
-                <p className="text-base leading-relaxed text-ink-soft">{v.desc}</p>
-              </li>
-            ))}
-          </ol>
+              </div>
+              <div className="flex-1 border-t-[3px] border-orange-500 px-6 py-6 text-left sm:px-7">
+                {c.body}
+              </div>
+            </article>
+          ))}
         </div>
       </Container>
     </section>
@@ -257,90 +288,5 @@ function BehindTheScenes() {
         </ZoomGroup>
       </Container>
     </section>
-  );
-}
-
-const CORNERS = [
-  "top-5 left-5 border-t-2 border-l-2",
-  "top-5 right-5 border-t-2 border-r-2",
-  "bottom-5 left-5 border-b-2 border-l-2",
-  "bottom-5 right-5 border-b-2 border-r-2",
-];
-
-/* Sứ mệnh / Tầm nhìn: khung hình điện ảnh — ảnh nền phủ màu thương hiệu, 4 góc khung ngắm,
-   câu tuyên bố lớn ở đáy + từ khoá. Rê chuột: ảnh trôi chậm, góc khung chuyển cam/trắng. */
-function StatementCard({ item, index }) {
-  const orange = index === 1;
-  return (
-    <article
-      className="group reveal relative isolate flex min-h-[400px] flex-col justify-between overflow-hidden rounded-3xl p-9 text-white sm:min-h-[460px] sm:p-12"
-      data-reveal="scale"
-      style={{ "--reveal-delay": `${index * 120}ms` }}
-    >
-      <Image
-        src={item.image}
-        alt=""
-        fill
-        sizes="(min-width: 768px) 50vw, 100vw"
-        className={cn(
-          "-z-20 object-cover transition-transform duration-[2000ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105",
-          !orange && "grayscale",
-        )}
-        style={{ objectPosition: item.imagePos }}
-      />
-      <div
-        aria-hidden="true"
-        className={cn(
-          "absolute inset-0 -z-10",
-          orange
-            ? "bg-linear-to-t from-orange-600 via-orange-500/85 to-orange-500/35"
-            : "bg-linear-to-t from-navy-950 via-navy-950/80 to-navy-950/35",
-        )}
-      />
-      {CORNERS.map((c) => (
-        <span
-          key={c}
-          aria-hidden="true"
-          className={cn(
-            "absolute size-6 transition-colors duration-500",
-            orange
-              ? "border-white/50 group-hover:border-white"
-              : "border-white/40 group-hover:border-orange-500",
-            c,
-          )}
-        />
-      ))}
-
-      <div className="flex items-center justify-between gap-4 text-xs font-semibold tracking-eyebrow uppercase">
-        <span className="flex items-center gap-3">
-          <span className={cn("h-0.5 w-6", orange ? "bg-white" : "bg-orange-500")} />
-          {item.title}
-        </span>
-        <span className="text-white/60">
-          {pad(index + 1)} - {item.en}
-        </span>
-      </div>
-
-      <div>
-        <p className="max-w-lg text-left text-[1.4rem] leading-[1.3] font-bold tracking-tight text-balance sm:text-[1.75rem]">
-          {item.text}
-        </p>
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {item.tags.map((t) => (
-            <li
-              key={t}
-              className={cn(
-                "rounded-full px-3.5 py-1.5 text-xs font-semibold backdrop-blur-sm",
-                orange
-                  ? "bg-white/20 text-white"
-                  : "bg-white/10 text-white/85 ring-1 ring-white/15",
-              )}
-            >
-              {t}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </article>
   );
 }

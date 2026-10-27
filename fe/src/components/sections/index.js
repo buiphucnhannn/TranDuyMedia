@@ -5,6 +5,7 @@ export { PageHeader } from "./PageHeader";
 export { Process } from "./Process";
 export { ServicesGrid } from "./ServicesGrid";
 export { Showreel } from "./Showreel";
+export { Testimonials } from "./Testimonials";
 export { Values } from "./Values";
 export { VideoFocus } from "./VideoFocus";
 export { Partners } from "./Partners";

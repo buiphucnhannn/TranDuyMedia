@@ -48,7 +48,7 @@ export function FormatShowcase({ formats }) {
           className="reveal mt-5 max-w-md text-base leading-relaxed text-white/65 lg:[@media(max-height:720px)]:hidden"
           style={{ "--reveal-delay": "160ms" }}
         >
-          Khung hình trích từ các dự án thật trong showreel 2026 — bấm vào ảnh để xem lớn.
+          Hình ảnh từ các dự án thật của Trần Duy Media — bấm vào ảnh để xem lớn.
         </p>
 
         <ol className="mt-8 hidden border-l border-white/10 lg:block">
@@ -109,7 +109,7 @@ export function FormatShowcase({ formats }) {
                 </span>
                 <div>
                   <h3 className="text-xl font-bold tracking-tight lg:text-2xl">{f.name}</h3>
-                  <p className="mt-1.5 max-w-lg text-sm leading-relaxed text-white/60 lg:text-base">
+                  <p className="mt-1.5 text-left text-sm leading-relaxed text-pretty text-white/60 lg:text-base">
                     {f.desc}
                   </p>
                 </div>

@@ -3,9 +3,8 @@ import {
   Intro,
   Partners,
   Process,
-  ServicesGrid,
   Showreel,
-  Values,
+  Testimonials,
   VideoFocus,
 } from "@/components/sections";
 
@@ -17,9 +16,8 @@ export default function HomePage() {
       <Showreel />
       <Intro />
       <VideoFocus />
-      <ServicesGrid />
       <Process />
-      <Values />
+      <Testimonials />
     </>
   );
 }

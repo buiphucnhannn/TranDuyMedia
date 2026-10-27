@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Showreel 4K gốc (~1.1GB) — không commit; bản web đã nén nằm ở public/media (npm run video)
 /public/videos/
+
+# Ảnh gốc HD khách gửi (~160MB) — không commit; bản web WebP nằm ở public/images/about-hd
+/public/images/images_real/
