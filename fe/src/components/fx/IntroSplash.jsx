@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { cn } from "@/lib/utils";
+import { INTRO_LOGO } from "./intro-logo";
 
 // Mốc thời gian (ms) tính từ LÚC MỞ TRANG (performance.now) — khớp với animation CSS vốn chạy từ khung
 // hình đầu tiên. Nếu JS tải chậm (bản dev), các mốc đã qua sẽ chạy ngay → không kéo dài thêm.
@@ -58,11 +58,16 @@ export function IntroSplash() {
 
     // Timecode chạy thật (HH:MM:SS:FF ở 25 fps) tính từ lúc mở trang — ghi thẳng vào DOM, không re-render
     let raf = 0;
+    // Chỉ ghi khi số khung đổi (25 lần/giây) — rAF chạy 60 lần/giây, ghi lại chữ y hệt vẫn bắt tính lại bố cục
+    let last = -1;
     const tick = (t) => {
       const frames = Math.floor((t / 1000) * FPS);
-      const ff = String(frames % FPS).padStart(2, "0");
-      const ss = String(Math.floor(frames / FPS) % 60).padStart(2, "0");
-      if (timecodeRef.current) timecodeRef.current.textContent = `00:00:${ss}:${ff}`;
+      if (frames !== last && timecodeRef.current) {
+        last = frames;
+        const ff = String(frames % FPS).padStart(2, "0");
+        const ss = String(Math.floor(frames / FPS) % 60).padStart(2, "0");
+        timecodeRef.current.textContent = `00:00:${ss}:${ff}`;
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -136,13 +141,14 @@ export function IntroSplash() {
             {/* Trung tâm: logo lấy nét → slogan → vạch ghi hình */}
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
               <div style={{ animation: "introFocus 1.1s cubic-bezier(.22,1,.36,1) .1s both" }}>
-                <Image
-                  src="/images/brand/logo-light.webp"
+                {/* Logo nhúng sẵn trong HTML (data URI, scripts/intro-logo.mjs) → hiện ngay, không chờ tải ảnh */}
+                {/* eslint-disable-next-line @next/next/no-img-element -- data URI nhỏ, không qua bộ tối ưu ảnh */}
+                <img
+                  src={INTRO_LOGO.src}
                   alt=""
-                  width={989}
-                  height={768}
-                  preload
-                  sizes="240px"
+                  width={INTRO_LOGO.width}
+                  height={INTRO_LOGO.height}
+                  decoding="sync"
                   className="h-[clamp(5.5rem,16svh,9rem)] w-auto drop-shadow-[0_6px_30px_rgba(0,0,0,0.5)]"
                 />
               </div>

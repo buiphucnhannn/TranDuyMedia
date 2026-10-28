@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useCallback, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import DIMS from "@/data/image-dims.json";
 
@@ -15,14 +15,41 @@ import DIMS from "@/data/image-dims.json";
  * chọn bản đủ độ phân giải (nhân thêm mật độ điểm ảnh màn hình). Chỉ tăng, không giảm.
  * Ảnh lazy (mặc định) chỉ tải khi gần màn hình — lúc đó `sizes` đã đúng, không tải 2 lần.
  * Props như next/image; thêm `ratio` (rộng / cao ảnh gốc) khi ảnh không nằm trong public/.
+ * Ảnh fill KHÔNG ưu tiên (không preload / eager): chỉ gắn vào trang khi cách màn hình < NEAR — trình duyệt
+ * không biết tốc độ mạng (vd. lúc đo PageSpeed) sẽ tải sẵn mọi ảnh lazy trong ~5000px, giành băng thông với
+ * phần đầu trang. Ảnh fill nằm trong khung đã có kích thước nên chưa gắn ảnh cũng không xê dịch bố cục.
+ * `autoSizes={false}`: giữ nguyên `sizes` khai báo — dùng cho ảnh tải ngay khi mở trang (hero) đã tính sẵn
+ * `sizes` chính xác: đổi `sizes` sau khi ảnh đang tải sẽ khiến trình duyệt tải thêm bản khác (tốn băng thông).
  */
+const NEAR = "1200px";
+
 export const SmartImage = forwardRef(function SmartImage(
-  { sizes, ratio, fill, onLoad, alt, ...props },
+  { sizes, ratio, fill, onLoad, alt, autoSizes = true, ...props },
   forwardedRef,
 ) {
   const ref = useRef(null);
   const [auto, setAuto] = useState(null);
   const natural = useRef(ratio ?? ratioOf(props.src));
+  const deferrable = fill && !props.preload && !props.priority && props.loading !== "eager";
+  const [near, setNear] = useState(!deferrable);
+  const holder = useRef(null);
+
+  useEffect(() => {
+    if (near) return;
+    const el = holder.current;
+    if (!el || typeof IntersectionObserver === "undefined") return setNear(true);
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: `${NEAR} ${NEAR}` },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near]);
 
   const setRefs = useCallback(
     (el) => {
@@ -35,7 +62,7 @@ export const SmartImage = forwardRef(function SmartImage(
 
   const measure = useCallback(() => {
     const img = ref.current;
-    if (!img || !fill) return;
+    if (!img || !fill || !autoSizes) return;
     const w = img.offsetWidth;
     const h = img.offsetHeight;
     if (!w || !h) return;
@@ -45,7 +72,7 @@ export const SmartImage = forwardRef(function SmartImage(
     const cover = getComputedStyle(img).objectFit === "cover" && R ? Math.max(1, (h * R) / w) : 1;
     const need = Math.ceil(w * cover * scale);
     setAuto((prev) => (prev && prev >= need ? prev : need));
-  }, [fill]);
+  }, [fill, autoSizes]);
 
   useLayoutEffect(() => {
     measure();
@@ -54,7 +81,9 @@ export const SmartImage = forwardRef(function SmartImage(
     const ro = new ResizeObserver(measure);
     ro.observe(img);
     return () => ro.disconnect();
-  }, [measure, fill]);
+  }, [measure, fill, near]);
+
+  if (!near) return <span ref={holder} aria-hidden="true" className="absolute inset-0" />;
 
   return (
     <Image

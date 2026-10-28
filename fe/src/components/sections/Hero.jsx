@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SmartImage as Image } from "@/components/ui/SmartImage";
+import { SmartImage as Image, ratioOf } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { SplitText } from "@/components/fx";
 import { Container } from "@/components/ui";
@@ -13,6 +13,18 @@ const SLIDES = btsImages.slice(0, 4); // 4 ảnh hậu trường: máy quay, eki
 const TICK = 6000; // thời gian mỗi ảnh (ms) — khớp với thanh tiến trình
 
 /**
+ * `sizes` đúng bề rộng ảnh hiển thị: ảnh dọc phủ (object-cover) khung hero ~1 màn hình → khi màn hình "dọc hơn"
+ * ảnh thì bề rộng ảnh = chiều cao màn × tỉ lệ ảnh, ngược lại = bề rộng màn; × 1.1 cho ken burns (phóng tới 110%).
+ * Khai báo đúng ngay từ HTML → trình duyệt tải 1 lần đúng bản cần (không tải bản nhỏ rồi tải lại bản lớn).
+ */
+const heroSizes = (src) => {
+  const r = ratioOf(src);
+  if (!r) return "110vw";
+  const [w, h] = [Math.round(r * 1000), 1000];
+  return `(max-aspect-ratio: ${w}/${h}) ${Math.ceil(r * 110)}vh, 110vw`;
+};
+
+/**
  * Hero điện ảnh toàn màn hình, bố cục căn giữa kiểu Squarespace:
  * - Ảnh hậu trường chuyển cảnh chậm (ken-burns + crossfade), phủ tối đều để chữ luôn rõ.
  * - Giữa: eyebrow · tiêu đề 2 dòng · mô tả · 2 nút.
@@ -22,6 +34,7 @@ const TICK = 6000; // thời gian mỗi ảnh (ms) — khớp với thanh tiến
 export function Hero() {
   const [idx, setIdx] = useState(0);
   const [ready, setReady] = useState(false);
+  const [first, setFirst] = useState(false); // đã bắt đầu tải ảnh hero đầu tiên
   const imgRef = useRef(null);
   const textRef = useRef(null);
 
@@ -33,12 +46,20 @@ export function Hero() {
       clearTimeout(t);
       t = setTimeout(() => setReady(true), 120);
     };
+    let f;
     if (document.getElementById("intro") && document.documentElement.dataset.intro !== "skip") {
       window.addEventListener("td:intro-reveal", go, { once: true });
       t = setTimeout(go, 8500);
-    } else go();
+      // Màn chào che hero ~3s: tải ảnh đầu sau 0.6s (vẫn xong rất lâu trước khi màn mở) → không giành băng thông
+      // với logo màn chào, font, script lúc vừa mở trang (điện thoại 4G).
+      f = setTimeout(() => setFirst(true), 600);
+    } else {
+      setFirst(true); // eslint-disable-line react-hooks/set-state-in-effect -- không có màn chào: hero là phần tử đầu tiên, tải ngay
+      go();
+    }
     return () => {
       clearTimeout(t);
+      clearTimeout(f);
       window.removeEventListener("td:intro-reveal", go);
     };
   }, []);
@@ -86,15 +107,21 @@ export function Hero() {
               )}
               aria-hidden={i !== idx}
             >
-              <Image
-                src={s.src}
-                alt={i === 0 ? s.alt : ""}
-                fill
-                preload={i === 0}
-                sizes="100vw"
-                className={cn("object-cover", i === idx && "animate-kenburns")}
-                style={{ objectPosition: s.pos }}
-              />
+              {/* Ảnh 1 tải ngay khi không có màn chào, hoặc 0.6s sau khi mở trang nếu có màn chào; ảnh 2–4 chỉ tải
+                  khi hero bắt đầu chạy — vẫn sớm hơn lúc hiện (6s) rất nhiều */}
+              {((i === 0 && first) || ready) && (
+                <Image
+                  src={s.src}
+                  alt={i === 0 ? s.alt : ""}
+                  fill
+                  loading="eager"
+                  fetchPriority={i === 0 ? "high" : "low"}
+                  autoSizes={false}
+                  sizes={heroSizes(s.src)}
+                  className={cn("object-cover", i === idx && "animate-kenburns")}
+                  style={{ objectPosition: s.pos }}
+                />
+              )}
             </div>
           ))}
         </div>
