@@ -345,18 +345,23 @@ async function ServiceView({ params }) {
 }
 
 /** Khung chờ cùng chiều cao đầu trang → không giật layout khi nội dung đổ vào. */
+// Khung chờ cao ít nhất 1 màn hình (đầu trang + vùng nền sáng): HTML dựng sẵn gửi khung chờ trước rồi mới
+// thay bằng nội dung — khung thấp thì chân trang lọt vào màn hình rồi bị đẩy xuống (CLS, LCP nhầm ảnh chân trang).
 function ServiceSkeleton() {
   return (
-    <section
-      className="relative flex min-h-[max(460px,calc(var(--screen)*0.66))] items-end bg-navy-950 pt-32 pb-16 text-white"
-      data-nav-theme="dark"
-      aria-busy="true"
-    >
-      <Container className="space-y-5">
-        <div className="h-3 w-56 rounded-full bg-white/10" />
-        <div className="h-16 w-3/4 animate-pulse rounded-xl bg-white/10" />
-        <div className="h-5 w-1/2 rounded-full bg-white/5" />
-      </Container>
-    </section>
+    <>
+      <section
+        className="relative flex min-h-[max(460px,calc(var(--screen)*0.66))] items-end bg-navy-950 pt-32 pb-16 text-white"
+        data-nav-theme="dark"
+        aria-busy="true"
+      >
+        <Container className="space-y-5">
+          <div className="h-3 w-56 rounded-full bg-white/10" />
+          <div className="h-16 w-3/4 animate-pulse rounded-xl bg-white/10" />
+          <div className="h-5 w-1/2 rounded-full bg-white/5" />
+        </Container>
+      </section>
+      <div aria-hidden="true" className="h-svh bg-paper" />
+    </>
   );
 }

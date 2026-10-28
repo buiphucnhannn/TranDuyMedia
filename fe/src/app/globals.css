@@ -321,10 +321,13 @@ html:not([data-intro="skip"]) body:has(#intro[data-phase="in"]) main * {
 html[data-intro="skip"] #intro {
   display: none !important;
 }
-/* Lấy nét ống kính: nhoè + hơi phóng → nét */
+/* Lấy nét ống kính: nhoè + hơi phóng → nét.
+   opacity 0.01 (không phải 0): mắt thường không thấy khác, nhưng Chrome chỉ tính LCP cho phần tử có opacity > 0
+   ngay ở lần vẽ đầu — bắt đầu từ 0 thì logo (hiện dần bằng animation GPU, không vẽ lại) chỉ được ghi nhận khi
+   màn chào tách ra (~2.8s) → điểm LCP thấp oan. */
 @keyframes introFocus {
   from {
-    opacity: 0;
+    opacity: 0.01;
     filter: blur(18px);
     transform: scale(1.12);
   }

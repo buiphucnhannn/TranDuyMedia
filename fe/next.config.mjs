@@ -26,6 +26,11 @@ const nextConfig = {
     // MỌI ảnh nén ở chất lượng 90 (nét, gần như không mất chi tiết). Chỉ khai báo đúng 1 mức: ảnh không ghi
     // quality (mặc định 75) tự được đưa về mức gần nhất là 90 — không còn cảnh báo "unconfigured qualities".
     qualities: [90],
+    // Bậc kích thước ảnh dày hơn mặc định (vd. 384 → 448 → 512 → 640 thay vì nhảy thẳng 384 → 640): SmartImage khai
+    // báo đúng bề rộng cần (đã tính object-cover + mật độ điểm ảnh) → trình duyệt chọn bản vừa sát nhất, vẫn đủ nét
+    // nhưng bớt tải thừa.
+    imageSizes: [32, 48, 64, 96, 128, 192, 256, 320, 384, 448, 512, 576],
+    deviceSizes: [640, 750, 828, 960, 1080, 1200, 1440, 1600, 1920, 2048, 2560, 3840],
     // Ảnh đã tối ưu được trình duyệt / CDN giữ 31 ngày (mặc định chỉ vài giờ) → lần sau mở trang không phải nén lại
     minimumCacheTTL: 2678400,
     // Ảnh / poster video lưu trên Cloudinary (chỉ cho phép đúng cloud của studio nếu đã cấu hình)
