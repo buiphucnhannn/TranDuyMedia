@@ -8,6 +8,8 @@
 @custom-variant short-m (@media (width < 40rem) and (height < 760px));
 /* Laptop màn thấp / trình duyệt chưa F11 / Windows zoom 125%: thu gọn Hero cho cân */
 @custom-variant short-d (@media (width >= 40rem) and (height < 760px));
+/* Màn hình máy tính đủ cao: popup đặt lịch thoáng hơn (khoảng cách lớn hơn, cao hơn) */
+@custom-variant tall (@media (width >= 40rem) and (height >= 860px));
 
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -252,6 +254,21 @@ html.lenis body {
     opacity: 1;
     transform: none;
     filter: blur(0);
+  }
+}
+/* Rung nhẹ ngang — nhắc chỗ cần chú ý (vd. chưa tích ô đồng ý) */
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
   }
 }
 @keyframes fadeIn {

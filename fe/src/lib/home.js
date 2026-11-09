@@ -9,7 +9,7 @@ import { DEFAULT_HERO, DEFAULT_INTRO, DEFAULT_SERVICES, DEFAULT_SHOWREEL } from 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
 // Backend lỗi → giữ kết quả dự phòng ngắn rồi tự lấy lại (≥ 5 phút hết hạn để Next vẫn dựng sẵn trang lúc build;
 // hồ sơ "seconds" quá ngắn khiến trang bị coi là trang động)
-const RETRY_SOON = { stale: 30, revalidate: 30, expire: 600 };
+const RETRY_SOON = { stale: 300, revalidate: 30, expire: 600 };
 export const HOME_TAG = "home";
 
 /** Ảnh đã lưu (Cloudinary + cách cắt) → dạng các section đang dùng. */

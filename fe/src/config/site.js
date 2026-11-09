@@ -99,6 +99,8 @@ export const features = {
 };
 
 /** Trang dịch vụ cho thuê studio — có mục riêng trên menu (không nằm trong menu "Video & Hình ảnh"). */
+/** Khối "Hệ sinh thái dịch vụ" trên trang chủ — thay cho trang tổng hợp /dich-vu (đã bỏ theo feedback 09/11). */
+export const SERVICES_HREF = "/#dich-vu-trong-tam";
 export const STUDIO_HREF = "/dich-vu/cho-thue-studio";
 
 // Menu chung cho header (desktop + mobile) và footer.
@@ -108,8 +110,9 @@ export const STUDIO_HREF = "/dich-vu/cho-thue-studio";
 // đang ở trang chủ thì cuộn mượt tới, ở trang khác thì chuyển về trang chủ rồi cuộn (SmoothScroll).
 const NAV = [
   { label: "Về chúng tôi", href: "/gioi-thieu" },
-  // Bấm → trang tổng hợp dịch vụ; rê chuột → danh sách dịch vụ video & chụp ảnh
-  { label: "Video & Hình ảnh", href: "/dich-vu", dropdown: true },
+  // Rê chuột → danh sách dịch vụ video & chụp ảnh; bấm → khối "Hệ sinh thái dịch vụ" ở trang chủ.
+  // match: sáng mục này khi đang ở trang dịch vụ con (/dich-vu/...)
+  { label: "Video & Hình ảnh", href: SERVICES_HREF, match: "/dich-vu", dropdown: true },
   { label: "Cho thuê studio", href: STUDIO_HREF },
   { label: "Sản phẩm", href: "/san-pham", feature: "products" },
   { label: "Hậu trường", href: "/#hau-truong", feature: "behindScenes" },

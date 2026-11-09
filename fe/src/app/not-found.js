@@ -14,7 +14,7 @@ export default function NotFound() {
       description="Trang bạn tìm có thể đã được đổi tên, gỡ xuống hoặc đường dẫn chưa chính xác."
       actions={[
         { href: "/", label: "Về trang chủ", primary: true },
-        { href: "/dich-vu", label: "Xem dịch vụ" },
+        { href: "/#dich-vu-trong-tam", label: "Xem dịch vụ" },
       ]}
     />
   );

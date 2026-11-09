@@ -1,7 +1,7 @@
 import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
-import { Button, Container } from "@/components/ui";
+import { Container } from "@/components/ui";
 import { DEFAULT_SERVICES } from "@/data/home";
 import { zoomStyle } from "@/lib/crop";
 import { pad } from "@/lib/utils";
@@ -53,9 +53,6 @@ export function VideoFocus({ panels = DEFAULT_SERVICES }) {
               All in for production
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Button href="/dich-vu" variant="white" pill>
-                Xem dịch vụ
-              </Button>
               <button
                 type="button"
                 data-showreel

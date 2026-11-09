@@ -314,7 +314,7 @@ function Ecosystem() {
               <Button pill variant="white" data-booking>
                 Đặt lịch tư vấn
               </Button>
-              <Button href="/dich-vu" variant="light">
+              <Button href="/#dich-vu-trong-tam" variant="light">
                 Xem dịch vụ
               </Button>
             </div>

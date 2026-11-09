@@ -7,7 +7,7 @@ import { BentoGallery } from "@/components/gallery";
 import { ClipGrid, Journey, Pricing, ServiceVideoHero, StudioRooms } from "@/components/services";
 import { Button, Container } from "@/components/ui";
 import { BehindScenes, PageHeader, Partners, Values } from "@/components/sections";
-import { siteConfig, features } from "@/config/site";
+import { SERVICES_HREF, siteConfig, features } from "@/config/site";
 import { getService, services } from "@/data/services";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -67,7 +67,7 @@ async function ServiceView({ params }) {
           title={s.title}
           description={s.heroDesc}
           eyebrow={false}
-          crumbs={[{ label: "Dịch vụ", href: "/dich-vu" }]}
+          crumbs={[{ label: "Dịch vụ", href: SERVICES_HREF }]}
           columns={headerColumns(s.pool)}
         />
       ) : (
@@ -136,10 +136,10 @@ async function ServiceView({ params }) {
               Dịch vụ khác
             </h2>
             <Link
-              href="/dich-vu"
+              href={SERVICES_HREF}
               className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"
             >
-              Tổng quan dịch vụ
+              Hệ sinh thái dịch vụ
               <Icon
                 name="arrowRight"
                 className="size-4 transition-transform group-hover:translate-x-1"

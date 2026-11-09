@@ -37,7 +37,7 @@ export function Intro({ images = DEFAULT_INTRO }) {
               <Button href="/gioi-thieu" pill>
                 Câu chuyện của chúng tôi
               </Button>
-              <Button href="/dich-vu" variant="outline">
+              <Button href="#dich-vu-trong-tam" variant="outline">
                 Xem dịch vụ
               </Button>
             </div>

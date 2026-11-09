@@ -1,3 +1,4 @@
+import { PRIVACY_VERSION } from "#models/booking.model.js";
 import { logger } from "#config/logger.js";
 import { bookingRepository } from "#repositories/booking.repository.js";
 import { ApiError } from "#utils/api-error.js";
@@ -13,7 +14,7 @@ export class BookingService {
     this.repo = repo;
   }
 
-  async create({ website, ...input }) {
+  async create({ website, consent, ...input }, meta = {}) {
     // Honeypot bị điền → bot: trả về như thành công nhưng không lưu
     if (website) {
       logger.warn("Chặn yêu cầu đặt lịch từ bot (honeypot)");
@@ -28,7 +29,18 @@ export class BookingService {
         },
       );
     }
-    const booking = await this.repo.create({ ...input, status: "pending" });
+    const booking = await this.repo.create({
+      ...input,
+      status: "pending",
+      consent: consent
+        ? {
+            at: new Date(),
+            version: PRIVACY_VERSION,
+            ip: meta.ip ?? null,
+            userAgent: meta.userAgent?.slice(0, 300) ?? null,
+          }
+        : undefined,
+    });
     logger.info("Yêu cầu đặt lịch mới", { id: booking.id, service: booking.service });
     // TODO: gửi thông báo cho studio (email / Zalo OA / Telegram) — đặt ở đây, không ở controller
     return booking;

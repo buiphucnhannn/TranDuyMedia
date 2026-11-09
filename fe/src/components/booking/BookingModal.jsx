@@ -70,7 +70,7 @@ export function BookingModal() {
         onClick={close}
       />
 
-      <div className="relative grid max-h-[calc(100svh-1.5rem)] w-full max-w-[980px] [animation:popIn_.55s_cubic-bezier(.22,1,.36,1)_both] overflow-hidden rounded-[1.5rem] bg-paper shadow-soft sm:max-h-[92svh] sm:rounded-[1.75rem] lg:grid-cols-[0.42fr_0.58fr]">
+      <div className="relative grid max-h-[calc(100svh-1.5rem)] w-full max-w-[980px] [animation:popIn_.55s_cubic-bezier(.22,1,.36,1)_both] overflow-hidden rounded-[1.5rem] bg-paper shadow-soft sm:max-h-[92svh] sm:min-h-[min(44rem,92svh)] sm:rounded-[1.75rem] lg:grid-cols-[0.42fr_0.58fr] tall:min-h-[min(50rem,92svh)]">
         {/* Cột ảnh (desktop) */}
         <div className="relative hidden lg:block">
           <Image src="/images/bts/bts-05.webp" alt="" fill sizes="420px" className="object-cover" />
@@ -102,7 +102,7 @@ export function BookingModal() {
         {/* Cột form — data-lenis-prevent: Lenis không chặn cuộn bên trong popup */}
         <div
           data-lenis-prevent
-          className="relative no-scrollbar overflow-y-auto overscroll-contain px-5 pt-6 pb-5 sm:px-9 sm:py-8"
+          className="relative no-scrollbar flex flex-col justify-center-safe overflow-y-auto overscroll-contain px-5 pt-6 pb-5 sm:px-10 sm:py-8 short-d:py-5 tall:py-11"
         >
           <button
             type="button"
@@ -114,21 +114,21 @@ export function BookingModal() {
           </button>
 
           <div className="flex flex-col items-center text-center">
-            <Logo className="h-10 sm:h-12" />
-            <h3 className="mt-2.5 text-[1.45rem] h-display text-ink sm:mt-3 sm:text-[2rem]">
+            <Logo className="h-10 sm:h-12 short-d:h-9" />
+            <h3 className="mt-2.5 text-[1.45rem] h-display text-ink sm:mt-3 sm:text-[2rem] short-d:mt-1.5 short-d:text-[1.6rem]">
               Đặt lịch tư vấn miễn phí
             </h3>
-            <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-ink-soft sm:mt-2 sm:text-[13.5px]">
+            <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-ink-soft sm:mt-2 sm:text-[13.5px] short-d:mt-1.5">
               Cảm ơn quý khách đã quan tâm. Để lại thông tin, chúng tôi sẽ phản hồi lại trong 24 giờ
               để trao đổi định hướng và gửi dự toán tới bạn.
             </p>
           </div>
 
-          <div className="mt-4 sm:mt-6">
+          <div className="mt-4 sm:mt-6 short-d:mt-3.5 tall:mt-8">
             <BookingForm preset={preset} note={note} compact />
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-ink/10 pt-4 text-[12px] text-ink-muted sm:mt-6 sm:pt-5">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-ink/10 pt-4 text-[12px] text-ink-muted sm:mt-6 sm:pt-5 short-d:mt-3 short-d:pt-3 tall:mt-8 tall:pt-6">
             <span>Hoặc liên hệ trực tiếp:</span>
             {quick.map(({ href, label, icon, ext }) => (
               <a

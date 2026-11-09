@@ -79,6 +79,8 @@ const nextConfig = {
         permanent: true,
       })),
       { source: "/studio/:slug", destination: "/san-pham", permanent: true },
+      // Trang tổng hợp dịch vụ đã bỏ (feedback 09/11) → khối "Hệ sinh thái dịch vụ" ở trang chủ
+      { source: "/dich-vu", destination: "/#dich-vu-trong-tam", permanent: true },
       // Dịch vụ cũ (4 mảng) → 5 dịch vụ mới (feedback 02/11) — khớp legacyServices trong src/data/services.js
       {
         source: "/dich-vu/san-xuat-video",

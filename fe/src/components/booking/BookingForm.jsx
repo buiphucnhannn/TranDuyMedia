@@ -5,13 +5,25 @@ import { Icon } from "@/components/icons";
 import { DateField } from "@/components/ui/DateField";
 import { siteConfig } from "@/config/site";
 import { BUDGETS } from "@/data/bookings";
+import { PRIVACY_POLICY } from "@/data/privacy";
 import { services } from "@/data/services";
 import { api } from "@/lib/api";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { normalizeName, normalizePhone, validateName, validatePhone } from "@/lib/validate-booking";
 
-const EMPTY = { name: "", phone: "", service: "", date: "", budget: "", note: "", website: "" };
+// consent: ô "Tôi đồng ý…" — KHÔNG chọn sẵn (luật bảo vệ dữ liệu cá nhân: đồng ý phải chủ động, rõ ràng)
+const EMPTY = {
+  name: "",
+  phone: "",
+  service: "",
+  date: "",
+  budget: "",
+  note: "",
+  website: "",
+  consent: false,
+};
+const CONSENT_ERROR = "Vui lòng tích đồng ý để chúng tôi được liên hệ tư vấn cho bạn";
 const RULES = { name: validateName, phone: validatePhone };
 
 /** Lỗi từ backend → nội dung toast thân thiện (+ lỗi theo từng ô nếu có). */
@@ -60,6 +72,7 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
   const [errors, setErrors] = useState({});
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
+  const [consentTry, setConsentTry] = useState(0);
 
   const set = (k) => (e) => {
     const value = e?.target ? e.target.value : e;
@@ -73,10 +86,16 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const fields = { name: validateName(form.name), phone: validatePhone(form.phone) };
+    const fields = {
+      name: validateName(form.name),
+      phone: validatePhone(form.phone),
+      consent: form.consent ? undefined : CONSENT_ERROR,
+    };
     setErrors(fields);
-    if (fields.name || fields.phone) {
-      e.currentTarget.querySelector(fields.name ? "[name=name]" : "[name=phone]")?.focus();
+    if (fields.consent) setConsentTry((n) => n + 1);
+    const first = ["name", "phone", "consent"].find((k) => fields[k]);
+    if (first) {
+      e.currentTarget.querySelector(`[name=${first}]`)?.focus();
       return;
     }
     setPending(true);
@@ -105,14 +124,19 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
       {text}
     </span>
   );
+  /**
+   * Lỗi từng ô: nhãn nhỏ nằm ĐÈ lên mép dưới ô (absolute) — không chiếm thêm dòng → chiều cao form
+   * không đổi, popup không phải cuộn / không bị vỡ dù hiện bao nhiêu lỗi. Ô bọc ngoài cần `relative`.
+   */
   const fieldError = (k) =>
     errors[k] && (
       <span
         id={`bk-${k}-err`}
-        className="mt-1 flex items-center gap-1 pl-1 text-left text-[12px] text-red-600"
+        role="alert"
+        className="pointer-events-none absolute -bottom-2 left-3 z-[1] flex max-w-[calc(100%-1.5rem)] items-center gap-1 rounded-full bg-white px-2 text-[11px] leading-4 whitespace-nowrap text-red-600 shadow-[0_0_0_1px_rgba(239,68,68,0.35)]"
       >
-        <Icon name="close" className="size-3 shrink-0" strokeWidth={2.5} />
-        {errors[k]}
+        <Icon name="close" className="size-2.5 shrink-0" strokeWidth={3} />
+        <span className="truncate">{errors[k]}</span>
       </span>
     );
   const invalid = (k) => errors[k] && "border-red-300 focus:border-red-400 focus:ring-red-100";
@@ -151,7 +175,7 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-2.5 sm:space-y-3" noValidate>
+    <form onSubmit={onSubmit} className="space-y-2.5 sm:space-y-3 tall:space-y-3.5" noValidate>
       {/* Honeypot — ẩn hoàn toàn với người dùng & trình đọc màn hình */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label>
@@ -161,7 +185,7 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
       </div>
 
       <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-3">
-        <div>
+        <div className="relative">
           <input
             name="name"
             required
@@ -176,7 +200,7 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
           />
           {fieldError("name")}
         </div>
-        <div>
+        <div className="relative">
           <input
             name="phone"
             required
@@ -234,7 +258,7 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
           </select>
         </label>
       </div>
-      <div>
+      <div className="relative">
         <textarea
           className={cn(
             "field resize-none",
@@ -249,7 +273,72 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
         {fieldError("note")}
       </div>
 
-      <div className="flex justify-center pt-1">
+      {/*
+        Đồng ý xử lý dữ liệu cá nhân (Luật Bảo vệ dữ liệu cá nhân 2025): ô KHÔNG chọn sẵn, bắt buộc tích mới gửi được;
+        nêu rõ dữ liệu + mục đích, link tới Chính sách bảo mật (mở tab mới → không mất nội dung đang điền).
+        Máy chủ kiểm tra lại và lưu thời điểm + phiên bản chính sách làm bằng chứng.
+      */}
+      <div className="pt-1 tall:pt-2">
+        <label
+          // key đổi mỗi lần bấm Gửi khi chưa tích → chạy lại hiệu ứng rung
+          key={consentTry}
+          className={cn(
+            "group mx-auto flex w-fit cursor-pointer items-start gap-2.5 px-1 select-none",
+            errors.consent && "[animation:nudge_.4s_ease-in-out]",
+          )}
+        >
+          <input
+            type="checkbox"
+            name="consent"
+            className="peer sr-only"
+            checked={form.consent}
+            onChange={(e) => {
+              const v = e.target.checked;
+              setForm((x) => ({ ...x, consent: v }));
+              if (v) setErrors((x) => ({ ...x, consent: undefined }));
+            }}
+            {...aria("consent")}
+          />
+          <span
+            aria-hidden="true"
+            className={cn(
+              "mt-px flex size-[18px] shrink-0 items-center justify-center rounded-[5px] border-[1.5px] bg-white text-white transition group-hover:border-navy-800/60 peer-checked:border-navy-800 peer-checked:bg-navy-800 peer-focus-visible:ring-2 peer-focus-visible:ring-orange-500 peer-focus-visible:ring-offset-2 [&>svg]:scale-50 [&>svg]:opacity-0 [&>svg]:transition peer-checked:[&>svg]:scale-100 peer-checked:[&>svg]:opacity-100",
+              errors.consent ? "border-red-400" : "border-ink/30",
+            )}
+          >
+            <Icon name="check" className="size-3" strokeWidth={3} />
+          </span>
+          {/* Ngắt dòng cố định (màn ≥ sm) thành 2 dòng dài gần bằng nhau → khung ôm sát chữ, cả khối căn giữa đúng.
+              Điện thoại: tự xuống dòng theo bề rộng. */}
+          <span
+            className={cn(
+              "text-left text-[12.5px] leading-snug transition-colors",
+              errors.consent ? "text-red-600" : "text-ink-soft",
+            )}
+          >
+            <span className="sm:block">Tôi đồng ý cho Trần Duy Media xử lý thông tin trên </span>
+            để liên hệ tư vấn, theo{" "}
+            <a
+              href={PRIVACY_POLICY.path}
+              target="_blank"
+              rel="noopener"
+              onClick={(e) => e.stopPropagation()}
+              className="font-semibold text-ink transition-colors hover:text-orange-600"
+            >
+              Chính sách bảo mật
+            </a>
+            .
+          </span>
+        </label>
+        {/* Chưa tích: chỉ tô đỏ + rung (không thêm dòng chữ → không đổi chiều cao); trình đọc màn hình vẫn đọc lỗi */}
+        {errors.consent && (
+          <span id="bk-consent-err" role="alert" className="sr-only">
+            {errors.consent}
+          </span>
+        )}
+      </div>
+
+      <div className="flex justify-center pt-1 tall:pt-2">
         <button
           type="submit"
           disabled={pending}
@@ -265,10 +354,6 @@ export function BookingForm({ preset: rawPreset = "", note: presetNote = "", com
           </span>
         </button>
       </div>
-
-      <p className="text-center text-[12px] text-ink-muted">
-        Thông tin chỉ dùng để liên hệ tư vấn, không chia sẻ cho bên thứ ba.
-      </p>
     </form>
   );
 }

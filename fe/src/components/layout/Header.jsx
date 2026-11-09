@@ -73,10 +73,11 @@ export function Header() {
   const dark = onDark && !open;
   // Mục đang mở = mục có đường dẫn khớp DÀI NHẤT (vd. /dich-vu/cho-thue-studio → "Cho thuê studio",
   // không sáng cả "Video & Hình ảnh")
+  const key = (n) => n.match ?? n.href;
   const match = mainNav
-    .filter((n) => !n.href.includes("#") && pathname.startsWith(n.href))
-    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
-  const isActive = (href) => (href === "/" ? pathname === "/" : href === match);
+    .filter((n) => !key(n).includes("#") && pathname.startsWith(key(n)))
+    .sort((a, b) => key(b).length - key(a).length)[0];
+  const isActive = (href) => (href === "/" ? pathname === "/" : href === match?.href);
 
   return (
     <header className="fixed inset-x-3 top-3 z-50 sm:inset-x-5 sm:top-5">
@@ -125,12 +126,7 @@ export function Header() {
             // "Video & Hình ảnh": bấm → trang tổng hợp; rê chuột / Tab → dropdown dịch vụ con, căn giữa dưới nút
             return (
               <div key={item.href} className="group/dd relative">
-                <Link
-                  href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
-                  aria-haspopup="true"
-                  className={linkCls}
-                >
+                <Link href={item.href} aria-haspopup="true" className={linkCls}>
                   {item.label}
                   <Icon
                     name="chevronDown"

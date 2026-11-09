@@ -242,11 +242,13 @@ describe("API v1", () => {
       assert.equal(res.status, 400);
       assert.equal(res.body.error.code, "VALIDATION_ERROR");
       assert.ok(res.body.error.details.some((d) => d.field === "phone"));
+      // Chưa tích "Tôi đồng ý…" → không nhận (đồng ý phải chủ động, không mặc định)
+      assert.ok(res.body.error.details.some((d) => d.field === "consent"));
     });
 
     let id;
     it("hợp lệ → 201, chuẩn hoá SĐT", async () => {
-      const res = await withCsrf(request(app)).post("/api/v1/bookings").send({
+      const res = await withCsrf(request(app)).post("/api/v1/bookings").send({ consent: true,
         name: "Nguyễn Văn A",
         phone: "+84 971 542 026",
         service: "san-xuat-video-short",
@@ -259,10 +261,18 @@ describe("API v1", () => {
       id = res.body.data.id;
     });
 
+    it("đã đồng ý Chính sách bảo mật → lưu bằng chứng (thời điểm, phiên bản)", async () => {
+      // (trường hợp thiếu đồng ý → 400 đã kiểm ở bài "thiếu dữ liệu"; không gửi thêm để khỏi chạm giới hạn chống spam)
+      const { Booking, PRIVACY_VERSION } = await import("#models/booking.model.js");
+      const saved = await Booking.findById(id).lean();
+      assert.equal(saved.consent.version, PRIVACY_VERSION);
+      assert.ok(saved.consent.at instanceof Date);
+    });
+
     it("gửi trùng SĐT trong 10 phút → 409", async () => {
       const res = await withCsrf(request(app))
         .post("/api/v1/bookings")
-        .send({ name: "Nguyễn Văn A", phone: "0971542026" });
+        .send({ consent: true, name: "Nguyễn Văn A", phone: "0971542026" });
       assert.equal(res.status, 409);
     });
 
@@ -312,7 +322,7 @@ describe("API v1", () => {
     it("họ tên / SĐT không hợp lệ → 400 với thông báo rõ ràng", async () => {
       const res = await withCsrf(request(app))
         .post("/api/v1/bookings")
-        .send({ name: "<script>", phone: "0123" });
+        .send({ consent: true, name: "<script>", phone: "0123" });
       assert.equal(res.status, 400);
       const fields = Object.fromEntries(res.body.error.details.map((d) => [d.field, d.message]));
       assert.match(fields.name, /chữ cái/);
@@ -322,7 +332,7 @@ describe("API v1", () => {
     it("honeypot bị điền → báo thành công nhưng không lưu", async () => {
       const res = await withCsrf(request(app))
         .post("/api/v1/bookings")
-        .send({ name: "Bot Spam", phone: "0901234567", website: "http://spam" });
+        .send({ consent: true, name: "Bot Spam", phone: "0901234567", website: "http://spam" });
       assert.equal(res.status, 201);
       const list = await admin.get("/api/v1/bookings");
       assert.equal(list.body.meta.total, 1);
@@ -331,7 +341,7 @@ describe("API v1", () => {
     it("thiếu header chống CSRF → 403", async () => {
       const res = await request(app)
         .post("/api/v1/bookings")
-        .send({ name: "Ai đó", phone: "0911111111" });
+        .send({ consent: true, name: "Ai đó", phone: "0911111111" });
       assert.equal(res.status, 403);
       assert.equal(res.body.error.code, "CSRF_REJECTED");
     });

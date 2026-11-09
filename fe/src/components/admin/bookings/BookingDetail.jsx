@@ -130,6 +130,18 @@ export function BookingDetail({ booking: b, onClose, onStatus, saving }) {
           <p className="mt-4 text-center font-mono text-[11px] text-ink-muted">
             Mã yêu cầu: {b.id}
           </p>
+          {/* Bằng chứng đồng ý xử lý dữ liệu cá nhân (yêu cầu gửi trước khi có ô đồng ý → không có) */}
+          <p className="mt-1.5 flex items-center justify-center gap-1.5 text-center text-[11px] text-ink-muted">
+            {b.consent?.at ? (
+              <>
+                <Icon name="check" className="size-3 text-emerald-600" strokeWidth={2.5} />
+                Khách đã đồng ý Chính sách bảo mật (bản {b.consent.version}) lúc{" "}
+                {formatFullDateTime(b.consent.at)}
+              </>
+            ) : (
+              "Gửi trước khi website có ô đồng ý Chính sách bảo mật"
+            )}
+          </p>
         </div>
 
         {/* Liên hệ nhanh */}

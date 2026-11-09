@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+/**
+ * Phiên bản Chính sách bảo mật đang áp dụng (= ngày hiệu lực, khớp PRIVACY_POLICY.version ở fe/src/data/privacy.js).
+ * Đổi nội dung chính sách → đổi phiên bản ở CẢ 2 nơi để biết mỗi khách đã đồng ý với bản nào.
+ */
+export const PRIVACY_VERSION = "2026-11-09";
+
 /** Trạng thái xử lý: Chưa giải quyết → Đang liên hệ → Đã giải quyết. */
 export const BOOKING_STATUSES = ["pending", "contacting", "resolved"];
 
@@ -20,6 +26,14 @@ const bookingSchema = new mongoose.Schema(
     date: { type: String, default: null }, // YYYY-MM-DD khách mong muốn
     budget: { type: String, default: null },
     note: { type: String, default: "", maxlength: 2000 },
+    // Bằng chứng khách ĐỒNG Ý xử lý dữ liệu cá nhân (Luật Bảo vệ dữ liệu cá nhân 2025: bên kiểm soát dữ liệu
+    // phải chứng minh được sự đồng ý) — thời điểm, phiên bản chính sách, nơi gửi.
+    consent: {
+      at: { type: Date, default: null },
+      version: { type: String, default: null },
+      ip: { type: String, default: null },
+      userAgent: { type: String, default: null, maxlength: 300 },
+    },
     status: { type: String, enum: BOOKING_STATUSES, default: "pending", index: true },
     statusChangedAt: { type: Date, default: null },
     // Xoá mềm: bản ghi vẫn còn trong DB (khôi phục / đối soát được) nhưng ẩn khỏi mọi truy vấn

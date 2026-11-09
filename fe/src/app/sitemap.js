@@ -1,5 +1,6 @@
 import { features, mainNav, siteConfig } from "@/config/site";
 import { getProducts } from "@/lib/products";
+import { PRIVACY_POLICY } from "@/data/privacy";
 import { services } from "@/data/services";
 
 export default async function sitemap() {
@@ -24,5 +25,12 @@ export default async function sitemap() {
     changeFrequency: "monthly",
     priority: 0.7,
   }));
-  return [home, ...pages, ...servicePages, ...albums];
+  // Chính sách bảo mật: trang pháp lý (tín hiệu tin cậy) — ít thay đổi, ưu tiên thấp
+  const legal = {
+    url: `${siteConfig.url}${PRIVACY_POLICY.path}`,
+    lastModified: PRIVACY_POLICY.version,
+    changeFrequency: "yearly",
+    priority: 0.3,
+  };
+  return [home, ...pages, ...servicePages, ...albums, legal];
 }

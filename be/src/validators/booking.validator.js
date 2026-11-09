@@ -55,6 +55,10 @@ export const createBookingSchema = z.object({
     .optional()
     .transform((v) => v || null),
   note: z.string().trim().max(2000, "Mô tả tối đa 2000 ký tự").optional().default(""),
+  // Đồng ý xử lý dữ liệu cá nhân — BẮT BUỘC, chủ động tích (không chọn sẵn, im lặng không phải là đồng ý)
+  consent: z.literal(true, {
+    error: "Vui lòng đồng ý với Chính sách bảo mật để gửi yêu cầu",
+  }),
   // Bẫy bot (honeypot): ô ẩn với người dùng thật — bot tự điền → yêu cầu bị bỏ qua âm thầm
   website: z.string().max(200).optional().default(""),
 });

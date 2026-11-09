@@ -23,7 +23,6 @@ import { ShowreelEditor } from "./ShowreelEditor";
 /** Trang trong website gợi ý cho ô "Xem thêm". */
 const PAGES = [
   ...serviceList.map((s) => ({ value: `/dich-vu/${s.slug}`, label: s.title })),
-  { value: "/dich-vu", label: "Tất cả dịch vụ" },
   { value: "/san-pham", label: "Sản phẩm" },
   { value: "/gioi-thieu", label: "Về chúng tôi" },
   { value: "/lien-he", label: "Liên hệ" },

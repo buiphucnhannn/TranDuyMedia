@@ -7,7 +7,10 @@ import { created, ok } from "#utils/response.js";
  */
 export const bookingController = {
   async create(req, res) {
-    const booking = await bookingService.create(req.validated.body);
+    const booking = await bookingService.create(req.validated.body, {
+      ip: req.ip,
+      userAgent: req.get("user-agent"),
+    });
     created(res, { id: booking.id, status: booking.status, createdAt: booking.createdAt });
   },
 

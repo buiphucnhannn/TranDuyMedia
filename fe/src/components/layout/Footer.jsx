@@ -4,6 +4,7 @@ import { Icon } from "@/components/icons";
 import { Container, Logo } from "@/components/ui";
 import { FooterMap } from "./FooterMap";
 import { features, mainNav, siteConfig } from "@/config/site";
+import { PRIVACY_POLICY } from "@/data/privacy";
 import { services } from "@/data/services";
 
 async function CopyrightYear() {
@@ -185,6 +186,15 @@ export function Footer() {
         <Container className="flex flex-col items-center justify-between gap-3 py-6 text-xs sm:flex-row">
           <p>
             © <CopyrightYear /> {siteConfig.name}. All rights reserved.
+            <span aria-hidden="true" className="mx-2 text-white/30">
+              ·
+            </span>
+            <Link
+              href={PRIVACY_POLICY.path}
+              className="inline-block py-1 transition-colors hover:text-white lg:py-0"
+            >
+              Chính sách bảo mật
+            </Link>
           </p>
           <ul className="flex flex-wrap justify-center gap-x-3.5 gap-y-1 sm:gap-x-5">
             {mainNav.map((item) => (
