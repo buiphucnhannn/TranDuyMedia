@@ -12,6 +12,7 @@ import {
   profileImage,
   vision,
 } from "@/data/about";
+import { getHome } from "@/lib/home";
 import { createMetadata } from "@/lib/metadata";
 import { cn, pad } from "@/lib/utils";
 
@@ -28,7 +29,8 @@ export const metadata = createMetadata({
  * câu chuyện → giá trị cốt lõi (tầm nhìn · sứ mệnh) → chuẩn mực sản xuất → hệ sinh thái dịch vụ (cuộn ngang)
  * → vì sao khách hàng chọn Trần Duy Media → showreel → đối tác (ngay trên "Bắt đầu dự án…" của chân trang).
  */
-export default function AboutPage() {
+export default async function AboutPage() {
+  const home = await getHome(); // showreel đổi ở tab "Trang chủ" → trang này dùng cùng video
   return (
     <>
       <PageHeader
@@ -49,7 +51,7 @@ export default function AboutPage() {
         eyebrow="Khách hàng tin tưởng chọn Tran Duy Media"
         description="Ba giá trị chúng tôi giữ trong mọi khung hình — từ buổi trao đổi đầu tiên đến file bàn giao cuối cùng."
       />
-      <Showreel id="showreel-gioi-thieu" />
+      <Showreel id="showreel-gioi-thieu" video={home.showreel} />
       <Partners />
     </>
   );

@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Container } from "@/components/ui";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { siteConfig } from "@/config/site";
+import { zoomStyle } from "@/lib/crop";
 import { pickShowreelSrc } from "@/lib/showreel";
 import { cn } from "@/lib/utils";
 
@@ -22,8 +24,120 @@ export function Showreel({
   title = "Đồng hành lan tỏa giá trị cùng doanh nghiệp.",
   description = "Tổng hợp các dự án video marketing, iTVC, doanh nghiệp và sự kiện trong năm 2025 – 2026.",
   className,
+  video,
 }) {
-  const { showreel } = siteConfig;
+  // video.embed: quản trị đã thay bằng link YouTube / Google Drive (tab "Trang chủ") → hiện ảnh bìa + nút phát,
+  // bấm mở popup phát video đó. Không có → video showreel tự host như cũ.
+  if (video?.embed)
+    return <EmbedShowreel {...{ id, eyebrow, title, description, className, video }} />;
+  return <HostedShowreel {...{ id, eyebrow, title, description, className, video }} />;
+}
+
+/** Tiêu đề + mô tả phía trên khung video (dùng chung 2 kiểu). */
+function Heading({ eyebrow, title, description }) {
+  return (
+    <>
+      <p className="reveal mb-4 eyebrow">{eyebrow}</p>
+      {/* Mô tả canh giữa theo chiều cao tiêu đề (eyebrow nằm ngoài hàng để không lệch tâm) */}
+      <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <h2
+          className="reveal max-w-2xl h-section text-balance"
+          style={{ "--reveal-delay": "80ms" }}
+        >
+          {title}
+        </h2>
+        <p
+          // translate-y nhẹ: tâm hộp chữ tiêu đề lớn cao hơn tâm NHÌN (khoảng trống chừa dấu tiếng Việt ở trên)
+          // → hạ đoạn mô tả một chút để thẳng tâm thị giác với 2 dòng tiêu đề
+          className="reveal max-w-sm text-sm leading-relaxed text-ink-soft sm:translate-y-1.5 sm:text-base"
+          style={{ "--reveal-delay": "160ms" }}
+        >
+          {description}
+        </p>
+      </div>
+    </>
+  );
+}
+
+const FRAME =
+  "reveal group relative aspect-4/3 overflow-hidden rounded-2xl bg-navy-950 shadow-soft sm:aspect-video sm:rounded-3xl lg:aspect-2/1";
+
+/** Showreel là link YouTube / Google Drive: ảnh bìa (tự chọn hoặc lấy từ video) + nút phát → popup. */
+function EmbedShowreel({ id, eyebrow, title, description, className, video }) {
+  const poster = video.poster;
+  return (
+    <section
+      id={id}
+      className={cn("relative bg-paper section-y", className)}
+      data-nav-theme="light"
+      data-showreel-embed={video.embed}
+      data-showreel-title={video.title}
+    >
+      <Container>
+        <Heading {...{ eyebrow, title, description }} />
+        <div className={FRAME} data-reveal="clip">
+          <button
+            type="button"
+            data-showreel
+            aria-label={`Xem ${video.title}`}
+            className="absolute inset-0 block size-full text-left"
+          >
+            {poster ? (
+              <span className="absolute inset-0" style={zoomStyle(poster)}>
+                <Image
+                  src={poster.src}
+                  alt=""
+                  fill
+                  ratio={poster.ratio}
+                  sizes="(min-width: 1280px) 1200px, 100vw"
+                  className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.02]"
+                  style={{ objectPosition: poster.pos }}
+                />
+              </span>
+            ) : (
+              video.autoPoster && (
+                <Image
+                  src={video.autoPoster}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1280px) 1200px, 100vw"
+                  className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.02]"
+                />
+              )
+            )}
+            <span className="absolute inset-0 bg-linear-to-t from-navy-950/75 via-navy-950/10 to-transparent" />
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="relative flex size-16 -translate-y-4 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:bg-orange-500 sm:size-24 sm:translate-y-0">
+                <span className="absolute inset-0 [animation:ripple_2.6s_ease-out_infinite] rounded-full bg-white/30" />
+                <Icon
+                  name="play"
+                  className="relative ml-1 size-6 sm:size-8"
+                  strokeWidth={0}
+                  fill="currentColor"
+                />
+              </span>
+            </span>
+            <span className="absolute bottom-0 left-0 max-w-[75%] p-5 text-white sm:max-w-none sm:p-8">
+              <span className="block text-[11px] tracking-eyebrow text-white/70 uppercase">
+                {video.caption}
+              </span>
+              <span className="mt-1 block text-xl leading-tight font-semibold tracking-tight sm:text-3xl">
+                {video.title}
+              </span>
+            </span>
+          </button>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function HostedShowreel({ id, eyebrow, title, description, className, video }) {
+  const showreel = {
+    ...siteConfig.showreel,
+    ...(video?.title && { title: video.title }),
+    ...(video?.caption && { duration: video.caption }),
+  };
   const videoRef = useRef(null);
   const userPausedRef = useRef(false);
   const [muted, setMuted] = useState(true);
@@ -101,29 +215,9 @@ export function Showreel({
       data-nav-theme="light"
     >
       <Container>
-        <p className="reveal mb-4 eyebrow">{eyebrow}</p>
-        {/* Mô tả canh giữa theo chiều cao tiêu đề (eyebrow nằm ngoài hàng để không lệch tâm) */}
-        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <h2
-            className="reveal max-w-2xl h-section text-balance"
-            style={{ "--reveal-delay": "80ms" }}
-          >
-            {title}
-          </h2>
-          <p
-            // translate-y nhẹ: tâm hộp chữ tiêu đề lớn cao hơn tâm NHÌN (khoảng trống chừa dấu tiếng Việt ở trên)
-            // → hạ đoạn mô tả một chút để thẳng tâm thị giác với 2 dòng tiêu đề
-            className="reveal max-w-sm text-sm leading-relaxed text-ink-soft sm:translate-y-1.5 sm:text-base"
-            style={{ "--reveal-delay": "160ms" }}
-          >
-            {description}
-          </p>
-        </div>
+        <Heading {...{ eyebrow, title, description }} />
 
-        <div
-          className="reveal group relative aspect-4/3 overflow-hidden rounded-2xl bg-navy-950 shadow-soft sm:aspect-video sm:rounded-3xl lg:aspect-2/1"
-          data-reveal="clip"
-        >
+        <div className={FRAME} data-reveal="clip">
           <video
             ref={videoRef}
             data-showreel-inline

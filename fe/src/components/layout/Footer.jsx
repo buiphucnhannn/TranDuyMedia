@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Container, Logo } from "@/components/ui";
 import { FooterMap } from "./FooterMap";
-import { mainNav, siteConfig } from "@/config/site";
+import { features, mainNav, siteConfig } from "@/config/site";
 import { services } from "@/data/services";
 
 async function CopyrightYear() {
@@ -125,14 +125,16 @@ export function Footer() {
               </Link>
             </li>
           ))}
-          <li>
-            <Link
-              href="/san-pham"
-              className="inline-block py-1 transition-colors hover:text-white lg:py-0"
-            >
-              Sản phẩm đã thực hiện
-            </Link>
-          </li>
+          {features.products && (
+            <li>
+              <Link
+                href="/san-pham"
+                className="inline-block py-1 transition-colors hover:text-white lg:py-0"
+              >
+                Sản phẩm đã thực hiện
+              </Link>
+            </li>
+          )}
         </FooterColumn>
 
         {/* Bản đồ (thay cột Studio) */}

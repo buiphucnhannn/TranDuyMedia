@@ -5,10 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/ui";
-import { mainNav, siteConfig } from "@/config/site";
+import { STUDIO_HREF, mainNav, siteConfig } from "@/config/site";
 import { services } from "@/data/services";
 import { onLayoutChange, pageTop, subscribeScroll } from "@/lib/scroll";
 import { cn, lockScroll } from "@/lib/utils";
+
+// Dropdown "Video & Hình ảnh": các dịch vụ video & chụp ảnh (cho thuê studio đã có mục riêng trên menu)
+const menuServices = services.filter((s) => `/dich-vu/${s.slug}` !== STUDIO_HREF);
 
 /**
  * Header dạng "viên thuốc" kính mờ nổi cách mép (theo mẫu ButStudio):
@@ -68,7 +71,12 @@ export function Header() {
   }, [open]);
 
   const dark = onDark && !open;
-  const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  // Mục đang mở = mục có đường dẫn khớp DÀI NHẤT (vd. /dich-vu/cho-thue-studio → "Cho thuê studio",
+  // không sáng cả "Video & Hình ảnh")
+  const match = mainNav
+    .filter((n) => !n.href.includes("#") && pathname.startsWith(n.href))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
+  const isActive = (href) => (href === "/" ? pathname === "/" : href === match);
 
   return (
     <header className="fixed inset-x-3 top-3 z-50 sm:inset-x-5 sm:top-5">
@@ -102,7 +110,7 @@ export function Header() {
                   ? "text-white/80 hover:bg-white/10 hover:text-white"
                   : "text-ink/75 hover:bg-navy-900/5 hover:text-ink",
             );
-            if (item.href !== "/dich-vu") {
+            if (!item.dropdown) {
               return (
                 <Link
                   key={item.href}
@@ -114,7 +122,7 @@ export function Header() {
                 </Link>
               );
             }
-            // "Dịch vụ": bấm → trang tổng hợp; rê chuột / Tab → dropdown 3 dịch vụ con, căn giữa dưới nút
+            // "Video & Hình ảnh": bấm → trang tổng hợp; rê chuột / Tab → dropdown dịch vụ con, căn giữa dưới nút
             return (
               <div key={item.href} className="group/dd relative">
                 <Link
@@ -135,7 +143,7 @@ export function Header() {
                   {/* Mũi nhọn chỉ lên nút */}
                   <span className="absolute top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 rounded-[2px] bg-white" />
                   <ul className="relative rounded-2xl bg-white p-2 text-ink shadow-[0_24px_60px_-20px_rgba(11,18,32,0.45)] ring-1 ring-ink/5">
-                    {services.map((sv) => {
+                    {menuServices.map((sv) => {
                       const on = pathname === `/dich-vu/${sv.slug}`;
                       return (
                         <li key={sv.slug}>
@@ -258,9 +266,9 @@ export function Header() {
                   )}
                 />
               </Link>
-              {item.href === "/dich-vu" && (
+              {item.dropdown && (
                 <ul className="-mt-1 mb-4 space-y-1 border-l-2 border-orange-500/40 pl-4">
-                  {services.map((sv) => (
+                  {menuServices.map((sv) => (
                     <li key={sv.slug}>
                       <Link
                         href={`/dich-vu/${sv.slug}`}

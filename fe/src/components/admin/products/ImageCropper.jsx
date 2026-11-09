@@ -10,15 +10,12 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
-/** Ảnh 3:4 đã cắt — giống hệt cách website hiển thị (object-cover + zoomStyle). */
-function Thumb({ src, crop, className }) {
+/** Ảnh đã cắt (mặc định khung 3:4) — giống hệt cách website hiển thị (object-cover + zoomStyle). */
+function Thumb({ src, crop, className, ratio = 3 / 4 }) {
   return (
     <div
-      className={cn(
-        "relative aspect-3/4 overflow-hidden",
-        "bg-paper-200 ring-1 ring-ink/10",
-        className,
-      )}
+      className={cn("relative overflow-hidden", "bg-paper-200 ring-1 ring-ink/10", className)}
+      style={{ aspectRatio: ratio }}
     >
       <span className="absolute inset-0" style={zoomStyle(crop)}>
         {/* eslint-disable-next-line @next/next/no-img-element -- xem trước */}
@@ -53,8 +50,18 @@ function Preview({ caption, note, children }) {
  * - role "featured" → ảnh nổi bật (phần giới thiệu trang chi tiết).
  * "Thư viện sản phẩm" và ảnh xem lớn (lightbox) luôn hiện ảnh gốc, không cắt.
  * item: { src, pos, zoom }
+ * Dùng cho khung khác (trang chủ): ratio = tỉ lệ khung cắt (rộng / cao), hint = dòng mô tả dưới tiêu đề,
+ * previews = [{ caption, note, ratio }] các khung xem trước (vd. hero: máy tính 16:9 + điện thoại 9:19).
  */
-export function ImageCropper({ item, role = "featured", onApply, onClose }) {
+export function ImageCropper({
+  item,
+  role = "featured",
+  ratio = 3 / 4,
+  hint = "Kéo ảnh để chọn vùng hiện trên thẻ",
+  previews,
+  onApply,
+  onClose,
+}) {
   const [pt, setPt] = useState(() => parsePos(item.pos));
   const [zoom, setZoom] = useState(() => clamp(item.zoom || 1, MIN_ZOOM, MAX_ZOOM));
   const [natural, setNatural] = useState(null);
@@ -169,7 +176,7 @@ export function ImageCropper({ item, role = "featured", onApply, onClose }) {
             <h2 id="crop-title" className="text-lg font-bold tracking-tight text-ink">
               Cắt khung hiển thị
             </h2>
-            <p className="text-left text-xs text-ink-muted">Kéo ảnh để chọn vùng hiện trên thẻ</p>
+            <p className="text-left text-xs text-ink-muted">{hint}</p>
           </div>
           <button
             type="button"
@@ -211,7 +218,9 @@ export function ImageCropper({ item, role = "featured", onApply, onClose }) {
                   moveBy(...d);
                 }
               }}
-              className="relative aspect-3/4 h-[min(50svh,420px)] rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-orange-500 md:h-[min(56svh,460px)]"
+              // Khung cắt: cao tối đa ~1/2 màn hình, rộng không vượt vùng chỉnh (khung ngang 16:9 / 2:1)
+              style={{ aspectRatio: ratio, "--r": ratio }}
+              className="relative w-[min(100%,calc(var(--h)*var(--r)))] rounded-sm outline-none [--h:min(50svh,420px)] focus-visible:ring-2 focus-visible:ring-orange-500 md:[--h:min(56svh,460px)]"
             >
               {/* Phần bị cắt bỏ (mờ) */}
               {imgLayer("opacity-30")}
@@ -288,17 +297,34 @@ export function ImageCropper({ item, role = "featured", onApply, onClose }) {
               <p className="mb-3 text-center text-[11px] font-semibold tracking-eyebrow whitespace-nowrap text-ink-muted uppercase">
                 Xem trước trên website
               </p>
-              <div className="mx-auto w-[calc(50%-0.375rem)]">
-                {role === "cover" ? (
-                  <Preview caption="Thẻ sản phẩm" note="(trang Sản phẩm)">
-                    <Thumb src={item.src} crop={crop} className="rounded-lg" />
-                  </Preview>
-                ) : (
-                  <Preview caption="Ảnh nổi bật" note="(phần giới thiệu)">
-                    <Thumb src={item.src} crop={crop} className="rounded-lg" />
-                  </Preview>
-                )}
-              </div>
+              {previews ? (
+                <div className="flex items-end justify-center gap-3">
+                  {previews.map((p) => (
+                    <div
+                      key={p.caption}
+                      className="min-w-0"
+                      // Khung xem trước cùng chiều cao (~130px) → so sánh trực quan máy tính / điện thoại
+                      style={{ width: `min(100%, ${Math.round(130 * p.ratio)}px)` }}
+                    >
+                      <Preview caption={p.caption} note={p.note}>
+                        <Thumb src={item.src} crop={crop} ratio={p.ratio} className="rounded-lg" />
+                      </Preview>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mx-auto w-[calc(50%-0.375rem)]">
+                  {role === "cover" ? (
+                    <Preview caption="Thẻ sản phẩm" note="(trang Sản phẩm)">
+                      <Thumb src={item.src} crop={crop} className="rounded-lg" />
+                    </Preview>
+                  ) : (
+                    <Preview caption="Ảnh nổi bật" note="(phần giới thiệu)">
+                      <Thumb src={item.src} crop={crop} className="rounded-lg" />
+                    </Preview>
+                  )}
+                </div>
+              )}
             </div>
 
             <button

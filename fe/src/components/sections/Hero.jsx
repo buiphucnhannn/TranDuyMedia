@@ -5,11 +5,11 @@ import { SmartImage as Image, ratioOf } from "@/components/ui/SmartImage";
 import { Icon } from "@/components/icons";
 import { SplitText } from "@/components/fx";
 import { Container } from "@/components/ui";
-import { btsImages } from "@/data/collections";
+import { DEFAULT_HERO } from "@/data/home";
+import { zoomStyle } from "@/lib/crop";
 import { subscribeScroll } from "@/lib/scroll";
 import { cn, pad } from "@/lib/utils";
 
-const SLIDES = btsImages.slice(0, 4); // 4 ảnh hậu trường: máy quay, ekip, đèn
 const TICK = 6000; // thời gian mỗi ảnh (ms) — khớp với thanh tiến trình
 
 /**
@@ -17,11 +17,12 @@ const TICK = 6000; // thời gian mỗi ảnh (ms) — khớp với thanh tiến
  * ảnh thì bề rộng ảnh = chiều cao màn × tỉ lệ ảnh, ngược lại = bề rộng màn; × 1.1 cho ken burns (phóng tới 110%).
  * Khai báo đúng ngay từ HTML → trình duyệt tải 1 lần đúng bản cần (không tải bản nhỏ rồi tải lại bản lớn).
  */
-const heroSizes = (src) => {
-  const r = ratioOf(src);
-  if (!r) return "110vw";
+const heroSizes = (s) => {
+  const r = s.ratio ?? ratioOf(s.src);
+  const z = Math.min(Math.max(Number(s.zoom) || 1, 1), 4) * 110; // phóng khi cắt khung × ken burns
+  if (!r) return `${Math.ceil(z)}vw`;
   const [w, h] = [Math.round(r * 1000), 1000];
-  return `(max-aspect-ratio: ${w}/${h}) ${Math.ceil(r * 110)}vh, 110vw`;
+  return `(max-aspect-ratio: ${w}/${h}) ${Math.ceil(r * z)}vh, ${Math.ceil(z)}vw`;
 };
 
 /**
@@ -31,7 +32,8 @@ const heroSizes = (src) => {
  * - Đáy: thanh thông tin thẳng hàng container — chú thích ảnh đang chiếu, tiến trình (bấm được), cuộn xuống.
  * - Parallax: ảnh trôi chậm hơn trang, chữ mờ dần khi cuộn (đồng bộ Lenis).
  */
-export function Hero() {
+export function Hero({ slides = DEFAULT_HERO }) {
+  const SLIDES = slides; // 4 ảnh hero (quản trị thay ở tab "Trang chủ"; ô trống → ảnh hậu trường mặc định)
   const [idx, setIdx] = useState(0);
   const [ready, setReady] = useState(false);
   const [first, setFirst] = useState(false); // đã bắt đầu tải ảnh hero đầu tiên
@@ -86,7 +88,7 @@ export function Hero() {
     if (!ready) return;
     const t = setTimeout(() => setIdx((v) => (v + 1) % SLIDES.length), TICK);
     return () => clearTimeout(t);
-  }, [ready, idx]);
+  }, [ready, idx, SLIDES.length]);
 
   return (
     <section
@@ -100,7 +102,7 @@ export function Hero() {
         <div className={cn("absolute inset-0", ready ? "hero-panel" : "opacity-0")}>
           {SLIDES.map((s, i) => (
             <div
-              key={s.src}
+              key={`${i}-${s.src}`}
               className={cn(
                 "absolute inset-0 transition-opacity duration-[1800ms] ease-out",
                 i === idx ? "opacity-100" : "opacity-0",
@@ -110,17 +112,21 @@ export function Hero() {
               {/* Ảnh 1 tải ngay khi không có màn chào, hoặc 0.6s sau khi mở trang nếu có màn chào; ảnh 2–4 chỉ tải
                   khi hero bắt đầu chạy — vẫn sớm hơn lúc hiện (6s) rất nhiều */}
               {((i === 0 && first) || ready) && (
-                <Image
-                  src={s.src}
-                  alt={i === 0 ? s.alt : ""}
-                  fill
-                  loading="eager"
-                  fetchPriority={i === 0 ? "high" : "low"}
-                  autoSizes={false}
-                  sizes={heroSizes(s.src)}
-                  className={cn("object-cover", i === idx && "animate-kenburns")}
-                  style={{ objectPosition: s.pos }}
-                />
+                // Lớp bọc: cắt khung (phóng quanh điểm đã chọn ở trang quản trị)
+                <span className="absolute inset-0" style={zoomStyle(s)}>
+                  <Image
+                    src={s.src}
+                    alt={i === 0 ? s.alt : ""}
+                    fill
+                    loading="eager"
+                    fetchPriority={i === 0 ? "high" : "low"}
+                    autoSizes={false}
+                    ratio={s.ratio}
+                    sizes={heroSizes(s)}
+                    className={cn("object-cover", i === idx && "animate-kenburns")}
+                    style={{ objectPosition: s.pos }}
+                  />
+                </span>
               )}
             </div>
           ))}
@@ -244,7 +250,7 @@ export function Hero() {
             <div className="flex flex-1 items-center justify-center gap-2 md:flex-none">
               {SLIDES.map((s, i) => (
                 <button
-                  key={s.src}
+                  key={`${i}-${s.src}`}
                   type="button"
                   onClick={() => setIdx(i)}
                   aria-label={`Ảnh ${i + 1}: ${s.alt}`}

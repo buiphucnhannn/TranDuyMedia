@@ -7,7 +7,7 @@ import { BentoGallery } from "@/components/gallery";
 import { ClipGrid, Journey, Pricing, ServiceVideoHero, StudioRooms } from "@/components/services";
 import { Button, Container } from "@/components/ui";
 import { BehindScenes, PageHeader, Partners, Values } from "@/components/sections";
-import { siteConfig } from "@/config/site";
+import { siteConfig, features } from "@/config/site";
 import { getService, services } from "@/data/services";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -112,19 +112,19 @@ async function ServiceView({ params }) {
           <Values eyebrow="3 thế mạnh của Trần Duy Media" />
           {/* 4 — Sản phẩm thực tế (riêng) */}
           <Works s={s} />
-          {/* 5 — Đối tác khách hàng (dùng chung) */}
-          <Partners />
-          {/* 6 — Quy trình làm việc (dùng chung) */}
+          {/* 5 — Quy trình làm việc (dùng chung) */}
           <Journey />
-          {/* 7 — Báo giá (riêng) */}
+          {/* 6 — Báo giá (riêng) */}
           <Pricing
             slug={s.slug}
             plans={s.pricing.plans}
             // Chỉ viết thường CHỮ ĐẦU (đứng sau "Báo giá") — giữ nguyên chữ hoa có chủ đích: "iTVC, Viral"
             title={`Báo giá ${s.title.charAt(0).toLowerCase()}${s.title.slice(1)}.`}
           />
-          {/* 8 — Hậu trường (dùng chung) */}
+          {/* 7 — Hậu trường (dùng chung; đang tạm ẩn — features.behindScenes) */}
           <BehindScenes id="hau-truong-dich-vu" />
+          {/* 8 — Đối tác khách hàng (dùng chung) — cuối trang, ngay trên "Dịch vụ khác" (feedback 09/11) */}
+          <Partners />
         </>
       )}
 
@@ -325,16 +325,19 @@ function Works({ s }) {
           <h2 className="reveal h-section" style={{ "--reveal-delay": "80ms" }}>
             {works.title}
           </h2>
-          <Link
-            href="/san-pham"
-            className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"
-          >
-            Xem tất cả sản phẩm
-            <Icon
-              name="arrowRight"
-              className="size-4 transition-transform group-hover:translate-x-1"
-            />
-          </Link>
+          {/* Trang Sản phẩm đang tạm ẩn (features.products) → ẩn luôn link dẫn tới */}
+          {features.products && (
+            <Link
+              href="/san-pham"
+              className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"
+            >
+              Xem tất cả sản phẩm
+              <Icon
+                name="arrowRight"
+                className="size-4 transition-transform group-hover:translate-x-1"
+              />
+            </Link>
+          )}
         </div>
         {works.clips?.length > 0 && <ClipGrid clips={works.clips} />}
         {works.photos?.length > 0 && (

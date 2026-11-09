@@ -1,13 +1,16 @@
 import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { Parallax } from "@/components/fx";
 import { Button, Container } from "@/components/ui";
+import { DEFAULT_INTRO } from "@/data/home";
 import { stats } from "@/data/services";
+import { zoomStyle } from "@/lib/crop";
 
 /**
  * Giới thiệu ngắn (khớp nội dung trang Về chúng tôi) + số liệu (USP: 10+ năm, trọn gói).
  * Bên phải: ảnh hậu trường lớn + ảnh nhỏ (ảnh studio khách chọn — feedback 02/11) xếp lệch, parallax nhẹ.
  */
-export function Intro() {
+export function Intro({ images = DEFAULT_INTRO }) {
+  const { main, side } = images; // quản trị thay ở tab "Trang chủ"
   return (
     <section className="relative overflow-hidden bg-white section-y" data-nav-theme="light">
       <Container>
@@ -55,13 +58,17 @@ export function Intro() {
                 className="reveal relative aspect-4/5 overflow-hidden rounded-2xl shadow-soft"
                 data-reveal="scale"
               >
-                <Image
-                  src="/images/bts/bts-05.webp"
-                  alt="Ekip Trần Duy Media trên trường quay"
-                  fill
-                  sizes="(min-width: 1024px) 34vw, 68vw"
-                  className="object-cover"
-                />
+                <span className="absolute inset-0" style={zoomStyle(main)}>
+                  <Image
+                    src={main.src}
+                    alt={main.alt}
+                    fill
+                    ratio={main.ratio}
+                    sizes="(min-width: 1024px) 34vw, 68vw"
+                    className="object-cover"
+                    style={{ objectPosition: main.pos }}
+                  />
+                </span>
               </div>
             </Parallax>
             {/* Ảnh nhỏ bên trái: thay bằng ảnh khách chọn (feedback 02/11, mục 6) */}
@@ -71,14 +78,17 @@ export function Intro() {
                 data-reveal="scale"
                 style={{ "--reveal-delay": "200ms" }}
               >
-                <Image
-                  src="/images/about-hd/studio-interview.webp"
-                  alt="Setup quay phỏng vấn tại studio Trần Duy Media"
-                  fill
-                  sizes="(min-width: 1024px) 26vw, 52vw"
-                  className="object-cover"
-                  style={{ objectPosition: "center 55%" }}
-                />
+                <span className="absolute inset-0" style={zoomStyle(side)}>
+                  <Image
+                    src={side.src}
+                    alt={side.alt}
+                    fill
+                    ratio={side.ratio}
+                    sizes="(min-width: 1024px) 26vw, 52vw"
+                    className="object-cover"
+                    style={{ objectPosition: side.pos }}
+                  />
+                </span>
               </div>
             </Parallax>
             {/* Neo theo mép phải: luôn kết thúc cách mép trái ảnh lớn (rộng 68%, sát phải) 1.5rem → không chạm ảnh */}

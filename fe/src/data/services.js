@@ -685,6 +685,7 @@ export const getService = (slug) => services.find((s) => s.slug === slug);
 export const processSteps = [
   {
     step: "01",
+    icon: "inbox", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/about-hd/jewelry-consult.webp",
     imagePos: "center 40%",
     title: "Tiếp nhận",
@@ -692,6 +693,7 @@ export const processSteps = [
   },
   {
     step: "02",
+    icon: "bulb", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/about-hd/crew-portrait.webp",
     imagePos: "center 35%",
     title: "Đề xuất định hướng",
@@ -699,6 +701,7 @@ export const processSteps = [
   },
   {
     step: "03",
+    icon: "note", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/about-hd/handshake.webp",
     imagePos: "center 40%",
     title: "Hợp đồng",
@@ -706,6 +709,7 @@ export const processSteps = [
   },
   {
     step: "04",
+    icon: "calendar", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/bts/bts-04.webp",
     imagePos: "center",
     title: "Tiền kỳ",
@@ -713,6 +717,7 @@ export const processSteps = [
   },
   {
     step: "05",
+    icon: "camera", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/bts/bts-11.webp",
     imagePos: "center",
     title: "Onset",
@@ -720,6 +725,7 @@ export const processSteps = [
   },
   {
     step: "06",
+    icon: "film", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/about-hd/tvc-monitor.webp",
     imagePos: "center 45%",
     title: "Hậu kỳ",
@@ -727,6 +733,7 @@ export const processSteps = [
   },
   {
     step: "07",
+    icon: "check", // biểu tượng ở khối "Quy trình sản xuất" (trang dịch vụ)
     image: "/images/about-hd/partner-award.webp",
     imagePos: "center 40%",
     title: "Nghiệm thu & bàn giao",

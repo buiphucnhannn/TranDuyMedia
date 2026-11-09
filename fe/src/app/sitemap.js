@@ -1,4 +1,4 @@
-import { mainNav, siteConfig } from "@/config/site";
+import { features, mainNav, siteConfig } from "@/config/site";
 import { getProducts } from "@/lib/products";
 import { services } from "@/data/services";
 
@@ -13,7 +13,8 @@ export default async function sitemap() {
       changeFrequency: "monthly",
       priority: 0.8,
     }));
-  const albums = products.map((p) => ({
+  // Trang Sản phẩm đang tạm ẩn → chưa đưa các bộ sản phẩm lên sitemap
+  const albums = (features.products ? products : []).map((p) => ({
     url: `${siteConfig.url}/san-pham/${p.slug}`,
     changeFrequency: "monthly",
     priority: 0.6,

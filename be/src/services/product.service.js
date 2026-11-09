@@ -1,4 +1,5 @@
 import { logger } from "#config/logger.js";
+import { Home } from "#models/home.model.js";
 import { MAX_PINNED } from "#models/product.model.js";
 import { productRepository } from "#repositories/product.repository.js";
 import { MediaService, mediaService } from "#services/media.service.js";
@@ -128,6 +129,9 @@ export class ProductService {
         .find({ _id: { $ne: before.id ?? before._id } }, { media: 1, cover: 1, featured: 1 })
         .lean();
       for (const o of others) for (const id of assetsOf(o).keys()) removed.delete(id);
+      // Ảnh đang dùng ở trang chủ → giữ lại
+      const home = JSON.stringify((await Home.findOne({ key: "home" }).lean()) ?? {});
+      for (const id of [...removed.keys()]) if (home.includes(id)) removed.delete(id);
       await mediaService.purge(removed);
     } catch (err) {
       logger.warn("Chưa dọn được tệp cũ của sản phẩm", { id: before.id, message: err?.message });

@@ -86,14 +86,33 @@ export const siteConfig = {
   },
 };
 
+/**
+ * BẬT / TẮT các mục đang chờ hoàn thiện nội dung (feedback khách hàng 09/11):
+ * - products: menu "Sản phẩm" + các link "Sản phẩm đã thực hiện" / "Xem tất cả sản phẩm".
+ * - behindScenes: menu "Hậu trường" + khối "Hậu trường sản xuất" (trang chủ, các trang dịch vụ, cho thuê studio).
+ * Nội dung hoàn thiện → đổi false thành true là các mục hiện lại đúng vị trí cũ.
+ * (Trang /san-pham vẫn mở được bằng link trực tiếp để quản trị xem trước; tab Sản phẩm trong quản trị vẫn dùng bình thường.)
+ */
+export const features = {
+  products: false,
+  behindScenes: false,
+};
+
+/** Trang dịch vụ cho thuê studio — có mục riêng trên menu (không nằm trong menu "Video & Hình ảnh"). */
+export const STUDIO_HREF = "/dich-vu/cho-thue-studio";
+
 // Menu chung cho header (desktop + mobile) và footer.
-// Theo feedback 02/11: Về chúng tôi - Dịch vụ - Sản phẩm - Hậu trường - Liên hệ.
+// Theo feedback 09/11: Về chúng tôi - Video & Hình ảnh - Cho thuê studio - Liên hệ
+// ("Sản phẩm", "Hậu trường" tạm ẩn — xem features ở trên).
 // Không có "Trang chủ" (logo đã là đường về trang chủ). Mục có "#" là section trên trang chủ:
 // đang ở trang chủ thì cuộn mượt tới, ở trang khác thì chuyển về trang chủ rồi cuộn (SmoothScroll).
-export const mainNav = [
+const NAV = [
   { label: "Về chúng tôi", href: "/gioi-thieu" },
-  { label: "Dịch vụ", href: "/dich-vu" },
-  { label: "Sản phẩm", href: "/san-pham" },
-  { label: "Hậu trường", href: "/#hau-truong" },
+  // Bấm → trang tổng hợp dịch vụ; rê chuột → danh sách dịch vụ video & chụp ảnh
+  { label: "Video & Hình ảnh", href: "/dich-vu", dropdown: true },
+  { label: "Cho thuê studio", href: STUDIO_HREF },
+  { label: "Sản phẩm", href: "/san-pham", feature: "products" },
+  { label: "Hậu trường", href: "/#hau-truong", feature: "behindScenes" },
   { label: "Liên hệ", href: "/#lien-he" },
 ];
+export const mainNav = NAV.filter((item) => !item.feature || features[item.feature]);

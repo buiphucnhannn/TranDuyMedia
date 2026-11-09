@@ -525,6 +525,71 @@ describe("API v1", () => {
     });
   });
 
+  describe("home (trang chủ)", () => {
+    const img = (n) => ({
+      url: `https://example.com/${n}.jpg`,
+      width: 1600,
+      height: 900,
+      pos: "40% 50%",
+      zoom: 1.2,
+    });
+
+    it("chưa chỉnh gì → trả nội dung trống (website dùng mặc định), công khai", async () => {
+      const res = await withCsrf(request(app)).get("/api/v1/home");
+      assert.equal(res.status, 200);
+      assert.deepEqual(res.body.data.hero, []);
+      assert.equal(res.body.data.services, null);
+      assert.equal(res.body.data.showreel.embed, null);
+    });
+
+    it("chưa đăng nhập → không được lưu", async () => {
+      const res = await withCsrf(request(app)).put("/api/v1/home").send({});
+      assert.equal(res.status, 401);
+    });
+
+    it("lưu ảnh hero / giới thiệu / thẻ dịch vụ; link Xem thêm sai → 400", async () => {
+      const bad = await admin.put("/api/v1/home").send({
+        services: [{ name: "TVC", link: "javascript:alert(1)" }],
+      });
+      assert.equal(bad.status, 400);
+      const res = await admin.put("/api/v1/home").send({
+        hero: [img(1), null, img(3), null],
+        intro: { main: img("m"), side: null },
+        services: [
+          {
+            name: "TVC / iTVC",
+            desc: "Quảng cáo",
+            image: img("s1"),
+            link: "/dich-vu/san-xuat-itvc-viral",
+            booking: "san-xuat-itvc-viral",
+          },
+          { name: "Cho thuê studio", link: "https://example.com/studio" },
+        ],
+      });
+      assert.equal(res.status, 200, JSON.stringify(res.body));
+      const got = (await withCsrf(request(app)).get("/api/v1/home")).body.data;
+      assert.equal(got.hero.length, 4);
+      assert.equal(got.hero[1], null);
+      assert.equal(got.hero[0].pos, "40% 50%");
+      assert.equal(got.intro.main.zoom, 1.2);
+      assert.equal(got.services.length, 2);
+      assert.equal(got.services[1].image, null);
+      // Bỏ thẻ đã lưu → quay về thẻ mặc định
+      const reset = await admin.put("/api/v1/home").send({ hero: got.hero, services: null });
+      assert.equal(reset.status, 200);
+      assert.equal(reset.body.data.services, null);
+      assert.equal(reset.body.data.hero[0].url, img(1).url);
+    });
+
+    it("link video không phải YouTube / Google Drive → báo lỗi dễ hiểu", async () => {
+      const res = await admin
+        .post("/api/v1/home/video-check")
+        .send({ url: "https://example.com/a.mp4" });
+      assert.equal(res.status, 400);
+      assert.equal(res.body.error.code, "VIDEO_LINK_INVALID");
+    });
+  });
+
   describe("media", () => {
     it("upload khi chưa đăng nhập → 401", async () => {
       const res = await withCsrf(request(app))

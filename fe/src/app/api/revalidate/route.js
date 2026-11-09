@@ -1,8 +1,9 @@
 import { revalidateTag } from "next/cache";
+import { HOME_TAG } from "@/lib/home";
 import { PRODUCTS_TAG } from "@/lib/products";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
-const ALLOWED = new Set([PRODUCTS_TAG]);
+const ALLOWED = new Set([PRODUCTS_TAG, HOME_TAG]);
 
 /**
  * Làm mới dữ liệu website ngay sau khi quản trị viên thay đổi nội dung.

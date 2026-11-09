@@ -48,6 +48,18 @@ export function VideoModal() {
       const el = e.target.closest("[data-showreel]");
       if (!el) return;
       e.preventDefault();
+      // Quản trị đã thay showreel bằng link YouTube / Google Drive → phát bằng trình phát nhúng
+      const custom = document.querySelector("[data-showreel-embed]");
+      if (custom) {
+        const embed = custom.getAttribute("data-showreel-embed");
+        setState({
+          embed: embed.includes("youtube")
+            ? `${embed}${embed.includes("?") ? "&" : "?"}autoplay=1&rel=0&playsinline=1`
+            : embed,
+          title: custom.getAttribute("data-showreel-title") || "",
+        });
+        return;
+      }
       const inline = inlineShowreel();
       resumeInlineRef.current = !!inline && !inline.paused;
       inline?.pause();

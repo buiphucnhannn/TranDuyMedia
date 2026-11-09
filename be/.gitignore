@@ -58,3 +58,4 @@ desktop.ini
 
 # ---------- Cache tải / nén video (scripts/import-showcase.js) ----------
 .cache/
+tests/

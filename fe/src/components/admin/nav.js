@@ -13,6 +13,12 @@ export const adminNav = [
     icon: "film",
     desc: "Bộ ảnh và video đã thực hiện",
   },
+  {
+    href: "/admin/home",
+    label: "Trang chủ",
+    icon: "home",
+    desc: "Ảnh hero, video showreel, ảnh giới thiệu và thẻ dịch vụ",
+  },
 ];
 
 export const findNav = (pathname) =>

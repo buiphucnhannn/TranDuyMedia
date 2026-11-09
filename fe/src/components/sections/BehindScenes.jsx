@@ -1,5 +1,6 @@
 import { LoopCarousel, ZoomGroup, ZoomImage } from "@/components/gallery";
 import { Container } from "@/components/ui";
+import { features } from "@/config/site";
 import { btsGallery } from "@/data/about";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,9 @@ export function BehindScenes({
   images = btsGallery,
   className,
 }) {
+  // Tạm ẩn ở MỌI trang (trang chủ, trang dịch vụ, cho thuê studio) cho tới khi nội dung hoàn thiện —
+  // bật lại: features.behindScenes = true trong src/config/site.js (ảnh và nội dung vẫn giữ nguyên)
+  if (!features.behindScenes) return null;
   // Chia ảnh xen kẽ cho 3 hàng → mỗi hàng đủ đa dạng
   const rows = ROWS.map((_, r) =>
     images.map((img, i) => ({ img, i })).filter((x) => x.i % 3 === r),
