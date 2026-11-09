@@ -7,6 +7,9 @@ import { DEFAULT_HERO, DEFAULT_INTRO, DEFAULT_SERVICES, DEFAULT_SHOWREEL } from 
  * Ô nào để trống / backend lỗi → dùng nội dung mặc định (trang chủ không bao giờ bị trống).
  */
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
+// Backend lỗi → giữ kết quả dự phòng ngắn rồi tự lấy lại (≥ 5 phút hết hạn để Next vẫn dựng sẵn trang lúc build;
+// hồ sơ "seconds" quá ngắn khiến trang bị coi là trang động)
+const RETRY_SOON = { stale: 30, revalidate: 30, expire: 600 };
 export const HOME_TAG = "home";
 
 /** Ảnh đã lưu (Cloudinary + cách cắt) → dạng các section đang dùng. */
@@ -60,24 +63,29 @@ export function toHomeView(d) {
   return { hero, showreel, intro, services };
 }
 
+/**
+ * Backend lỗi / chưa có API (vd. lúc build trên Vercel khi backend chưa cập nhật) → KHÔNG ném lỗi (lỗi ném ra
+ * trong "use cache" lúc build làm hỏng cả bản build) mà trả null → trang dùng nội dung mặc định.
+ * Kết quả lỗi chỉ giữ ~30 giây (RETRY_SOON — mức ngắn nhất được áp dụng) → backend ổn lại là tự lấy mới.
+ */
 async function cachedHome() {
   "use cache";
   cacheTag(HOME_TAG);
   cacheLife("minutes");
-  const res = await fetch(`${BACKEND_URL}/api/v1/home`, {
-    headers: { accept: "application/json" },
-    cache: "no-store", // cache do "use cache" + tag quản lý (xem lib/products.js)
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!res.ok) throw new Error(`Backend ${res.status}`);
-  return (await res.json()).data;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/v1/home`, {
+      headers: { accept: "application/json" },
+      cache: "no-store", // cache do "use cache" + tag quản lý (xem lib/products.js)
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`Backend ${res.status}`);
+    return (await res.json()).data;
+  } catch {
+    cacheLife(RETRY_SOON);
+    return null;
+  }
 }
 
-/** Lỗi kết nối không được cache (hàm "use cache" ném lỗi, hàm này bắt) → lần sau tự lấy lại. */
 export async function getHome() {
-  try {
-    return toHomeView(await cachedHome());
-  } catch {
-    return toHomeView(null);
-  }
+  return toHomeView(await cachedHome());
 }

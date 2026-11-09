@@ -8,6 +8,9 @@ import { mediaCount } from "@/lib/media-count";
  * để website cập nhật ngay. Backend lỗi → trả danh sách rỗng thay vì làm sập trang.
  */
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
+// Backend lỗi → giữ kết quả dự phòng ngắn rồi tự lấy lại (≥ 5 phút hết hạn để Next vẫn dựng sẵn trang lúc build;
+// hồ sơ "seconds" quá ngắn khiến trang bị coi là trang động)
+const RETRY_SOON = { stale: 30, revalidate: 30, expire: 600 };
 export const PRODUCTS_TAG = "products";
 
 /** Dữ liệu API → dạng các component đang dùng (ProductCard, AlbumGallery…). */
@@ -122,14 +125,20 @@ async function request(path) {
   return (await res.json()).data;
 }
 
-// LỖI KẾT NỐI không được cache: hàm "use cache" ném lỗi ra ngoài (Next không lưu kết quả lỗi), hàm bọc bên
-// ngoài mới xử lý → backend chập chờn vài giây không làm trang bị "trống" / "404" suốt nhiều phút.
+// LỖI KẾT NỐI chỉ được cache ~30 giây (RETRY_SOON) → backend chập chờn không làm trang bị "trống"
+// suốt nhiều phút, và cũng không làm hỏng bản build (lỗi ném ra trong "use cache" lúc build = build thất bại).
 async function cachedProducts() {
   "use cache";
   cacheTag(PRODUCTS_TAG);
   cacheLife("minutes");
-  // Kích thước ảnh thật → thẻ sản phẩm chọn đúng bản ảnh đủ nét cho khung đóng sẵn
-  return Promise.all(((await request("/products")) ?? []).map((p) => withSizes(toView(p))));
+  try {
+    // Kích thước ảnh thật → thẻ sản phẩm chọn đúng bản ảnh đủ nét cho khung đóng sẵn
+    return await Promise.all(((await request("/products")) ?? []).map((p) => withSizes(toView(p))));
+  } catch {
+    // Backend lỗi (kể cả lúc build) → danh sách rỗng, chỉ giữ vài giây rồi tự lấy lại (không làm hỏng bản build)
+    cacheLife(RETRY_SOON);
+    return [];
+  }
 }
 
 export async function getProducts() {
@@ -144,8 +153,13 @@ export async function getProducts() {
  * Sản phẩm theo slug: null CHỈ khi backend trả 404 (thật sự không có → trang 404).
  * Lỗi kết nối → ném lỗi (không cache) để trang báo lỗi tạm thời, lần tải sau tự lấy lại.
  */
+/** Slug giữ chỗ khi build lúc chưa có sản phẩm nào (Cache Components cần ít nhất 1 tham số). */
+export const PLACEHOLDER_SLUG = "__none";
+
 export async function getProduct(slug) {
   "use cache";
+  // Trang giữ chỗ lúc build → không gọi backend (backend tắt lúc build không được làm hỏng bản build)
+  if (slug === PLACEHOLDER_SLUG) return null;
   cacheTag(PRODUCTS_TAG);
   cacheLife("minutes");
   const p = await request(`/products/${encodeURIComponent(slug)}`);

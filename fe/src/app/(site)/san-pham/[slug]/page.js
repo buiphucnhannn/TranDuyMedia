@@ -8,13 +8,13 @@ import { Container } from "@/components/ui";
 import { PageHeader } from "@/components/sections";
 import { coverSizes, zoomStyle } from "@/lib/crop";
 import { headerColumns } from "@/lib/header-collage";
-import { getProduct, getProducts, relatedProducts } from "@/lib/products";
+import { getProduct, getProducts, relatedProducts, PLACEHOLDER_SLUG } from "@/lib/products";
 import { createMetadata } from "@/lib/metadata";
 
 export async function generateStaticParams() {
   const products = await getProducts();
   // Cache Components yêu cầu ít nhất 1 tham số; backend chưa chạy lúc build → dựng theo yêu cầu
-  return products.length ? products.map((p) => ({ slug: p.slug })) : [{ slug: "__none" }];
+  return products.length ? products.map((p) => ({ slug: p.slug })) : [{ slug: PLACEHOLDER_SLUG }];
 }
 
 export async function generateMetadata({ params }) {
