@@ -25,6 +25,20 @@ function friendlyError(err) {
     return "Không kết nối được máy chủ. Vui lòng kiểm tra mạng hoặc thử lại sau ít phút.";
   return err.message || "Đăng nhập không thành công. Vui lòng thử lại.";
 }
+/**
+ * Đăng nhập nhanh cho BẢN DEMO: chỉ hiện khi đặt cả 2 biến môi trường (fe/.env.local hoặc Vercel → Environment
+ * Variables, rồi build lại). Không viết cứng vào code → tài khoản không nằm trong git.
+ * LƯU Ý: biến NEXT_PUBLIC_* nằm trong mã gửi về trình duyệt — ai mở trang đăng nhập cũng vào được quản trị.
+ * Chỉ bật cho bản demo; bản chính thức: XOÁ 2 biến này (nút tự biến mất) và đổi mật khẩu quản trị.
+ */
+const DEMO_LOGIN =
+  process.env.NEXT_PUBLIC_DEMO_LOGIN_ID && process.env.NEXT_PUBLIC_DEMO_LOGIN_PASSWORD
+    ? {
+        username: process.env.NEXT_PUBLIC_DEMO_LOGIN_ID,
+        password: process.env.NEXT_PUBLIC_DEMO_LOGIN_PASSWORD,
+      }
+    : null;
+
 export function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
@@ -44,11 +58,10 @@ export function LoginForm() {
   const [pending, setPending] = useState(false);
   const set = (k) => (e) => setForm((v) => ({ ...v, [k]: e.target.value }));
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const login = async (body) => {
     setPending(true);
     try {
-      await api("/auth/login", { method: "POST", body: form, retry: false });
+      await api("/auth/login", { method: "POST", body, retry: false });
       toast.success("Chào mừng bạn quay lại trang quản trị.", { title: "Đăng nhập thành công" });
       router.replace(next);
       router.refresh();
@@ -59,6 +72,16 @@ export function LoginForm() {
       setForm((v) => ({ ...v, password: "" }));
       setPending(false);
     }
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    login(form);
+  };
+  // Điền sẵn tài khoản demo (thấy được trên form) rồi đăng nhập luôn — vẫn theo lựa chọn "Ghi nhớ đăng nhập"
+  const quickLogin = () => {
+    const body = { ...form, ...DEMO_LOGIN };
+    setForm(body);
+    login(body);
   };
 
   return (
@@ -148,6 +171,27 @@ export function LoginForm() {
           </span>
         </button>
       </div>
+
+      {DEMO_LOGIN && (
+        <div className="pt-2">
+          <div className="flex items-center gap-3 text-[11px] tracking-wider text-ink-muted uppercase">
+            <span className="h-px flex-1 bg-ink/10" />
+            Bản demo
+            <span className="h-px flex-1 bg-ink/10" />
+          </div>
+          <div className="mt-3 flex justify-center">
+            <button
+              type="button"
+              onClick={quickLogin}
+              disabled={pending}
+              className="inline-flex h-11 min-w-[240px] items-center justify-center gap-2 rounded-full border border-dashed border-orange-500/60 bg-orange-50 px-6 text-sm font-semibold text-orange-700 transition hover:border-orange-500 hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[280px]"
+            >
+              <Icon name="sparkle" className="size-4" />
+              Đăng nhập nhanh
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
