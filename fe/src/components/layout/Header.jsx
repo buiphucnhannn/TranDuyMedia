@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/ui";
-import { STUDIO_HREF, mainNav, siteConfig } from "@/config/site";
+import { STUDIO_HREF, buildNav, siteConfig } from "@/config/site";
 import { services } from "@/data/services";
 import { onLayoutChange, pageTop, subscribeScroll } from "@/lib/scroll";
 import { cn, lockScroll } from "@/lib/utils";
@@ -19,7 +19,7 @@ const menuServices = services.filter((s) => `/dich-vu/${s.slug}` !== STUDIO_HREF
  * - menu giữa có ô active, CTA kèm vòng tròn mũi tên.
  * - Section nào muốn header tối: đặt data-nav-theme="dark" lên section đó.
  */
-export function Header() {
+export function Header({ nav: mainNav = buildNav() }) {
   const pathname = usePathname();
   // Menu mobile: lưu kèm pathname lúc mở → đổi trang là tự đóng (không cần setState trong effect)
   const [menu, setMenu] = useState({ open: false, path: "" });

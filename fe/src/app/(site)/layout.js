@@ -1,9 +1,17 @@
 import { BookingModal, VideoModal } from "@/components/booking";
 import { IntroSplash, PageTransition, Reveal, ScrollTop, SmoothScroll } from "@/components/fx";
 import { FloatingContact, Footer, Header } from "@/components/layout";
+import { buildNav } from "@/config/site";
+import { getHome } from "@/lib/home";
 
-/** Khung chung của website công khai: header, footer, cuộn mượt, màn chào, popup đặt lịch / video. */
-export default function SiteLayout({ children }) {
+/**
+ * Khung chung của website công khai: header, footer, cuộn mượt, màn chào, popup đặt lịch / video.
+ * Menu theo trạng thái bật / tắt ở trang quản trị (vd. trang Sản phẩm) — dữ liệu cache tag "home",
+ * quản trị đổi trạng thái là website cập nhật ngay.
+ */
+export default async function SiteLayout({ children }) {
+  const { flags } = await getHome();
+  const nav = buildNav(flags);
   return (
     <>
       <a
@@ -18,9 +26,9 @@ export default function SiteLayout({ children }) {
       <IntroSplash />
       <PageTransition />
       <Reveal />
-      <Header />
+      <Header nav={nav} />
       <main id="main">{children}</main>
-      <Footer />
+      <Footer nav={nav} flags={flags} />
       <FloatingContact />
       <ScrollTop />
       <BookingModal />

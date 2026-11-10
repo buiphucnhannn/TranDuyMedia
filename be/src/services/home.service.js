@@ -55,6 +55,7 @@ export class HomeService {
       },
       intro: { main: d.intro?.main ?? null, side: d.intro?.side ?? null },
       services: d.services?.length ? d.services : null,
+      features: { products: Boolean(d.features?.products) },
       updatedAt: d.updatedAt ?? null,
     };
   }
@@ -161,6 +162,18 @@ export class HomeService {
       { upsert: true, new: true, runValidators: true, lean: true },
     );
     this.#purgeRemoved(before, doc); // chạy nền
+    return HomeService.toDto(doc);
+  }
+
+  /** Bật / tắt các mục của website (vd. trang Sản phẩm). Không đụng tới nội dung trang chủ. */
+  async setFeatures(input) {
+    const $set = Object.fromEntries(Object.entries(input).map(([k, v]) => [`features.${k}`, v]));
+    const doc = await Home.findOneAndUpdate(
+      { key: KEY },
+      { $set },
+      { upsert: true, new: true, runValidators: true, lean: true },
+    );
+    logger.info("Đổi trạng thái hiển thị mục website", input);
     return HomeService.toDto(doc);
   }
 

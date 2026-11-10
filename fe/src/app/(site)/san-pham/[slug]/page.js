@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { getHome } from "@/lib/home";
 import { SmartImage as Image } from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,14 +21,18 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   // Backend chập chờn → dùng tiêu đề mặc định thay vì gắn "404" cho trang đang tồn tại
-  const p = await getProduct(slug).catch(() => null);
+  const [p, { flags }] = await Promise.all([getProduct(slug).catch(() => null), getHome()]);
   if (!p) return {};
-  return createMetadata({
-    title: `${p.title} | Sản phẩm`,
-    description: p.description,
-    path: `/san-pham/${p.slug}`,
-    image: p.cover.src,
-  });
+  return {
+    ...createMetadata({
+      title: `${p.title} | Sản phẩm`,
+      description: p.description,
+      path: `/san-pham/${p.slug}`,
+      image: p.cover.src,
+    }),
+    // Trang Sản phẩm đang ẩn → không lập chỉ mục (vẫn xem trước được)
+    ...(!flags.products && { robots: { index: false, follow: false } }),
+  };
 }
 
 /**

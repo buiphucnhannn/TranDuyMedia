@@ -89,6 +89,8 @@ export const siteConfig = {
 /**
  * BẬT / TẮT các mục đang chờ hoàn thiện nội dung (feedback khách hàng 09/11):
  * - products: menu "Sản phẩm" + các link "Sản phẩm đã thực hiện" / "Xem tất cả sản phẩm".
+ *   → Bật / tắt ngay trong trang quản trị (tab Sản phẩm, nút "Ẩn / Hiện trên website") — lưu ở backend,
+ *     giá trị ở đây chỉ là mặc định khi chưa đọc được backend.
  * - behindScenes: menu "Hậu trường" + khối "Hậu trường sản xuất" (trang chủ, các trang dịch vụ, cho thuê studio).
  * Nội dung hoàn thiện → đổi false thành true là các mục hiện lại đúng vị trí cũ.
  * (Trang /san-pham vẫn mở được bằng link trực tiếp để quản trị xem trước; tab Sản phẩm trong quản trị vẫn dùng bình thường.)
@@ -118,4 +120,9 @@ const NAV = [
   { label: "Hậu trường", href: "/#hau-truong", feature: "behindScenes" },
   { label: "Liên hệ", href: "/#lien-he" },
 ];
-export const mainNav = NAV.filter((item) => !item.feature || features[item.feature]);
+/**
+ * Menu theo trạng thái bật / tắt hiện tại. flags: giá trị từ backend (vd. { products: true }) — mục nào
+ * không có trong flags thì dùng mặc định ở `features`.
+ */
+export const buildNav = (flags = {}) =>
+  NAV.filter((item) => !item.feature || (flags[item.feature] ?? features[item.feature]));

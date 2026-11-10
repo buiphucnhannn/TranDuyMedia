@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -19,6 +19,7 @@ import {
   subscribeJobs,
 } from "./jobs";
 import { ProductEditor } from "./ProductEditor";
+import { usePageVisible } from "./page-visibility";
 
 /**
  * Thứ tự giống hệt backend (product.repository SORT): nổi bật trước (đánh dấu sau → đứng trước),
@@ -50,6 +51,9 @@ const coverOf = (p) => {
  */
 export function ProductsManager() {
   const router = useRouter();
+  // Cả trang Sản phẩm đang ẩn trên website (công tắc ở thanh tiêu đề) → khoá nút ẩn / hiện + mở trên web của từng thẻ
+  const pageHidden = usePageVisible() === false;
+  const HIDDEN_NOTE = "Trang Sản phẩm đang ẩn trên website — bấm “Hiện trang” ở đầu trang để dùng";
   const [items, setItems] = useState(null);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -60,10 +64,15 @@ export function ProductsManager() {
 
   const [tick, setTick] = useState(0);
   const [loading, setLoading] = useState(false);
+  const manual = useRef(false); // lần tải này do người dùng bấm nút ↻ → báo kết quả bằng toast
   const load = useCallback(() => {
     setLoading(true);
     setTick((t) => t + 1);
   }, []);
+  const reloadByUser = () => {
+    manual.current = true;
+    load();
+  };
 
   // Việc lưu được TẢI TIẾP sau khi tải lại trang (UploadResumer) xong → làm mới danh sách
   useEffect(() => {
@@ -79,12 +88,19 @@ export function ProductsManager() {
         if (!alive) return;
         setItems(res.data);
         setError("");
+        if (manual.current)
+          toast.success(`Danh sách đã cập nhật mới nhất (${res.data.length} sản phẩm).`, {
+            title: "Đã tải lại",
+          });
       })
       .catch((err) => {
         if (err.status === 401) return router.replace("/login");
         if (alive) setError("Không tải được danh sách sản phẩm. Vui lòng thử lại.");
+        if (manual.current)
+          toast.error("Vui lòng kiểm tra kết nối rồi thử lại.", { title: "Chưa tải lại được" });
       })
       .finally(() => {
+        manual.current = false;
         // Xoay tối thiểu ~0.6s để thấy nút đã nhận lệnh
         setTimeout(() => alive && setLoading(false), Math.max(0, 600 - (Date.now() - started)));
       });
@@ -279,7 +295,7 @@ export function ProductsManager() {
           </label>
           <button
             type="button"
-            onClick={load}
+            onClick={reloadByUser}
             disabled={loading}
             aria-label="Tải lại danh sách"
             title="Tải lại danh sách"
@@ -469,27 +485,34 @@ export function ProductsManager() {
                   <Icon name="note" className="size-4" />
                   Sửa
                 </button>
-                <Action
-                  label={p.published ? "Ẩn khỏi website" : "Hiển thị trên website"}
-                  icon={p.published ? "eye" : "eyeOff"}
-                  disabled={busy === p.id}
-                  onClick={() => togglePublish(p)}
-                />
-                <a
-                  href={`/san-pham/${p.slug}`}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="Xem trên website"
-                  title={
-                    p.published ? "Xem trên website" : "Sản phẩm đang ẩn — bật hiển thị để xem"
-                  }
-                  className={cn(
-                    "flex size-10 items-center justify-center rounded-full text-ink-soft ring-1 ring-ink/10 transition hover:bg-paper hover:text-ink",
-                    !p.published && "pointer-events-none opacity-30",
-                  )}
-                >
-                  <Icon name="external" className="size-4" />
-                </a>
+                {/* Nút bị khoá không hiện chú thích khi rê chuột → bọc span mang chú thích lý do */}
+                <span title={pageHidden ? HIDDEN_NOTE : undefined} className="inline-flex">
+                  <Action
+                    label={p.published ? "Ẩn khỏi website" : "Hiển thị trên website"}
+                    icon={p.published ? "eye" : "eyeOff"}
+                    disabled={busy === p.id || pageHidden}
+                    onClick={() => togglePublish(p)}
+                  />
+                </span>
+                <span title={pageHidden ? HIDDEN_NOTE : undefined} className="inline-flex">
+                  <a
+                    href={`/san-pham/${p.slug}`}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Xem trên website"
+                    aria-disabled={pageHidden || !p.published || undefined}
+                    tabIndex={pageHidden || !p.published ? -1 : undefined}
+                    title={
+                      p.published ? "Xem trên website" : "Sản phẩm đang ẩn — bật hiển thị để xem"
+                    }
+                    className={cn(
+                      "flex size-10 items-center justify-center rounded-full text-ink-soft ring-1 ring-ink/10 transition hover:bg-paper hover:text-ink",
+                      (pageHidden || !p.published) && "pointer-events-none opacity-30",
+                    )}
+                  >
+                    <Icon name="external" className="size-4" />
+                  </a>
+                </span>
                 <Action
                   label="Xoá sản phẩm"
                   icon="trash"

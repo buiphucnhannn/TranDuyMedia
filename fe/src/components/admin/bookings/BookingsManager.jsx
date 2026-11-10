@@ -79,6 +79,7 @@ export function BookingsManager({ initialTab = "all" }) {
 
   // Khoá truy vấn hiện tại; "đang tải" = chưa nhận dữ liệu cho đúng khoá này
   const [tick, setTick] = useState(0);
+  const manual = useRef(false); // lần tải này do người dùng bấm nút ↻
   const key = `${page}|${tab}|${q}|${tick}|${limit}`;
   const [loadedKey, setLoadedKey] = useState(null);
   const loading = loadedKey !== key;
@@ -98,17 +99,30 @@ export function BookingsManager({ initialTab = "all" }) {
         if (id !== reqId.current) return;
         setData({ items: res.data, meta: res.meta });
         setError("");
+        if (manual.current)
+          toast.success(`Danh sách đã cập nhật mới nhất (${res.meta.total} yêu cầu).`, {
+            title: "Đã tải lại",
+          });
       })
       .catch((err) => {
         if (err.status === 401) return router.replace("/login");
         if (id === reqId.current) setError("Không tải được danh sách. Vui lòng thử lại.");
+        if (manual.current)
+          toast.error("Vui lòng kiểm tra kết nối rồi thử lại.", { title: "Chưa tải lại được" });
       })
-      .finally(() => id === reqId.current && setLoadedKey(key));
+      .finally(() => {
+        if (id !== reqId.current) return;
+        manual.current = false;
+        setLoadedKey(key);
+      });
   }, [fetchList, key, router, limit]);
 
-  /** Tải lại (nút ↻ hoặc sau khi đổi trạng thái để cập nhật số đếm). */
-  const load = ({ silent = false } = {}) => {
-    if (!silent) return setTick((t) => t + 1);
+  /** Tải lại (nút ↻ hoặc sau khi đổi trạng thái để cập nhật số đếm). byUser: bấm nút ↻ → báo kết quả bằng toast. */
+  const load = ({ silent = false, byUser = false } = {}) => {
+    if (!silent) {
+      manual.current = byUser;
+      return setTick((t) => t + 1);
+    }
     fetchList()
       .then((res) => setData({ items: res.data, meta: res.meta }))
       .catch(() => {});
@@ -276,8 +290,10 @@ export function BookingsManager({ initialTab = "all" }) {
           </label>
           <button
             type="button"
-            onClick={() => load()}
+            onClick={() => load({ byUser: true })}
+            disabled={loading}
             aria-label="Tải lại"
+            title="Tải lại danh sách"
             className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white text-ink-soft ring-1 ring-ink/10 transition hover:text-ink"
           >
             <Icon name="refresh" className={cn("size-4", loading && "animate-spin")} />

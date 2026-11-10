@@ -60,7 +60,9 @@ export function toHomeView(d) {
         booking: c.booking || "",
       }))
     : DEFAULT_SERVICES;
-  return { hero, showreel, intro, services };
+  // Bật / tắt mục website (trang Sản phẩm) — chỉnh ở trang quản trị; backend lỗi → ẩn (mặc định)
+  const flags = { products: Boolean(d?.features?.products) };
+  return { hero, showreel, intro, services, flags };
 }
 
 /**

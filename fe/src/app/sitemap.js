@@ -1,10 +1,12 @@
-import { features, mainNav, siteConfig } from "@/config/site";
+import { buildNav, siteConfig } from "@/config/site";
+import { getHome } from "@/lib/home";
 import { getProducts } from "@/lib/products";
 import { PRIVACY_POLICY } from "@/data/privacy";
 import { services } from "@/data/services";
 
 export default async function sitemap() {
-  const products = await getProducts();
+  const [products, { flags }] = await Promise.all([getProducts(), getHome()]);
+  const mainNav = buildNav(flags);
   // Trang chủ không nằm trong menu (logo thay thế) nên thêm riêng
   const home = { url: siteConfig.url, changeFrequency: "weekly", priority: 1 };
   const pages = mainNav
@@ -15,7 +17,7 @@ export default async function sitemap() {
       priority: 0.8,
     }));
   // Trang Sản phẩm đang tạm ẩn → chưa đưa các bộ sản phẩm lên sitemap
-  const albums = (features.products ? products : []).map((p) => ({
+  const albums = (flags.products ? products : []).map((p) => ({
     url: `${siteConfig.url}/san-pham/${p.slug}`,
     changeFrequency: "monthly",
     priority: 0.6,

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Container, Logo } from "@/components/ui";
 import { FooterMap } from "./FooterMap";
-import { features, mainNav, siteConfig } from "@/config/site";
+import { buildNav, siteConfig } from "@/config/site";
 import { PRIVACY_POLICY } from "@/data/privacy";
 import { services } from "@/data/services";
 
@@ -18,7 +18,7 @@ const socialLinks = [
   ["tiktok", siteConfig.socials.tiktok],
 ];
 
-export function Footer() {
+export function Footer({ nav: mainNav = buildNav(), flags = {} }) {
   const { contact } = siteConfig;
 
   return (
@@ -126,7 +126,7 @@ export function Footer() {
               </Link>
             </li>
           ))}
-          {features.products && (
+          {flags.products && (
             <li>
               <Link
                 href="/san-pham"

@@ -2,6 +2,7 @@ import { ProductBrowser } from "@/components/gallery";
 import { Container } from "@/components/ui";
 import { PageHeader } from "@/components/sections";
 import { getProducts } from "@/lib/products";
+import { getHome } from "@/lib/home";
 import { createMetadata } from "@/lib/metadata";
 
 // Nền đầu trang: 6 cột ảnh trôi so le — khung hình từ chính các sản phẩm đã thực hiện (clip & ảnh trên Drive)
@@ -29,13 +30,20 @@ const headerColumns = Array.from({ length: 6 }, (_, i) =>
   [0, 1, 2].map((k) => HEADER_IMAGES[i * 3 + k]),
 );
 
-export const metadata = createMetadata({
-  title: "Sản phẩm đã thực hiện",
-  description:
-    "Các dự án video marketing, chụp ảnh thương mại, chụp ảnh sự kiện do Trần Duy Media Studio thực hiện — từ ý tưởng, sản xuất đến hậu kỳ.",
-  path: "/san-pham",
-  image: "/images/vintage-green/vintage-green-03.webp",
-});
+export async function generateMetadata() {
+  const { flags } = await getHome();
+  return {
+    ...createMetadata({
+      title: "Sản phẩm đã thực hiện",
+      description:
+        "Các dự án video marketing, chụp ảnh thương mại, chụp ảnh sự kiện do Trần Duy Media Studio thực hiện — từ ý tưởng, sản xuất đến hậu kỳ.",
+      path: "/san-pham",
+      image: "/images/vintage-green/vintage-green-03.webp",
+    }),
+    // Đang ẩn (tắt ở trang quản trị): vẫn mở được để quản trị xem trước, nhưng Google không lập chỉ mục
+    ...(!flags.products && { robots: { index: false, follow: false } }),
+  };
+}
 
 export default async function ProductsPage() {
   const products = await getProducts();

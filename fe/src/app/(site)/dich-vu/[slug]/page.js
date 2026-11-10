@@ -7,7 +7,8 @@ import { BentoGallery } from "@/components/gallery";
 import { ClipGrid, Journey, Pricing, ServiceVideoHero, StudioRooms } from "@/components/services";
 import { Button, Container } from "@/components/ui";
 import { BehindScenes, PageHeader, Partners, Values } from "@/components/sections";
-import { SERVICES_HREF, siteConfig, features } from "@/config/site";
+import { SERVICES_HREF, siteConfig } from "@/config/site";
+import { getHome } from "@/lib/home";
 import { getService, services } from "@/data/services";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -58,6 +59,7 @@ async function ServiceView({ params }) {
 
   const others = services.filter((x) => x.slug !== slug);
   const studio = s.kind === "studio";
+  const { flags } = await getHome(); // trang Sản phẩm đang bật / tắt (trang quản trị)
 
   return (
     <>
@@ -111,7 +113,7 @@ async function ServiceView({ params }) {
           {/* 3 — 3 thế mạnh (dùng chung) */}
           <Values eyebrow="3 thế mạnh của Trần Duy Media" />
           {/* 4 — Sản phẩm thực tế (riêng) */}
-          <Works s={s} />
+          <Works s={s} showAll={flags.products} />
           {/* 5 — Quy trình làm việc (dùng chung) */}
           <Journey />
           {/* 6 — Báo giá (riêng) */}
@@ -315,7 +317,7 @@ function Overview({ s, className, flush = false }) {
 }
 
 /* ── Sản phẩm thực tế: clip (Drive) và/hoặc ảnh dự án theo từng dịch vụ ── */
-function Works({ s }) {
+function Works({ s, showAll }) {
   const { works } = s;
   return (
     <section id="san-pham-thuc-te" className="bg-white section-y" data-nav-theme="light">
@@ -325,8 +327,8 @@ function Works({ s }) {
           <h2 className="reveal h-section" style={{ "--reveal-delay": "80ms" }}>
             {works.title}
           </h2>
-          {/* Trang Sản phẩm đang tạm ẩn (features.products) → ẩn luôn link dẫn tới */}
-          {features.products && (
+          {/* Trang Sản phẩm đang ẩn (tắt ở trang quản trị) → ẩn luôn link dẫn tới */}
+          {showAll && (
             <Link
               href="/san-pham"
               className="reveal group inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap hover:text-orange-500"

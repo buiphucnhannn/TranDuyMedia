@@ -53,6 +53,11 @@ const homeSchema = new mongoose.Schema(
       side: { type: homeImageSchema, default: null }, // ảnh nhỏ 1:1
     },
     services: { type: [serviceCardSchema], default: undefined }, // không có → thẻ mặc định
+    // Bật / tắt các mục của website ngay trong trang quản trị (không cần sửa code)
+    features: {
+      // Trang "Sản phẩm" (/san-pham): hiện mục trên menu + các link dẫn tới. Mặc định ẩn.
+      products: { type: Boolean, default: false },
+    },
   },
   { timestamps: true },
 );

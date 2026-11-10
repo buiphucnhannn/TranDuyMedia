@@ -9,6 +9,7 @@ import { api } from "@/lib/api";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { adminNav, findNav } from "./nav";
+import { ProductsVisibility } from "./products/ProductsVisibility";
 
 /**
  * Khung trang quản trị:
@@ -62,33 +63,35 @@ export function AdminShell({ children }) {
         Quản lý
       </p>
       <nav aria-label="Điều hướng quản trị" className="flex-1 space-y-1 px-3">
-        {adminNav.map((n) => {
-          const active = n.href === current.href;
-          return (
-            <Link
-              key={n.href}
-              href={n.href}
-              aria-current={active ? "page" : undefined}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-                active ? "bg-white text-ink" : "text-white/65 hover:bg-white/5 hover:text-white",
-              )}
-            >
-              <span
+        {adminNav
+          .filter((n) => !n.hidden)
+          .map((n) => {
+            const active = n.href === current.href;
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                aria-current={active ? "page" : undefined}
+                onClick={() => setOpen(false)}
                 className={cn(
-                  "flex size-8 items-center justify-center rounded-lg transition-colors",
-                  active
-                    ? "bg-orange-500 text-white"
-                    : "bg-white/5 text-white/70 group-hover:text-white",
+                  "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                  active ? "bg-white text-ink" : "text-white/65 hover:bg-white/5 hover:text-white",
                 )}
               >
-                <Icon name={n.icon} className="size-4" />
-              </span>
-              {n.label}
-            </Link>
-          );
-        })}
+                <span
+                  className={cn(
+                    "flex size-8 items-center justify-center rounded-lg transition-colors",
+                    active
+                      ? "bg-orange-500 text-white"
+                      : "bg-white/5 text-white/70 group-hover:text-white",
+                  )}
+                >
+                  <Icon name={n.icon} className="size-4" />
+                </span>
+                {n.label}
+              </Link>
+            );
+          })}
       </nav>
 
       <div className="m-3 rounded-2xl bg-white/5 p-3 ring-1 ring-white/10">
@@ -177,7 +180,7 @@ export function AdminShell({ children }) {
             {current.href !== "/admin" && <span className="text-ink-soft">{current.label}</span>}
           </nav>
           {/* Icon cao bằng khối tiêu đề + mô tả; các dòng cách nhau vừa phải cho dễ đọc */}
-          <div className="mt-3.5 flex items-center gap-4">
+          <div className="mt-3.5 flex flex-wrap items-center gap-4">
             <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-navy-950 text-orange-500">
               <Icon name={current.icon} className="size-5" />
             </span>
@@ -187,6 +190,12 @@ export function AdminShell({ children }) {
               </h1>
               <p className="mt-1 text-left text-sm text-ink-soft">{current.desc}</p>
             </div>
+            {/* Tab Sản phẩm: công tắc Ẩn / Hiện trang Sản phẩm trên website */}
+            {current.href === "/admin/products" && (
+              <div className="w-full sm:ml-auto sm:w-auto">
+                <ProductsVisibility />
+              </div>
+            )}
           </div>
         </header>
         <main className="flex-1 p-5 sm:p-8 sm:pt-6">{children}</main>

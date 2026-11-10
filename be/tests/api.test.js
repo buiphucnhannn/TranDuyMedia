@@ -591,6 +591,20 @@ describe("API v1", () => {
       assert.equal(reset.body.data.hero[0].url, img(1).url);
     });
 
+    it("trang Sản phẩm: mặc định ẩn; admin bật / tắt được, không làm mất nội dung trang chủ", async () => {
+      const pub = withCsrf(request(app));
+      assert.equal((await pub.get("/api/v1/home")).body.data.features.products, false);
+      assert.equal((await pub.patch("/api/v1/home/features").send({ products: true })).status, 401);
+      assert.equal((await admin.patch("/api/v1/home/features").send({})).status, 400);
+      const on = await admin.patch("/api/v1/home/features").send({ products: true });
+      assert.equal(on.status, 200);
+      assert.equal(on.body.data.features.products, true);
+      const got = (await pub.get("/api/v1/home")).body.data;
+      assert.equal(got.features.products, true);
+      assert.equal(got.hero[0].url, "https://example.com/1.jpg"); // nội dung trang chủ giữ nguyên
+      await admin.patch("/api/v1/home/features").send({ products: false });
+    });
+
     it("link video không phải YouTube / Google Drive → báo lỗi dễ hiểu", async () => {
       const res = await admin
         .post("/api/v1/home/video-check")

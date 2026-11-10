@@ -78,6 +78,11 @@ export const updateHomeSchema = z.object({
     .default(null),
 });
 
+/** Bật / tắt các mục của website (chỉ gửi mục cần đổi). */
+export const updateFeaturesSchema = z
+  .object({ products: z.boolean({ error: "Giá trị không hợp lệ" }).optional() })
+  .refine((v) => Object.keys(v).length > 0, "Chưa có mục nào cần đổi");
+
 export const checkVideoSchema = z.object({
   url: z
     .string({ error: "Vui lòng dán link video" })

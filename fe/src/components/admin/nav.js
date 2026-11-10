@@ -1,4 +1,7 @@
-/** Các tab quản trị — thêm tab mới: thêm 1 dòng ở đây + tạo trang src/app/admin/<slug>/page.js */
+/**
+ * Các tab quản trị — thêm tab mới: thêm 1 dòng ở đây + tạo trang src/app/admin/<slug>/page.js.
+ * hidden: true → không hiện trên thanh điều hướng (trang vẫn hoạt động nếu mở trực tiếp).
+ */
 export const adminNav = [
   { href: "/admin", label: "Tổng quan", icon: "grid", desc: "Số liệu nhanh và hoạt động gần đây" },
   {
@@ -18,6 +21,9 @@ export const adminNav = [
     label: "Trang chủ",
     icon: "home",
     desc: "Ảnh hero, video showreel, ảnh giới thiệu và thẻ dịch vụ",
+    // Tạm ẩn khỏi thanh điều hướng (code giữ nguyên, vẫn mở được bằng /admin/home).
+    // Hiện lại: xoá dòng này.
+    hidden: true,
   },
 ];
 

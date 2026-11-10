@@ -9,6 +9,9 @@ export const homeController = {
   async update(req, res) {
     ok(res, await homeService.update(req.validated.body));
   },
+  async setFeatures(req, res) {
+    ok(res, await homeService.setFeatures(req.validated.body));
+  },
   async checkVideo(req, res) {
     ok(res, await homeService.checkVideo(req.validated.body.url));
   },
