@@ -44,6 +44,7 @@ export function LoginForm() {
   const params = useSearchParams();
   const next = safeNext(params.get("next"));
   const expired = params.get("het-phien") === "1";
+  const loggedOut = params.get("da-dang-xuat") === "1";
 
   // Bị chuyển về đây vì phiên đã hết hạn → báo nhẹ nhàng, đăng nhập xong quay lại đúng trang cũ
   useEffect(() => {
@@ -52,6 +53,13 @@ export function LoginForm() {
         title: "Phiên đăng nhập đã hết hạn",
       });
   }, [expired]);
+
+  // Vừa đăng xuất (trang quản trị chuyển về đây) → báo nhẹ, rồi bỏ tham số khỏi địa chỉ
+  useEffect(() => {
+    if (!loggedOut) return;
+    toast.info("Bạn đã đăng xuất khỏi trang quản trị.", { title: "Đã đăng xuất" });
+    window.history.replaceState(null, "", window.location.pathname);
+  }, [loggedOut]);
   // Mặc định KHÔNG ghi nhớ (an toàn cho máy dùng chung): đóng trình duyệt là đăng xuất
   const [form, setForm] = useState({ username: "", password: "", remember: false });
   const [show, setShow] = useState(false);

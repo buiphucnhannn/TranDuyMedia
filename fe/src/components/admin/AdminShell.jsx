@@ -31,12 +31,20 @@ export function AdminShell({ children }) {
       .catch(() => router.replace("/login"));
   }, [router]);
 
+  /**
+   * Đăng xuất: xoá phiên ở backend (tối đa 8 giây — mạng treo vẫn thoát được) rồi TẢI LẠI HẲN trang đăng nhập.
+   * Không dùng router.replace + router.refresh: refresh chen ngang khiến trang kẹt ở "Đang đăng xuất…"
+   * (địa chỉ đã là /login nhưng giao diện quản trị vẫn còn). Tải lại hẳn còn xoá sạch dữ liệu quản trị
+   * đang giữ trong trình duyệt. Thông báo "Đã đăng xuất" hiện ở trang đăng nhập (?da-dang-xuat=1).
+   */
   const logout = async () => {
+    if (leaving) return;
     setLeaving(true);
-    await api("/auth/logout", { method: "POST" }).catch(() => {});
-    toast.info("Bạn đã đăng xuất khỏi trang quản trị.", { title: "Đã đăng xuất" });
-    router.replace("/login");
-    router.refresh();
+    await Promise.race([
+      api("/auth/logout", { method: "POST", retry: false }).catch(() => {}),
+      new Promise((ok) => setTimeout(ok, 8000)),
+    ]);
+    window.location.replace("/login?da-dang-xuat=1");
   };
 
   const sidebar = (inDrawer = false) => (
